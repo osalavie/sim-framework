@@ -1,0 +1,4 @@
+agent.json
+data/
+*.log
+.smoke-*/

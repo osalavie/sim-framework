@@ -1,0 +1,20 @@
+services:
+  web:
+    image: ${SIM_WEB_IMAGE:-sim-web:latest}
+    container_name: sim-web
+    volumes:
+      - ./config/simframework.conf:/etc/nginx/conf.d/default.conf:ro
+      # - ./config/.htpasswd:/etc/nginx/.htpasswd:ro
+      # - ./config/nginx-ssl:/etc/nginx/ssl:ro
+    ports:
+      - "80:80"
+      # - "443:443"
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - sim-net
+
+networks:
+  sim-net:
+    driver: bridge

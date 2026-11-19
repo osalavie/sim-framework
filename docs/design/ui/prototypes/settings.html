@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>系统配置 · SimFramework</title>
+<meta name="description" content="SimFramework 系统配置 · 常规、安全、审批流与存储">
+<link rel="stylesheet" href="assets/ui.css">
+</head>
+<body data-shell="app" data-page="settings" data-title="系统配置">
+<a class="skip-link" href="#main">跳到主要内容</a>
+<div class="shell" id="shell">
+  <div class="shell__main">
+    <main class="page" id="main">
+
+      <div class="page-head" data-od-id="settings-head">
+        <div class="page-head__main">
+          <span class="kicker">系统 · 平台设置</span>
+          <h1>系统配置</h1>
+          <p>这里的改动影响整个平台。安全与审批相关配置需要二次确认，所有变更都会记录操作人与前后值。</p>
+        </div>
+        <div class="page-head__actions">
+          <a class="btn btn--ghost" href="notifications.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 9a6 6 0 1 0-12 0c0 5-2 6-2 6h16s-2-1-2-6"/><path d="M10 19a2.2 2.2 0 0 0 4 0"/></svg>
+            通知渠道
+          </a>
+          <button class="btn" type="button" data-toast="已导出当前配置快照（JSON）">导出快照</button>
+        </div>
+      </div>
+
+      <form id="settings-form" novalidate>
+        <div class="grid grid--sidebar" data-od-id="settings-main">
+          <section class="card card--flush" data-tabs>
+            <div style="padding:14px 20px 0">
+              <div class="tabs" role="tablist" aria-label="配置分类">
+                <button type="button" role="tab" id="tab-general" aria-controls="general" aria-selected="true">常规</button>
+                <button type="button" role="tab" id="tab-security" aria-controls="security" aria-selected="false">安全</button>
+                <button type="button" role="tab" id="tab-workflow" aria-controls="workflow" aria-selected="false">审批流</button>
+                <button type="button" role="tab" id="tab-storage" aria-controls="storage" aria-selected="false">存储与备份</button>
+              </div>
+            </div>
+
+            <div id="general" role="tabpanel" aria-labelledby="tab-general" style="padding:22px 20px">
+              <div class="grid grid--2">
+                <div class="field"><label for="set-name">平台名称</label><input class="input" id="set-name" type="text" value="SimFramework 企业中台"><span class="field__hint">显示在登录页、邮件与浏览器标题中。</span></div>
+                <div class="field"><label for="set-url">平台地址</label><input class="input" id="set-url" type="url" value="https://sim.dev"><span class="field__hint">用于生成审批链接与邮件跳转。</span></div>
+                <div class="field"><label for="set-lang">默认语言</label>
+                  <select class="select" id="set-lang"><option selected>简体中文</option><option>English</option></select>
+                </div>
+                <div class="field"><label for="set-tz">时区</label>
+                  <select class="select" id="set-tz"><option selected>Asia/Shanghai (UTC+8)</option><option>Asia/Singapore (UTC+8)</option><option>UTC</option></select>
+                </div>
+              </div>
+              <div class="field" style="margin-top:18px">
+                <span class="field__label">界面主题</span>
+                <div class="chip-row" style="margin-top:6px">
+                  <button class="chip" type="button" aria-pressed="true" data-toast="已切换到「纸上海洋」主题">纸上海洋（默认）</button>
+                  <button class="chip" type="button" aria-pressed="false" data-toast="已切换到「深海」深色主题">深海 · 深色</button>
+                  <button class="chip" type="button" aria-pressed="false" data-toast="已跟随系统外观">跟随系统</button>
+                </div>
+                <span class="field__hint">主题仅影响界面外观，不改变权限与数据。</span>
+              </div>
+              <div class="field" style="margin-top:18px;max-width:340px">
+                <label for="set-session">无操作自动退出</label>
+                <select class="select" id="set-session"><option>30 分钟</option><option selected>2 小时</option><option>8 小时</option><option>不自动退出</option></select>
+              </div>
+            </div>
+
+            <div id="security" role="tabpanel" aria-labelledby="tab-security" style="padding:22px 20px" hidden>
+              <div class="note" style="margin-bottom:18px">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.4 2.9 7.6 7 9.5 4.1-1.9 7-5.1 7-9.5V6Z"/><path d="m9.2 12 2 2 3.6-3.8"/></svg>
+                <span>安全配置保存后，所有在线会话将在 5 分钟内重新校验。修改密码策略不会强制现有密码立即过期。</span>
+              </div>
+              <div class="grid grid--2">
+                <div class="field"><label for="set-pwd">最小密码长度</label><input class="input" id="set-pwd" type="number" value="12" min="8" max="32"></div>
+                <div class="field"><label for="set-rotate">密码轮换周期</label>
+                  <select class="select" id="set-rotate"><option>60 天</option><option selected>90 天</option><option>180 天</option><option>不轮换</option></select>
+                </div>
+                <div class="field"><label for="set-fail">登录失败锁定</label>
+                  <select class="select" id="set-fail"><option>3 次 / 30 分钟</option><option selected>5 次 / 30 分钟</option><option>10 次 / 1 小时</option></select>
+                </div>
+                <div class="field"><label for="set-audit">审计日志保留</label>
+                  <select class="select" id="set-audit"><option>180 天</option><option selected>365 天</option><option>3 年</option></select>
+                </div>
+              </div>
+              <div style="display:grid;gap:2px;margin-top:18px">
+                <div class="list__row">
+                  <span class="avatar avatar--mint">2F</span>
+                  <div><div class="list__title">强制双因素认证</div><div class="list__sub">对平台管理员与财务审核角色强制开启</div></div>
+                  <span class="switch"><input type="checkbox" checked aria-label="强制双因素认证"><span class="switch__track"></span></span>
+                </div>
+                <div class="list__row">
+                  <span class="avatar avatar--sky">IP</span>
+                  <div><div class="list__title">IP 白名单</div><div class="list__sub">仅允许 10.24.0.0/16 与办公出口网段登录</div></div>
+                  <span class="switch"><input type="checkbox" aria-label="启用 IP 白名单"><span class="switch__track"></span></span>
+                </div>
+                <div class="list__row">
+                  <span class="avatar avatar--lilac">SSO</span>
+                  <div><div class="list__title">企业 SSO 登录</div><div class="list__sub">SAML 2.0 · 已绑定 sim.dev 租户</div></div>
+                  <span class="switch"><input type="checkbox" checked aria-label="启用企业 SSO"><span class="switch__track"></span></span>
+                </div>
+              </div>
+            </div>
+
+            <div id="workflow" role="tabpanel" aria-labelledby="tab-workflow" style="padding:22px 20px" hidden>
+              <div class="grid grid--2">
+                <div class="field"><label for="set-sla">默认 SLA（小时）</label><input class="input" id="set-sla" type="number" value="24" min="1" max="240"><span class="field__hint">超时后向审批人与其负责人发送提醒。</span></div>
+                <div class="field"><label for="set-remind">超时提醒频率</label>
+                  <select class="select" id="set-remind"><option>每 4 小时</option><option selected>每 12 小时</option><option>每天一次</option></select>
+                </div>
+                <div class="field"><label for="set-auto">超时自动转交</label>
+                  <select class="select" id="set-auto"><option>不转交</option><option selected>转交给部门负责人</option><option>转交给指定代理人</option></select>
+                </div>
+                <div class="field"><label for="set-amount">大额审批阈值</label><input class="input" id="set-amount" type="text" value="¥ 100,000.00"></div>
+              </div>
+              <div class="field" style="margin-top:18px">
+                <span class="field__label">审批结果通知方式</span>
+                <div class="chip-row" style="margin-top:6px">
+                  <button class="chip" type="button" aria-pressed="true" data-toast="站内信通知已开启">站内信</button>
+                  <button class="chip" type="button" aria-pressed="true" data-toast="邮件通知已开启">邮件</button>
+                  <button class="chip" type="button" aria-pressed="false" data-toast="企业微信通知已开启">企业微信</button>
+                  <button class="chip" type="button" aria-pressed="false" data-toast="短信通知已开启">短信</button>
+                </div>
+              </div>
+              <div class="field" style="margin-top:18px">
+                <label for="set-rule">审批规则说明</label>
+                <textarea class="textarea" id="set-rule">报销 ≤ ¥5,000：直属主管 → 财务复核；采购 ≥ ¥10,000：部门负责人 → 采购复核 → 财务预算校验；合同：技术负责人 → 法务审核 → 用印归档。</textarea>
+              </div>
+            </div>
+
+            <div id="storage" role="tabpanel" aria-labelledby="tab-storage" style="padding:22px 20px" hidden>
+              <div class="grid grid--2">
+                <div class="field"><label for="set-store">对象存储</label>
+                  <select class="select" id="set-store"><option selected>S3 兼容 · 云枢科技</option><option>阿里云 OSS</option><option>MinIO 自建</option></select>
+                </div>
+                <div class="field"><label for="set-region">区域</label>
+                  <select class="select" id="set-region"><option selected>cn-shanghai</option><option>cn-hangzhou</option><option>ap-southeast-1</option></select>
+                </div>
+                <div class="field"><label for="set-keep">附件保留策略</label>
+                  <select class="select" id="set-keep"><option>1 年</option><option selected>3 年</option><option>永久</option></select>
+                </div>
+                <div class="field"><label for="set-backup">备份频率</label>
+                  <select class="select" id="set-backup"><option>每日</option><option selected>每 6 小时</option><option>每小时</option></select>
+                </div>
+              </div>
+              <div class="card card--cream" style="margin-top:18px;box-shadow:none">
+                <div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center">
+                  <div>
+                    <b style="font-size:13px">当前用量 1.42 TB / 2 TB</b>
+                    <p class="tiny muted" style="margin-top:3px">近 30 天增长 96 GB，按此速度约 6 个月后需要扩容。</p>
+                  </div>
+                  <button class="btn btn--sm" type="button" data-toast="扩容申请已提交给信息技术部">申请扩容</button>
+                </div>
+                <div class="progress progress--coral" style="margin-top:12px"><span style="width:71%"></span></div>
+              </div>
+            </div>
+          </section>
+
+          <aside class="stack" aria-label="环境信息" data-od-id="settings-rail">
+            <section class="card">
+              <div class="card__head"><div><h2>环境</h2><p>当前运行实例</p></div><span class="pill pill--mint pill--dot">生产</span></div>
+              <div class="detail-grid" style="grid-template-columns:minmax(0,1fr)">
+                <div class="kv"><dt>版本</dt><dd class="mono">v2.4.0 · 2026-10-18</dd></div>
+                <div class="kv"><dt>API 地址</dt><dd class="mono" style="font-size:12px">api.sim.dev/v2</dd></div>
+                <div class="kv"><dt>变更窗口</dt><dd>每周四 22:00 – 23:30</dd></div>
+                <div class="kv"><dt>值班联系人</dt><dd>王牧 · 信息技术部</dd></div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card__head"><div><h2>最近修改</h2></div><span class="pill pill--outline">7 天</span></div>
+              <div class="list">
+                <div class="list__row" style="grid-template-columns:minmax(0,1fr) auto">
+                  <div><div class="list__title">通知渠道重试次数 3 → 5</div><div class="list__sub">林知远 · 昨天 17:40</div></div>
+                  <span class="pill pill--sky">通知</span>
+                </div>
+                <div class="list__row" style="grid-template-columns:minmax(0,1fr) auto">
+                  <div><div class="list__title">审计日志保留 180 → 365 天</div><div class="list__sub">王牧 · 10-19 11:12</div></div>
+                  <span class="pill pill--lilac">安全</span>
+                </div>
+                <div class="list__row" style="grid-template-columns:minmax(0,1fr) auto">
+                  <div><div class="list__title">大额审批阈值 ¥80,000 → ¥100,000</div><div class="list__sub">何舟 · 10-16 09:30</div></div>
+                  <span class="pill pill--peach">审批</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="card card--sun">
+              <b style="font-family:var(--font-display);font-size:15px">变更前请确认</b>
+              <p class="small" style="margin-top:6px;line-height:1.8">安全与审批配置会影响正在进行的流程。建议在变更窗口内操作，并提前在测试环境验证。</p>
+              <button class="btn btn--sm btn--dark" type="button" style="margin-top:10px" data-toast="已打开变更检查清单">查看检查清单</button>
+            </section>
+          </aside>
+        </div>
+
+        <div id="settings-save" hidden style="position:sticky;bottom:16px;z-index:20;margin-top:18px">
+          <div class="card card--hard" style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 18px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="pill pill--sun">未保存</span>
+              <span class="small muted">配置修改将在保存后 5 分钟内生效。</span>
+            </div>
+            <div style="display:flex;gap:9px">
+              <button class="btn btn--ghost" type="reset" data-toast="已放弃未保存的修改">放弃</button>
+              <button class="btn btn--primary" type="submit" id="settings-save-btn">保存配置</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </main>
+  </div>
+</div>
+<script src="assets/ui.js"></script>
+</body>
+</html>

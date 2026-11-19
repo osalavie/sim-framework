@@ -1,0 +1,48 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/framework/">
+    <Project Path="framework/Sim.Framework.Application.Contracts/Sim.Framework.Application.Contracts.csproj" />
+    <Project Path="framework/Sim.Framework.Application/Sim.Framework.Application.csproj" />
+    <Project Path="framework/Sim.Framework.Core/Sim.Framework.Core.csproj" />
+    <Project Path="framework/Sim.Framework.Domain.Shared/Sim.Framework.Domain.Shared.csproj" />
+    <Project Path="framework/Sim.Framework.Domain/Sim.Framework.Domain.csproj" />
+    <Project Path="framework/Sim.SqlSugar.Core/Sim.SqlSugar.Core.csproj" />
+  </Folder>
+  <Folder Name="/modules/" />
+  <Folder Name="/modules/system/">
+    <Project Path="modules/system/Sim.System.Application.Contracts/Sim.System.Application.Contracts.csproj" />
+    <Project Path="modules/system/Sim.System.Application/Sim.System.Application.csproj" />
+    <Project Path="modules/system/Sim.System.Domain.Shared/Sim.System.Domain.Shared.csproj" />
+    <Project Path="modules/system/Sim.System.Domain/Sim.System.Domain.csproj" />
+    <Project Path="modules/system/Sim.System.SqlSugar/Sim.System.SqlSugar.csproj" />
+  </Folder>
+  <Folder Name="/modules/approval/">
+    <Project Path="modules/approval/Sim.Approval.Application.Contracts/Sim.Approval.Application.Contracts.csproj" />
+    <Project Path="modules/approval/Sim.Approval.Application/Sim.Approval.Application.csproj" />
+    <Project Path="modules/approval/Sim.Approval.Domain.Shared/Sim.Approval.Domain.Shared.csproj" />
+    <Project Path="modules/approval/Sim.Approval.Domain/Sim.Approval.Domain.csproj" />
+    <Project Path="modules/approval/Sim.Approval.SqlSugar/Sim.Approval.SqlSugar.csproj" />
+  </Folder>
+  <Folder Name="/modules/openplatform/">
+    <Project Path="modules/openplatform/Sim.OpenPlatform.Application.Contracts/Sim.OpenPlatform.Application.Contracts.csproj" />
+    <Project Path="modules/openplatform/Sim.OpenPlatform.Application/Sim.OpenPlatform.Application.csproj" />
+    <Project Path="modules/openplatform/Sim.OpenPlatform.Domain.Shared/Sim.OpenPlatform.Domain.Shared.csproj" />
+    <Project Path="modules/openplatform/Sim.OpenPlatform.Domain/Sim.OpenPlatform.Domain.csproj" />
+    <Project Path="modules/openplatform/Sim.OpenPlatform.SqlSugar/Sim.OpenPlatform.SqlSugar.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Sim.Admin.Application.Contracts/Sim.Admin.Application.Contracts.csproj" />
+    <Project Path="src/Sim.Admin.Application/Sim.Admin.Application.csproj" />
+    <Project Path="src/Sim.Admin.Domain.Shared/Sim.Admin.Domain.Shared.csproj" />
+    <Project Path="src/Sim.Admin.Domain/Sim.Admin.Domain.csproj" />
+    <Project Path="src/Sim.Admin.HttpApi.Host/Sim.Admin.HttpApi.Host.csproj" />
+    <Project Path="src/Sim.Admin.SqlSugar/Sim.Admin.SqlSugar.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Sim.Security.Tests/Sim.Security.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>商务主题提案 · 中国传统色</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  button { font: inherit; }
+  .tp {
+    --board-bg: #e9e7e1;
+    --board-ink: #1e2428;
+    --board-muted: #6a716f;
+    --board-line: #d5d2c9;
+    --board-gold: #8a6a2e;
+    background: var(--board-bg);
+    color: var(--board-ink);
+    font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+    padding: 40px 28px 72px;
+    min-height: 100vh;
+  }
+  .tp .serif {
+    font-family: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+    font-weight: 600;
+  }
+  .tp .mono {
+    font-family: "Cascadia Code", ui-monospace, "SFMono-Regular", Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .tp .wrap { max-width: 1400px; margin: 0 auto; }
+
+  .tp-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(260px, .55fr);
+    gap: 36px;
+    align-items: end;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--board-line);
+  }
+  .tp-kicker {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--board-gold);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: .16em; text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .tp-kicker::before { content: ""; width: 30px; height: 1px; background: currentColor; }
+  .tp h1 {
+    margin: 0;
+    font-size: clamp(34px, 4.2vw, 58px);
+    line-height: 1.12;
+    letter-spacing: -.02em;
+    font-weight: 600;
+  }
+  .tp h1 em { font-style: normal; color: var(--board-gold); }
+  .tp-hero p {
+    margin: 16px 0 0;
+    max-width: 62ch;
+    color: var(--board-muted);
+    font-size: 14px;
+  }
+  .tp-meta {
+    display: grid; gap: 12px;
+    padding: 18px 20px;
+    border: 1px solid var(--board-line);
+    background: rgba(255,255,255,.42);
+    border-radius: 4px;
+  }
+  .tp-meta div { display: flex; justify-content: space-between; gap: 18px; font-size: 12px; }
+  .tp-meta span:first-child { color: var(--board-muted); }
+  .tp-meta b { font-weight: 650; }
+
+  .tp-principles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 26px 0 0;
+    border: 1px solid var(--board-line);
+    border-radius: 4px;
+    overflow: hidden;
+    background: rgba(255,255,255,.35);
+  }
+  .tp-principles > div { padding: 18px 20px; border-right: 1px solid var(--board-line); }
+  .tp-principles > div:last-child { border-right: 0; }
+  .tp-principles b { display: block; font-size: 13px; margin-bottom: 5px; }
+  .tp-principles p { margin: 0; font-size: 11.5px; color: var(--board-muted); line-height: 1.55; }
+  .tp-principles i {
+    display: inline-block; width: 18px; height: 2px; background: var(--board-gold);
+    margin-bottom: 10px;
+  }
+
+  .tp-theme { margin-top: 56px; }
+  .tp-theme-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, .7fr);
+    gap: 28px;
+    align-items: end;
+    margin-bottom: 18px;
+  }
+  .tp-index {
+    color: var(--board-gold);
+    font-size: 11px; font-weight: 700; letter-spacing: .18em;
+    margin-bottom: 8px;
+  }
+  .tp-theme-head h2 {
+    margin: 0;
+    font-size: clamp(24px, 2.4vw, 34px);
+    line-height: 1.2;
+    font-weight: 600;
+  }
+  .tp-theme-head h2 span { color: var(--board-muted); font-weight: 400; font-size: .55em; letter-spacing: .04em; margin-left: 10px; }
+  .tp-theme-head p { margin: 8px 0 0; color: var(--board-muted); font-size: 13px; max-width: 64ch; }
+  .tp-origin { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 6px; }
+  .tp-origin span {
+    border: 1px solid var(--board-line);
+    background: rgba(255,255,255,.4);
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    color: var(--board-muted);
+  }
+
+  .tp-modes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .tp-mode {
+    background: var(--bg);
+    color: var(--ink);
+    border: 1px solid var(--edge);
+    border-radius: 4px;
+    box-shadow: 0 18px 50px rgba(21, 27, 30, .10);
+    overflow: hidden;
+  }
+  .tp-mode-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .tp-mode-tag {
+    font-size: 9.5px; font-weight: 700; letter-spacing: .14em;
+    padding: 3px 7px; border-radius: 999px;
+    background: var(--primary-soft); color: var(--primary);
+    border: 1px solid var(--edge);
+  }
+  .tp-mode-name { font-size: 12px; font-weight: 650; }
+  .tp-mode-hex { margin-left: auto; font-size: 10.5px; color: var(--ink-faint); }
+
+  .tp-app { display: grid; grid-template-columns: 52px minmax(0, 1fr); min-height: 384px; }
+  .tp-rail {
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+    padding: 12px 0;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .tp-logo {
+    width: 26px; height: 26px; border-radius: 7px;
+    background: var(--primary); color: var(--on-primary);
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 700;
+    margin-bottom: 8px;
+    box-shadow: 0 3px 10px color-mix(in oklab, var(--primary) 30%, transparent);
+  }
+  .tp-nav {
+    width: 30px; height: 30px; border-radius: 7px;
+    display: grid; place-items: center;
+    color: var(--ink-faint);
+    position: relative;
+  }
+  .tp-nav svg { width: 14px; height: 14px; }
+  .tp-nav.is-active { background: var(--primary-soft); color: var(--primary); }
+  .tp-nav.is-active::before {
+    content: ""; position: absolute; left: -11px; top: 8px; bottom: 8px;
+    width: 2px; border-radius: 2px; background: var(--accent-bright);
+  }
+  .tp-main { padding: 12px 14px 14px; min-width: 0; }
+  .tp-topbar { display: flex; align-items: center; gap: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .tp-crumb { font-size: 10px; color: var(--ink-faint); white-space: nowrap; }
+  .tp-crumb b { color: var(--ink); font-weight: 600; }
+  .tp-search {
+    margin-left: auto;
+    width: 128px; height: 26px; border-radius: 7px;
+    border: 1px solid var(--edge); background: var(--bg-alt);
+    display: flex; align-items: center; gap: 6px; padding: 0 8px;
+    color: var(--ink-faint); font-size: 10px;
+  }
+  .tp-search svg { width: 11px; height: 11px; flex: none; }
+  .tp-icon-btn {
+    width: 26px; height: 26px; border-radius: 7px;
+    border: 1px solid transparent; background: transparent;
+    display: grid; place-items: center;
+    color: var(--ink-soft); position: relative;
+  }
+  .tp-icon-btn svg { width: 13px; height: 13px; }
+  .tp-icon-btn::after {
+    content: ""; position: absolute; top: 6px; right: 6px;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--danger);
+  }
+  .tp-avatar {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid var(--edge);
+    display: grid; place-items: center; font-size: 9px; font-weight: 700;
+  }
+  .tp-pagehead { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0 10px; }
+  .tp-pagehead h3 { margin: 0; font-size: 16px; line-height: 1.25; font-weight: 650; letter-spacing: -.01em; }
+  .tp-pagehead p { margin: 3px 0 0; font-size: 10px; color: var(--ink-faint); }
+  .tp-actions { margin-left: auto; display: flex; gap: 6px; }
+  .tp-btn {
+    height: 28px; padding: 0 11px; border-radius: 7px;
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 600; white-space: nowrap;
+    border: 1px solid var(--edge); background: var(--surface); color: var(--ink);
+  }
+  .tp-btn--primary {
+    background: var(--primary); border-color: var(--primary); color: var(--on-primary);
+    box-shadow: 0 4px 12px color-mix(in oklab, var(--primary) 24%, transparent);
+  }
+  .tp-btn--ghost { background: transparent; }
+
+  .tp-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .tp-kpi {
+    background: var(--surface);
+    border: 1px solid var(--edge);
+    border-radius: 9px;
+    padding: 9px 10px 8px;
+    min-width: 0;
+  }
+  .tp-kpi-label { font-size: 9.5px; color: var(--ink-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tp-kpi-value { margin-top: 3px; font-size: 18px; font-weight: 650; line-height: 1.15; letter-spacing: -.02em; }
+  .tp-kpi-value small { font-size: 10px; font-weight: 500; color: var(--ink-faint); margin-left: 2px; }
+  .tp-kpi-foot { display: flex; align-items: center; gap: 5px; margin-top: 4px; font-size: 9px; color: var(--ink-faint); }
+  .tp-delta { font-weight: 650; }
+  .tp-up { color: var(--success); }
+  .tp-down { color: var(--danger); }
+  .tp-spark { margin-left: auto; width: 38px; height: 14px; overflow: visible; }
+  .tp-spark polyline { fill: none; stroke: var(--accent-bright); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  .tp-table {
+    margin-top: 9px;
+    background: var(--surface);
+    border: 1px solid var(--edge);
+    border-radius: 9px;
+    overflow: hidden;
+  }
+  .tp-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 58px 62px 44px;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--line);
+    font-size: 10px;
+  }
+  .tp-row:last-child { border-bottom: 0; }
+  .tp-row--head {
+    background: var(--bg-alt);
+    color: var(--ink-faint);
+    font-size: 8.5px; letter-spacing: .05em; text-transform: uppercase;
+    padding-top: 6px; padding-bottom: 6px;
+  }
+  .tp-row--hover { background: color-mix(in oklab, var(--primary) 5%, var(--surface)); }
+  .tp-cell-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tp-cell-title b { font-weight: 600; color: var(--ink); }
+  .tp-cell-title span { color: var(--ink-faint); margin-left: 5px; font-size: 9px; }
+  .tp-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 6px; border-radius: 999px;
+    font-size: 8.5px; font-weight: 600; white-space: nowrap;
+    border: 1px solid currentColor;
+  }
+  .tp-pill::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+  .tp-pill--warn { color: var(--warning); background: var(--warning-soft); border-color: color-mix(in oklab, var(--warning) 22%, transparent); }
+  .tp-pill--info { color: var(--info); background: var(--info-soft); border-color: color-mix(in oklab, var(--info) 22%, transparent); }
+  .tp-pill--ok { color: var(--success); background: var(--success-soft); border-color: color-mix(in oklab, var(--success) 22%, transparent); }
+  .tp-pill--danger { color: var(--danger); background: var(--danger-soft); border-color: color-mix(in oklab, var(--danger) 22%, transparent); }
+  .tp-amount { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .tp-date { text-align: right; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  .tp-formline { display: flex; align-items: center; gap: 6px; margin-top: 9px; }
+  .tp-input {
+    flex: 1; height: 28px; border-radius: 7px;
+    border: 1px solid var(--primary);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 14%, transparent);
+    background: var(--surface);
+    display: flex; align-items: center; padding: 0 9px;
+    font-size: 9.5px; color: var(--ink-faint);
+    min-width: 0;
+  }
+  .tp-chip {
+    height: 22px; padding: 0 8px; border-radius: 6px;
+    background: var(--surface); border: 1px solid var(--edge);
+    color: var(--ink-soft); font-size: 9px;
+    display: inline-flex; align-items: center; white-space: nowrap;
+  }
+  .tp-chip--accent { background: var(--accent-soft); border-color: color-mix(in oklab, var(--accent) 25%, transparent); color: var(--accent); }
+
+  .tp-palette {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+  }
+  .tp-swatch { background: var(--surface); padding: 9px 10px 8px; min-width: 0; }
+  .tp-swatch-top { display: flex; align-items: center; gap: 7px; }
+  .tp-swatch-dot { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--edge); flex: none; }
+  .tp-swatch-name { font-size: 9.5px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tp-swatch-hex { margin-left: 23px; font-size: 9px; color: var(--ink-faint); letter-spacing: .02em; }
+
+  .tp-matrix-wrap {
+    margin-top: 54px;
+    border: 1px solid var(--board-line);
+    background: rgba(255,255,255,.42);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .tp-section-head { padding: 18px 20px; border-bottom: 1px solid var(--board-line); display: flex; align-items: baseline; gap: 14px; }
+  .tp-section-head h2 { margin: 0; font-size: 20px; font-weight: 600; }
+  .tp-section-head span { color: var(--board-muted); font-size: 12px; }
+  .tp-matrix { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .tp-matrix th, .tp-matrix td { padding: 8px 12px; border-bottom: 1px solid var(--board-line); text-align: left; white-space: nowrap; }
+  .tp-matrix thead th { font-size: 10px; font-weight: 650; color: var(--board-muted); background: rgba(255,255,255,.35); }
+  .tp-matrix tbody tr:last-child td { border-bottom: 0; }
+  .tp-matrix td:first-child { font-weight: 600; }
+  .tp-matrix .mono { font-size: 10.5px; }
+  .tp-matrix-dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; border: 1px solid rgba(0,0,0,.12); }
+  .tp-matrix-scroll { overflow-x: auto; }
+
+  .tp-settings { margin-top: 54px; }
+  .tp-settings-panel {
+    border: 1px solid var(--board-line);
+    background: rgba(255,255,255,.42);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .tp-settings-head {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--board-line);
+    display: flex; align-items: baseline; gap: 16px;
+  }
+  .tp-settings-head h3 { margin: 0; font-size: 16px; font-weight: 650; }
+  .tp-settings-head p { margin: 0; font-size: 12px; color: var(--board-muted); }
+  .tp-setting-group { padding: 18px 20px; border-bottom: 1px solid var(--board-line); }
+  .tp-setting-group:last-child { border-bottom: 0; }
+  .tp-setting-label { font-size: 12px; font-weight: 650; margin-bottom: 10px; }
+  .tp-setting-row { display: flex; align-items: center; gap: 20px; }
+  .tp-setting-row .tp-setting-label { margin-bottom: 0; }
+  .tp-setting-hint { font-size: 11px; color: var(--board-muted); margin-top: 3px; }
+  .tp-theme-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .tp-theme-card {
+    position: relative; text-align: left;
+    border: 1px solid var(--board-line);
+    background: rgba(255,255,255,.5);
+    border-radius: 6px; padding: 8px; cursor: default;
+  }
+  .tp-theme-card.is-selected { border-color: #2e5065; box-shadow: 0 0 0 2px rgba(46,80,101,.14); }
+  .tp-theme-preview { display: flex; height: 44px; border-radius: 4px; overflow: hidden; border: 1px solid rgba(0,0,0,.08); }
+  .tp-theme-preview span { flex: 1; }
+  .tp-theme-card-name { display: block; font-size: 11px; font-weight: 600; margin-top: 8px; }
+  .tp-theme-card-sub { display: block; font-size: 9.5px; color: var(--board-muted); margin-top: 1px; }
+  .tp-theme-card-check {
+    position: absolute; top: 10px; right: 10px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #2e5065; color: #fff;
+    display: grid; place-items: center; font-size: 9px;
+  }
+  .tp-seg {
+    margin-left: auto; display: inline-flex; padding: 3px;
+    border: 1px solid var(--board-line); border-radius: 7px;
+    background: rgba(255,255,255,.5);
+  }
+  .tp-seg span { padding: 5px 14px; border-radius: 5px; font-size: 11px; color: var(--board-muted); }
+  .tp-seg span.is-active { background: #fff; color: var(--board-ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); font-weight: 600; }
+
+  .tp-skin { margin-top: 54px; }
+  .tp-skin-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  .tp-skin-card {
+    border: 1px solid var(--board-line);
+    background: rgba(255,255,255,.42);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .tp-skin-card-head {
+    padding: 13px 18px; border-bottom: 1px solid var(--board-line);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .tp-skin-card-head b { font-size: 13px; }
+  .tp-skin-card-head span { font-size: 10px; color: var(--board-muted); margin-left: auto; }
+  .tp-skin-demo { padding: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: center; }
+  .tp-demo-card {
+    padding: 14px; border-radius: 14px; min-height: 120px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .tp-demo-card b { font-size: 12px; }
+  .tp-demo-card p { margin: 4px 0 0; font-size: 10px; opacity: .72; }
+  .tp-demo-card .tp-demo-btn { align-self: flex-start; }
+
+  .tp-paper {
+    background: #fff9ee; color: #14284b;
+    border: 2px solid #14284b; border-radius: 18px;
+    box-shadow: 4px 4px 0 #14284b;
+  }
+  .tp-paper .tp-demo-btn {
+    border: 2px solid #14284b; border-radius: 999px; background: #ff7a6b;
+    color: #14284b; font-weight: 800;
+    padding: 6px 12px; font-size: 10px;
+  }
+  .tp-business {
+    background: #ffffff; color: #1b2a33;
+    border: 1px solid #cfd8d5; border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(16,24,32,.04), 0 10px 28px rgba(16,24,32,.07);
+  }
+  .tp-business .tp-demo-btn {
+    border: 1px solid #2e5065; border-radius: 7px; background: #2e5065;
+    color: #f7f6f1; font-weight: 600;
+    padding: 6px 12px; font-size: 10px;
+  }
+
+  .tp-specs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 18px; border: 1px solid var(--board-line); border-radius: 4px; overflow: hidden; background: rgba(255,255,255,.42); }
+  .tp-spec { padding: 16px 18px; border-right: 1px solid var(--board-line); border-bottom: 1px solid var(--board-line); }
+  .tp-spec:nth-child(3n) { border-right: 0; }
+  .tp-spec:nth-last-child(-n+3) { border-bottom: 0; }
+  .tp-spec b { display: block; font-size: 12px; margin-bottom: 4px; }
+  .tp-spec p { margin: 0; font-size: 11px; color: var(--board-muted); line-height: 1.55; }
+  .tp-spec code { font-family: "Cascadia Code", ui-monospace, Consolas, monospace; font-size: 10px; background: rgba(0,0,0,.05); padding: 1px 4px; border-radius: 3px; }
+
+  .tp-footer {
+    margin-top: 54px;
+    padding-top: 24px;
+    border-top: 1px solid var(--board-line);
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+    gap: 36px;
+  }
+  .tp-footer h2 { margin: 0 0 12px; font-size: 20px; font-weight: 600; }
+  .tp-footer ol { margin: 0; padding-left: 20px; color: var(--board-muted); font-size: 12.5px; }
+  .tp-footer li { margin-bottom: 8px; }
+  .tp-footer li b { color: var(--board-ink); }
+  .tp-next {
+    border-left: 2px solid var(--board-gold);
+    padding-left: 18px;
+    font-size: 12px;
+    color: var(--board-muted);
+  }
+  .tp-next b { color: var(--board-ink); display: block; margin-bottom: 6px; font-size: 12px; }
+
+  @media (max-width: 1080px) {
+    .tp-hero { grid-template-columns: 1fr; gap: 20px; }
+    .tp-principles { grid-template-columns: repeat(2, 1fr); }
+    .tp-principles > div:nth-child(2) { border-right: 0; }
+    .tp-principles > div:nth-child(-n+2) { border-bottom: 1px solid var(--board-line); }
+    .tp-modes { grid-template-columns: 1fr; }
+    .tp-theme-head { grid-template-columns: 1fr; }
+    .tp-origin { justify-content: flex-start; }
+    .tp-footer { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .tp { padding: 26px 16px 48px; }
+    .tp-principles { grid-template-columns: 1fr; }
+    .tp-principles > div { border-right: 0; border-bottom: 1px solid var(--board-line); }
+    .tp-principles > div:last-child { border-bottom: 0; }
+    .tp-app { grid-template-columns: 44px minmax(0, 1fr); }
+    .tp-kpis { grid-template-columns: 1fr 1fr; }
+    .tp-kpi:last-child { display: none; }
+    .tp-search { width: 74px; }
+    .tp-palette { grid-template-columns: repeat(2, 1fr); }
+    .tp-specs { grid-template-columns: 1fr; }
+    .tp-spec { border-right: 0; }
+    .tp-spec:nth-last-child(-n+3) { border-bottom: 1px solid var(--board-line); }
+    .tp-spec:last-child { border-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="tp">
+  <div class="wrap">
+    <header class="tp-hero">
+      <div>
+        <div class="tp-kicker">Theme proposal · 2026.10</div>
+        <h1 class="serif">商务主题 · <em>中国传统色</em></h1>
+        <p>不是给现有界面换一层颜色，而是用「传统色 + 商务皮肤」重建一套更克制的视觉语言：发丝边、柔光阴影、收敛圆角、实心主按钮。纸上海洋保留为一套独立风格，商务主题只作用于选择它的用户。</p>
+      </div>
+      <div class="tp-meta">
+        <div><span>候选色系</span><b>3 套</b></div>
+        <div><span>每套模式</span><b>月白 / 玄夜</b></div>
+        <div><span>结构基准</span><b>1px 边 · 8/14px 圆角</b></div>
+        <div><span>对比度</span><b>正文 ≥ 7:1 · 次级 ≥ 4.5:1</b></div>
+      </div>
+    </header>
+
+    <section class="tp-principles">
+      <div><i></i><b>色从传统，序从商务</b><p>颜色取自玄青、黛蓝、竹青、朱砂、缃色等传统色；层级关系遵循后台信息密度，而不是装饰性配色。</p></div>
+      <div><i></i><b>一个主色，一个强调色</b><p>主色只负责交互与主行动，强调色只负责选中、指标与印章式点缀。避免每个按钮都在抢注意力。</p></div>
+      <div><i></i><b>明暗同源，不另做一套</b><p>每套主题的明暗共享同一组语义角色，只调整明度与饱和；换模式时版式、圆角、间距完全不变。</p></div>
+      <div><i></i><b>商务皮肤独立成层</b><p>纸上海洋的 2px 墨线与硬投影不被破坏；商务皮肤通过独立 token 层生效，可单独验收、单独回退。</p></div>
+    </section>
+
+    <!-- ================= 玄青 ================= -->
+    <section class="tp-theme" id="xuanqing">
+      <div class="tp-theme-head">
+        <div>
+          <div class="tp-index">01 / XUANQING</div>
+          <h2 class="serif">玄青 · 鎏金 <span>Xuanqing &amp; Gilt</span></h2>
+          <p>玄青为骨，鎏金为线。适合集团管理、财务、法务、审计类后台：信息密度高、权限层级深，需要一种不喧哗的权威感。</p>
+        </div>
+        <div class="tp-origin"><span>玄青 #1B2A33</span><span>黛蓝 #2E5065</span><span>鎏金 #D2B36A</span><span>月白 #F5F6F4</span></div>
+      </div>
+      <div class="tp-modes">
+        <article class="tp-mode" style="--bg:#F5F6F4;--bg-alt:#ECEFF0;--surface:#FFFFFF;--raised:#FFFFFF;--ink:#1B2A33;--ink-soft:#52636D;--ink-faint:#5F6E78;--line:#DFE5E4;--edge:#CFD8D5;--edge-strong:#B6C2BE;--primary:#2E5065;--primary-hover:#264456;--primary-soft:#E8EFF3;--accent:#8A6A2E;--accent-bright:#D2B36A;--accent-soft:#F4EDDD;--on-primary:#F7F6F1;--success:#2E7D5B;--success-soft:#E6F2EC;--warning:#9A6A18;--warning-soft:#F7EDD9;--danger:#AF3A2E;--danger-soft:#F8E7E4;--info:#376C8B;--info-soft:#E8F0F4;">
+          <div class="tp-mode-head"><span class="tp-mode-tag">LIGHT</span><span class="tp-mode-name">月白</span><span class="tp-mode-hex mono">#F5F6F4</span></div>
+          <div class="tp-app">
+            <aside class="tp-rail">
+              <div class="tp-logo">S</div>
+              <span class="tp-nav is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3 7-7"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 5.2a3.5 3.5 0 0 1 0 6.6"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></span>
+            </aside>
+            <div class="tp-main">
+              <div class="tp-topbar">
+                <div class="tp-crumb">工作台 / <b>概览</b></div>
+                <div class="tp-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>搜索</div>
+                <span class="tp-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span>
+                <span class="tp-avatar">冯</span>
+              </div>
+              <div class="tp-pagehead">
+                <div><h3>运营概览</h3><p>2026 年 10 月 · 集团视图</p></div>
+                <div class="tp-actions"><button class="tp-btn tp-btn--ghost">导出</button><button class="tp-btn tp-btn--primary">+ 新建</button></div>
+              </div>
+              <div class="tp-kpis">
+                <div class="tp-kpi"><div class="tp-kpi-label">待办审批</div><div class="tp-kpi-value">12</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+3</span><span>较昨日</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,11 6,9 11,10 16,7 21,8 26,5 31,6 37,2"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">本月支出</div><div class="tp-kpi-value">486.2<small>k</small></div><div class="tp-kpi-foot"><span class="tp-delta tp-down">-2.4%</span><span>环比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,3 6,5 11,4 16,7 21,6 26,9 31,8 37,11"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">活跃成员</div><div class="tp-kpi-value">1,284</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+8.1%</span><span>同比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,10 6,8 11,9 16,6 21,7 26,4 31,5 37,2"/></svg></div></div>
+              </div>
+              <div class="tp-table">
+                <div class="tp-row tp-row--head"><span>事项</span><span>状态</span><span style="text-align:right">金额</span><span style="text-align:right">日期</span></div>
+                <div class="tp-row tp-row--hover"><span class="tp-cell-title"><b>年度预算复核</b><span>财务部</span></span><span><span class="tp-pill tp-pill--warn">待审批</span></span><span class="tp-amount">¥128,400</span><span class="tp-date">10-24</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>供应商准入</b><span>采购部</span></span><span><span class="tp-pill tp-pill--info">进行中</span></span><span class="tp-amount">¥86,000</span><span class="tp-date">10-23</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>权限变更申请</b><span>系统部</span></span><span><span class="tp-pill tp-pill--ok">已通过</span></span><span class="tp-amount">—</span><span class="tp-date">10-22</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>合同续签</b><span>法务部</span></span><span><span class="tp-pill tp-pill--danger">需关注</span></span><span class="tp-amount">¥42,800</span><span class="tp-date">10-21</span></div>
+              </div>
+              <div class="tp-formline"><div class="tp-input">搜索成员或部门</div><span class="tp-chip tp-chip--accent">财务部</span><span class="tp-chip">华东区</span></div>
+            </div>
+          </div>
+          <div class="tp-palette">
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#F5F6F4"></span><span class="tp-swatch-name">纸底</span></div><div class="tp-swatch-hex mono">#F5F6F4</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#FFFFFF"></span><span class="tp-swatch-name">卡面</span></div><div class="tp-swatch-hex mono">#FFFFFF</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#1B2A33"></span><span class="tp-swatch-name">玄青</span></div><div class="tp-swatch-hex mono">#1B2A33</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#2E5065"></span><span class="tp-swatch-name">黛蓝</span></div><div class="tp-swatch-hex mono">#2E5065</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#D2B36A"></span><span class="tp-swatch-name">鎏金</span></div><div class="tp-swatch-hex mono">#D2B36A</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#2E7D5B"></span><span class="tp-swatch-name">松绿</span></div><div class="tp-swatch-hex mono">#2E7D5B</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#9A6A18"></span><span class="tp-swatch-name">赭黄</span></div><div class="tp-swatch-hex mono">#9A6A18</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#AF3A2E"></span><span class="tp-swatch-name">朱砂</span></div><div class="tp-swatch-hex mono">#AF3A2E</div></div>
+          </div>
+        </article>
+
+        <article class="tp-mode" style="--bg:#0F161B;--bg-alt:#141E24;--surface:#19242B;--raised:#202E36;--ink:#EDF0EC;--ink-soft:#A7B4BA;--ink-faint:#7D8B92;--line:#2A383F;--edge:#36464E;--edge-strong:#4A5C65;--primary:#8FB6CF;--primary-hover:#A6C7DB;--primary-soft:#23333C;--accent:#D2B36A;--accent-bright:#E4CB8B;--accent-soft:#332C1D;--on-primary:#0F161B;--success:#6FC29A;--success-soft:#1C3329;--warning:#E0B264;--warning-soft:#332C1D;--danger:#E88378;--danger-soft:#3A2321;--info:#8AB8D2;--info-soft:#1E2F38;">
+          <div class="tp-mode-head"><span class="tp-mode-tag">DARK</span><span class="tp-mode-name">玄夜</span><span class="tp-mode-hex mono">#0F161B</span></div>
+          <div class="tp-app">
+            <aside class="tp-rail">
+              <div class="tp-logo">S</div>
+              <span class="tp-nav is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3 7-7"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 5.2a3.5 3.5 0 0 1 0 6.6"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></span>
+            </aside>
+            <div class="tp-main">
+              <div class="tp-topbar">
+                <div class="tp-crumb">工作台 / <b>概览</b></div>
+                <div class="tp-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>搜索</div>
+                <span class="tp-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span>
+                <span class="tp-avatar">冯</span>
+              </div>
+              <div class="tp-pagehead">
+                <div><h3>运营概览</h3><p>2026 年 10 月 · 集团视图</p></div>
+                <div class="tp-actions"><button class="tp-btn tp-btn--ghost">导出</button><button class="tp-btn tp-btn--primary">+ 新建</button></div>
+              </div>
+              <div class="tp-kpis">
+                <div class="tp-kpi"><div class="tp-kpi-label">待办审批</div><div class="tp-kpi-value">12</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+3</span><span>较昨日</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,11 6,9 11,10 16,7 21,8 26,5 31,6 37,2"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">本月支出</div><div class="tp-kpi-value">486.2<small>k</small></div><div class="tp-kpi-foot"><span class="tp-delta tp-down">-2.4%</span><span>环比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,3 6,5 11,4 16,7 21,6 26,9 31,8 37,11"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">活跃成员</div><div class="tp-kpi-value">1,284</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+8.1%</span><span>同比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,10 6,8 11,9 16,6 21,7 26,4 31,5 37,2"/></svg></div></div>
+              </div>
+              <div class="tp-table">
+                <div class="tp-row tp-row--head"><span>事项</span><span>状态</span><span style="text-align:right">金额</span><span style="text-align:right">日期</span></div>
+                <div class="tp-row tp-row--hover"><span class="tp-cell-title"><b>年度预算复核</b><span>财务部</span></span><span><span class="tp-pill tp-pill--warn">待审批</span></span><span class="tp-amount">¥128,400</span><span class="tp-date">10-24</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>供应商准入</b><span>采购部</span></span><span><span class="tp-pill tp-pill--info">进行中</span></span><span class="tp-amount">¥86,000</span><span class="tp-date">10-23</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>权限变更申请</b><span>系统部</span></span><span><span class="tp-pill tp-pill--ok">已通过</span></span><span class="tp-amount">—</span><span class="tp-date">10-22</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>合同续签</b><span>法务部</span></span><span><span class="tp-pill tp-pill--danger">需关注</span></span><span class="tp-amount">¥42,800</span><span class="tp-date">10-21</span></div>
+              </div>
+              <div class="tp-formline"><div class="tp-input">搜索成员或部门</div><span class="tp-chip tp-chip--accent">财务部</span><span class="tp-chip">华东区</span></div>
+            </div>
+          </div>
+          <div class="tp-palette">
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#0F161B"></span><span class="tp-swatch-name">玄夜</span></div><div class="tp-swatch-hex mono">#0F161B</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#19242B"></span><span class="tp-swatch-name">卡面</span></div><div class="tp-swatch-hex mono">#19242B</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#EDF0EC"></span><span class="tp-swatch-name">月白</span></div><div class="tp-swatch-hex mono">#EDF0EC</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#8FB6CF"></span><span class="tp-swatch-name">黛蓝</span></div><div class="tp-swatch-hex mono">#8FB6CF</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#D2B36A"></span><span class="tp-swatch-name">鎏金</span></div><div class="tp-swatch-hex mono">#D2B36A</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#6FC29A"></span><span class="tp-swatch-name">松绿</span></div><div class="tp-swatch-hex mono">#6FC29A</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#E0B264"></span><span class="tp-swatch-name">赭黄</span></div><div class="tp-swatch-hex mono">#E0B264</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#E88378"></span><span class="tp-swatch-name">朱砂</span></div><div class="tp-swatch-hex mono">#E88378</div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= 竹月 ================= -->
+    <section class="tp-theme" id="zhuyue">
+      <div class="tp-theme-head">
+        <div>
+          <div class="tp-index">02 / ZHUYUE</div>
+          <h2 class="serif">竹月 · 清雅 <span>Zhuyue &amp; Serene</span></h2>
+          <p>竹青入墨，月白为纸。适合内容、知识库、协作与日常办公：低饱和、低刺激，长时间阅读和批量处理不容易疲劳。</p>
+        </div>
+        <div class="tp-origin"><span>竹青 #3E6B57</span><span>石绿 #8FB6A6</span><span>月白 #F3F6F3</span><span>竹墨 #1F2C27</span></div>
+      </div>
+      <div class="tp-modes">
+        <article class="tp-mode" style="--bg:#F3F6F3;--bg-alt:#E9EFEB;--surface:#FFFFFF;--raised:#FFFFFF;--ink:#1F2C27;--ink-soft:#52645C;--ink-faint:#64766E;--line:#DDE6E1;--edge:#CCD9D2;--edge-strong:#B3C4BA;--primary:#3E6B57;--primary-hover:#345A49;--primary-soft:#E6F0EA;--accent:#4C7767;--accent-bright:#8FB6A6;--accent-soft:#E4EFEA;--on-primary:#F7F8F4;--success:#2E7D5B;--success-soft:#E6F2EC;--warning:#9A6A18;--warning-soft:#F7EDD9;--danger:#AF3A2E;--danger-soft:#F8E7E4;--info:#376C8B;--info-soft:#E8F0F4;">
+          <div class="tp-mode-head"><span class="tp-mode-tag">LIGHT</span><span class="tp-mode-name">月白</span><span class="tp-mode-hex mono">#F3F6F3</span></div>
+          <div class="tp-app">
+            <aside class="tp-rail">
+              <div class="tp-logo">S</div>
+              <span class="tp-nav is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3 7-7"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 5.2a3.5 3.5 0 0 1 0 6.6"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></span>
+            </aside>
+            <div class="tp-main">
+              <div class="tp-topbar">
+                <div class="tp-crumb">工作台 / <b>概览</b></div>
+                <div class="tp-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>搜索</div>
+                <span class="tp-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span>
+                <span class="tp-avatar">冯</span>
+              </div>
+              <div class="tp-pagehead">
+                <div><h3>运营概览</h3><p>2026 年 10 月 · 集团视图</p></div>
+                <div class="tp-actions"><button class="tp-btn tp-btn--ghost">导出</button><button class="tp-btn tp-btn--primary">+ 新建</button></div>
+              </div>
+              <div class="tp-kpis">
+                <div class="tp-kpi"><div class="tp-kpi-label">待办审批</div><div class="tp-kpi-value">12</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+3</span><span>较昨日</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,11 6,9 11,10 16,7 21,8 26,5 31,6 37,2"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">本月支出</div><div class="tp-kpi-value">486.2<small>k</small></div><div class="tp-kpi-foot"><span class="tp-delta tp-down">-2.4%</span><span>环比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,3 6,5 11,4 16,7 21,6 26,9 31,8 37,11"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">活跃成员</div><div class="tp-kpi-value">1,284</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+8.1%</span><span>同比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,10 6,8 11,9 16,6 21,7 26,4 31,5 37,2"/></svg></div></div>
+              </div>
+              <div class="tp-table">
+                <div class="tp-row tp-row--head"><span>事项</span><span>状态</span><span style="text-align:right">金额</span><span style="text-align:right">日期</span></div>
+                <div class="tp-row tp-row--hover"><span class="tp-cell-title"><b>年度预算复核</b><span>财务部</span></span><span><span class="tp-pill tp-pill--warn">待审批</span></span><span class="tp-amount">¥128,400</span><span class="tp-date">10-24</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>供应商准入</b><span>采购部</span></span><span><span class="tp-pill tp-pill--info">进行中</span></span><span class="tp-amount">¥86,000</span><span class="tp-date">10-23</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>权限变更申请</b><span>系统部</span></span><span><span class="tp-pill tp-pill--ok">已通过</span></span><span class="tp-amount">—</span><span class="tp-date">10-22</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>合同续签</b><span>法务部</span></span><span><span class="tp-pill tp-pill--danger">需关注</span></span><span class="tp-amount">¥42,800</span><span class="tp-date">10-21</span></div>
+              </div>
+              <div class="tp-formline"><div class="tp-input">搜索成员或部门</div><span class="tp-chip tp-chip--accent">财务部</span><span class="tp-chip">华东区</span></div>
+            </div>
+          </div>
+          <div class="tp-palette">
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#F3F6F3"></span><span class="tp-swatch-name">月白</span></div><div class="tp-swatch-hex mono">#F3F6F3</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#FFFFFF"></span><span class="tp-swatch-name">卡面</span></div><div class="tp-swatch-hex mono">#FFFFFF</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#1F2C27"></span><span class="tp-swatch-name">竹墨</span></div><div class="tp-swatch-hex mono">#1F2C27</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#3E6B57"></span><span class="tp-swatch-name">竹青</span></div><div class="tp-swatch-hex mono">#3E6B57</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#8FB6A6"></span><span class="tp-swatch-name">石绿</span></div><div class="tp-swatch-hex mono">#8FB6A6</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#2E7D5B"></span><span class="tp-swatch-name">松绿</span></div><div class="tp-swatch-hex mono">#2E7D5B</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#9A6A18"></span><span class="tp-swatch-name">赭黄</span></div><div class="tp-swatch-hex mono">#9A6A18</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#AF3A2E"></span><span class="tp-swatch-name">朱砂</span></div><div class="tp-swatch-hex mono">#AF3A2E</div></div>
+          </div>
+        </article>
+
+        <article class="tp-mode" style="--bg:#0E1512;--bg-alt:#131C18;--surface:#19231F;--raised:#202C27;--ink:#E9EFEA;--ink-soft:#A6B4AC;--ink-faint:#7C8C83;--line:#293732;--edge:#35463E;--edge-strong:#4A5C52;--primary:#8FC0A6;--primary-hover:#A5D0B9;--primary-soft:#23342C;--accent:#7FB3A1;--accent-bright:#A3C9BA;--accent-soft:#20312A;--on-primary:#0E1512;--success:#6FC29A;--success-soft:#1C3329;--warning:#E0B264;--warning-soft:#332C1D;--danger:#E88378;--danger-soft:#3A2321;--info:#8AB8D2;--info-soft:#1E2F38;">
+          <div class="tp-mode-head"><span class="tp-mode-tag">DARK</span><span class="tp-mode-name">竹夜</span><span class="tp-mode-hex mono">#0E1512</span></div>
+          <div class="tp-app">
+            <aside class="tp-rail">
+              <div class="tp-logo">S</div>
+              <span class="tp-nav is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3 7-7"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 5.2a3.5 3.5 0 0 1 0 6.6"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></span>
+            </aside>
+            <div class="tp-main">
+              <div class="tp-topbar">
+                <div class="tp-crumb">工作台 / <b>概览</b></div>
+                <div class="tp-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>搜索</div>
+                <span class="tp-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span>
+                <span class="tp-avatar">冯</span>
+              </div>
+              <div class="tp-pagehead">
+                <div><h3>运营概览</h3><p>2026 年 10 月 · 集团视图</p></div>
+                <div class="tp-actions"><button class="tp-btn tp-btn--ghost">导出</button><button class="tp-btn tp-btn--primary">+ 新建</button></div>
+              </div>
+              <div class="tp-kpis">
+                <div class="tp-kpi"><div class="tp-kpi-label">待办审批</div><div class="tp-kpi-value">12</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+3</span><span>较昨日</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,11 6,9 11,10 16,7 21,8 26,5 31,6 37,2"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">本月支出</div><div class="tp-kpi-value">486.2<small>k</small></div><div class="tp-kpi-foot"><span class="tp-delta tp-down">-2.4%</span><span>环比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,3 6,5 11,4 16,7 21,6 26,9 31,8 37,11"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">活跃成员</div><div class="tp-kpi-value">1,284</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+8.1%</span><span>同比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,10 6,8 11,9 16,6 21,7 26,4 31,5 37,2"/></svg></div></div>
+              </div>
+              <div class="tp-table">
+                <div class="tp-row tp-row--head"><span>事项</span><span>状态</span><span style="text-align:right">金额</span><span style="text-align:right">日期</span></div>
+                <div class="tp-row tp-row--hover"><span class="tp-cell-title"><b>年度预算复核</b><span>财务部</span></span><span><span class="tp-pill tp-pill--warn">待审批</span></span><span class="tp-amount">¥128,400</span><span class="tp-date">10-24</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>供应商准入</b><span>采购部</span></span><span><span class="tp-pill tp-pill--info">进行中</span></span><span class="tp-amount">¥86,000</span><span class="tp-date">10-23</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>权限变更申请</b><span>系统部</span></span><span><span class="tp-pill tp-pill--ok">已通过</span></span><span class="tp-amount">—</span><span class="tp-date">10-22</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>合同续签</b><span>法务部</span></span><span><span class="tp-pill tp-pill--danger">需关注</span></span><span class="tp-amount">¥42,800</span><span class="tp-date">10-21</span></div>
+              </div>
+              <div class="tp-formline"><div class="tp-input">搜索成员或部门</div><span class="tp-chip tp-chip--accent">财务部</span><span class="tp-chip">华东区</span></div>
+            </div>
+          </div>
+          <div class="tp-palette">
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#0E1512"></span><span class="tp-swatch-name">竹夜</span></div><div class="tp-swatch-hex mono">#0E1512</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#19231F"></span><span class="tp-swatch-name">卡面</span></div><div class="tp-swatch-hex mono">#19231F</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#E9EFEA"></span><span class="tp-swatch-name">月白</span></div><div class="tp-swatch-hex mono">#E9EFEA</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#8FC0A6"></span><span class="tp-swatch-name">竹青</span></div><div class="tp-swatch-hex mono">#8FC0A6</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#A3C9BA"></span><span class="tp-swatch-name">石绿</span></div><div class="tp-swatch-hex mono">#A3C9BA</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#6FC29A"></span><span class="tp-swatch-name">松绿</span></div><div class="tp-swatch-hex mono">#6FC29A</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#E0B264"></span><span class="tp-swatch-name">赭黄</span></div><div class="tp-swatch-hex mono">#E0B264</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#E88378"></span><span class="tp-swatch-name">朱砂</span></div><div class="tp-swatch-hex mono">#E88378</div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= 朱缃 ================= -->
+    <section class="tp-theme" id="zhuxiang">
+      <div class="tp-theme-head">
+        <div>
+          <div class="tp-index">03 / ZHUXIANG</div>
+          <h2 class="serif">朱缃 · 典章 <span>Zhuxiang &amp; Archive</span></h2>
+          <p>朱砂为印，缃色为签。适合审批、公文、档案、组织人事：暖纸底降低后台的冷硬感，朱砂主色保留印章式的仪式感。</p>
+        </div>
+        <div class="tp-origin"><span>朱砂 #A93B2E</span><span>缃色 #D9B44A</span><span>宣纸 #F8F4EA</span><span>玄墨 #2B2420</span></div>
+      </div>
+      <div class="tp-modes">
+        <article class="tp-mode" style="--bg:#F8F4EA;--bg-alt:#F1EADB;--surface:#FFFDF8;--raised:#FFFDF8;--ink:#2B2420;--ink-soft:#675B52;--ink-faint:#786B61;--line:#E6DCC9;--edge:#D8CAB2;--edge-strong:#C4B292;--primary:#A93B2E;--primary-hover:#8F3025;--primary-soft:#F7E7E2;--accent:#8A6A1F;--accent-bright:#D9B44A;--accent-soft:#F6EDCF;--on-primary:#FFF8EF;--success:#2E7D5B;--success-soft:#E6F2EC;--warning:#9A6A18;--warning-soft:#F7EDD9;--danger:#8C3A42;--danger-soft:#F4E4E6;--info:#376C8B;--info-soft:#E8F0F4;">
+          <div class="tp-mode-head"><span class="tp-mode-tag">LIGHT</span><span class="tp-mode-name">宣纸</span><span class="tp-mode-hex mono">#F8F4EA</span></div>
+          <div class="tp-app">
+            <aside class="tp-rail">
+              <div class="tp-logo">S</div>
+              <span class="tp-nav is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3 7-7"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 5.2a3.5 3.5 0 0 1 0 6.6"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></span>
+            </aside>
+            <div class="tp-main">
+              <div class="tp-topbar">
+                <div class="tp-crumb">工作台 / <b>概览</b></div>
+                <div class="tp-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>搜索</div>
+                <span class="tp-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span>
+                <span class="tp-avatar">冯</span>
+              </div>
+              <div class="tp-pagehead">
+                <div><h3>运营概览</h3><p>2026 年 10 月 · 集团视图</p></div>
+                <div class="tp-actions"><button class="tp-btn tp-btn--ghost">导出</button><button class="tp-btn tp-btn--primary">+ 新建</button></div>
+              </div>
+              <div class="tp-kpis">
+                <div class="tp-kpi"><div class="tp-kpi-label">待办审批</div><div class="tp-kpi-value">12</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+3</span><span>较昨日</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,11 6,9 11,10 16,7 21,8 26,5 31,6 37,2"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">本月支出</div><div class="tp-kpi-value">486.2<small>k</small></div><div class="tp-kpi-foot"><span class="tp-delta tp-down">-2.4%</span><span>环比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,3 6,5 11,4 16,7 21,6 26,9 31,8 37,11"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">活跃成员</div><div class="tp-kpi-value">1,284</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+8.1%</span><span>同比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,10 6,8 11,9 16,6 21,7 26,4 31,5 37,2"/></svg></div></div>
+              </div>
+              <div class="tp-table">
+                <div class="tp-row tp-row--head"><span>事项</span><span>状态</span><span style="text-align:right">金额</span><span style="text-align:right">日期</span></div>
+                <div class="tp-row tp-row--hover"><span class="tp-cell-title"><b>年度预算复核</b><span>财务部</span></span><span><span class="tp-pill tp-pill--warn">待审批</span></span><span class="tp-amount">¥128,400</span><span class="tp-date">10-24</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>供应商准入</b><span>采购部</span></span><span><span class="tp-pill tp-pill--info">进行中</span></span><span class="tp-amount">¥86,000</span><span class="tp-date">10-23</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>权限变更申请</b><span>系统部</span></span><span><span class="tp-pill tp-pill--ok">已通过</span></span><span class="tp-amount">—</span><span class="tp-date">10-22</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>合同续签</b><span>法务部</span></span><span><span class="tp-pill tp-pill--danger">需关注</span></span><span class="tp-amount">¥42,800</span><span class="tp-date">10-21</span></div>
+              </div>
+              <div class="tp-formline"><div class="tp-input">搜索成员或部门</div><span class="tp-chip tp-chip--accent">财务部</span><span class="tp-chip">华东区</span></div>
+            </div>
+          </div>
+          <div class="tp-palette">
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#F8F4EA"></span><span class="tp-swatch-name">宣纸</span></div><div class="tp-swatch-hex mono">#F8F4EA</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#FFFDF8"></span><span class="tp-swatch-name">卡面</span></div><div class="tp-swatch-hex mono">#FFFDF8</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#2B2420"></span><span class="tp-swatch-name">玄墨</span></div><div class="tp-swatch-hex mono">#2B2420</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#A93B2E"></span><span class="tp-swatch-name">朱砂</span></div><div class="tp-swatch-hex mono">#A93B2E</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#D9B44A"></span><span class="tp-swatch-name">缃色</span></div><div class="tp-swatch-hex mono">#D9B44A</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#2E7D5B"></span><span class="tp-swatch-name">松绿</span></div><div class="tp-swatch-hex mono">#2E7D5B</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#9A6A18"></span><span class="tp-swatch-name">赭黄</span></div><div class="tp-swatch-hex mono">#9A6A18</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#8C3A42"></span><span class="tp-swatch-name">绛红</span></div><div class="tp-swatch-hex mono">#8C3A42</div></div>
+          </div>
+        </article>
+
+        <article class="tp-mode" style="--bg:#151110;--bg-alt:#1B1614;--surface:#221C19;--raised:#2A231F;--ink:#F2EBDF;--ink-soft:#B8ABA0;--ink-faint:#8F8278;--line:#352C27;--edge:#433830;--edge-strong:#594A40;--primary:#E89A8D;--primary-hover:#F0B0A5;--primary-soft:#3A2521;--accent:#D9B44A;--accent-bright:#E6C76A;--accent-soft:#352D1C;--on-primary:#151110;--success:#6FC29A;--success-soft:#1C3329;--warning:#E0B264;--warning-soft:#332C1D;--danger:#E5A0A8;--danger-soft:#3A2325;--info:#8AB8D2;--info-soft:#1E2F38;">
+          <div class="tp-mode-head"><span class="tp-mode-tag">DARK</span><span class="tp-mode-name">玄笺</span><span class="tp-mode-hex mono">#151110</span></div>
+          <div class="tp-app">
+            <aside class="tp-rail">
+              <div class="tp-logo">S</div>
+              <span class="tp-nav is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3 7-7"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 5.2a3.5 3.5 0 0 1 0 6.6"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg></span>
+              <span class="tp-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></span>
+            </aside>
+            <div class="tp-main">
+              <div class="tp-topbar">
+                <div class="tp-crumb">工作台 / <b>概览</b></div>
+                <div class="tp-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>搜索</div>
+                <span class="tp-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span>
+                <span class="tp-avatar">冯</span>
+              </div>
+              <div class="tp-pagehead">
+                <div><h3>运营概览</h3><p>2026 年 10 月 · 集团视图</p></div>
+                <div class="tp-actions"><button class="tp-btn tp-btn--ghost">导出</button><button class="tp-btn tp-btn--primary">+ 新建</button></div>
+              </div>
+              <div class="tp-kpis">
+                <div class="tp-kpi"><div class="tp-kpi-label">待办审批</div><div class="tp-kpi-value">12</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+3</span><span>较昨日</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,11 6,9 11,10 16,7 21,8 26,5 31,6 37,2"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">本月支出</div><div class="tp-kpi-value">486.2<small>k</small></div><div class="tp-kpi-foot"><span class="tp-delta tp-down">-2.4%</span><span>环比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,3 6,5 11,4 16,7 21,6 26,9 31,8 37,11"/></svg></div></div>
+                <div class="tp-kpi"><div class="tp-kpi-label">活跃成员</div><div class="tp-kpi-value">1,284</div><div class="tp-kpi-foot"><span class="tp-delta tp-up">+8.1%</span><span>同比</span><svg class="tp-spark" viewBox="0 0 38 14"><polyline points="1,10 6,8 11,9 16,6 21,7 26,4 31,5 37,2"/></svg></div></div>
+              </div>
+              <div class="tp-table">
+                <div class="tp-row tp-row--head"><span>事项</span><span>状态</span><span style="text-align:right">金额</span><span style="text-align:right">日期</span></div>
+                <div class="tp-row tp-row--hover"><span class="tp-cell-title"><b>年度预算复核</b><span>财务部</span></span><span><span class="tp-pill tp-pill--warn">待审批</span></span><span class="tp-amount">¥128,400</span><span class="tp-date">10-24</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>供应商准入</b><span>采购部</span></span><span><span class="tp-pill tp-pill--info">进行中</span></span><span class="tp-amount">¥86,000</span><span class="tp-date">10-23</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>权限变更申请</b><span>系统部</span></span><span><span class="tp-pill tp-pill--ok">已通过</span></span><span class="tp-amount">—</span><span class="tp-date">10-22</span></div>
+                <div class="tp-row"><span class="tp-cell-title"><b>合同续签</b><span>法务部</span></span><span><span class="tp-pill tp-pill--danger">需关注</span></span><span class="tp-amount">¥42,800</span><span class="tp-date">10-21</span></div>
+              </div>
+              <div class="tp-formline"><div class="tp-input">搜索成员或部门</div><span class="tp-chip tp-chip--accent">财务部</span><span class="tp-chip">华东区</span></div>
+            </div>
+          </div>
+          <div class="tp-palette">
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#151110"></span><span class="tp-swatch-name">玄笺</span></div><div class="tp-swatch-hex mono">#151110</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#221C19"></span><span class="tp-swatch-name">卡面</span></div><div class="tp-swatch-hex mono">#221C19</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#F2EBDF"></span><span class="tp-swatch-name">绢白</span></div><div class="tp-swatch-hex mono">#F2EBDF</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#E89A8D"></span><span class="tp-swatch-name">朱砂</span></div><div class="tp-swatch-hex mono">#E89A8D</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#D9B44A"></span><span class="tp-swatch-name">缃色</span></div><div class="tp-swatch-hex mono">#D9B44A</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#6FC29A"></span><span class="tp-swatch-name">松绿</span></div><div class="tp-swatch-hex mono">#6FC29A</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#E0B264"></span><span class="tp-swatch-name">赭黄</span></div><div class="tp-swatch-hex mono">#E0B264</div></div>
+            <div class="tp-swatch"><div class="tp-swatch-top"><span class="tp-swatch-dot" style="background:#E5A0A8"></span><span class="tp-swatch-name">绛红</span></div><div class="tp-swatch-hex mono">#E5A0A8</div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= matrix ================= -->
+    <section class="tp-matrix-wrap">
+      <div class="tp-section-head"><h2 class="serif">完整色值</h2><span>同一角色在六种组合下的取值，可直接作为实现时的令牌基准。</span></div>
+      <div class="tp-matrix-scroll">
+        <table class="tp-matrix">
+          <thead>
+            <tr>
+              <th>角色</th>
+              <th>玄青 · 明</th><th>玄青 · 暗</th>
+              <th>竹月 · 明</th><th>竹月 · 暗</th>
+              <th>朱缃 · 明</th><th>朱缃 · 暗</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>页面底</td>
+              <td><span class="tp-matrix-dot" style="background:#F5F6F4"></span><span class="mono">#F5F6F4</span></td>
+              <td><span class="tp-matrix-dot" style="background:#0F161B"></span><span class="mono">#0F161B</span></td>
+              <td><span class="tp-matrix-dot" style="background:#F3F6F3"></span><span class="mono">#F3F6F3</span></td>
+              <td><span class="tp-matrix-dot" style="background:#0E1512"></span><span class="mono">#0E1512</span></td>
+              <td><span class="tp-matrix-dot" style="background:#F8F4EA"></span><span class="mono">#F8F4EA</span></td>
+              <td><span class="tp-matrix-dot" style="background:#151110"></span><span class="mono">#151110</span></td>
+            </tr>
+            <tr><td>次级底 / 表头</td>
+              <td><span class="mono">#ECEFF0</span></td><td><span class="mono">#141E24</span></td>
+              <td><span class="mono">#E9EFEB</span></td><td><span class="mono">#131C18</span></td>
+              <td><span class="mono">#F1EADB</span></td><td><span class="mono">#1B1614</span></td>
+            </tr>
+            <tr><td>卡面</td>
+              <td><span class="mono">#FFFFFF</span></td><td><span class="mono">#19242B</span></td>
+              <td><span class="mono">#FFFFFF</span></td><td><span class="mono">#19231F</span></td>
+              <td><span class="mono">#FFFDF8</span></td><td><span class="mono">#221C19</span></td>
+            </tr>
+            <tr><td>主文字</td>
+              <td><span class="mono">#1B2A33</span></td><td><span class="mono">#EDF0EC</span></td>
+              <td><span class="mono">#1F2C27</span></td><td><span class="mono">#E9EFEA</span></td>
+              <td><span class="mono">#2B2420</span></td><td><span class="mono">#F2EBDF</span></td>
+            </tr>
+            <tr><td>次级文字</td>
+              <td><span class="mono">#52636D</span></td><td><span class="mono">#A7B4BA</span></td>
+              <td><span class="mono">#52645C</span></td><td><span class="mono">#A6B4AC</span></td>
+              <td><span class="mono">#675B52</span></td><td><span class="mono">#B8ABA0</span></td>
+            </tr>
+            <tr><td>三级文字</td>
+              <td><span class="mono">#5F6E78</span></td><td><span class="mono">#7D8B92</span></td>
+              <td><span class="mono">#64766E</span></td><td><span class="mono">#7C8C83</span></td>
+              <td><span class="mono">#786B61</span></td><td><span class="mono">#8F8278</span></td>
+            </tr>
+            <tr><td>发丝边</td>
+              <td><span class="mono">#CFD8D5</span></td><td><span class="mono">#36464E</span></td>
+              <td><span class="mono">#CCD9D2</span></td><td><span class="mono">#35463E</span></td>
+              <td><span class="mono">#D8CAB2</span></td><td><span class="mono">#433830</span></td>
+            </tr>
+            <tr><td>主色</td>
+              <td><span class="tp-matrix-dot" style="background:#2E5065"></span><span class="mono">#2E5065</span></td>
+              <td><span class="tp-matrix-dot" style="background:#8FB6CF"></span><span class="mono">#8FB6CF</span></td>
+              <td><span class="tp-matrix-dot" style="background:#3E6B57"></span><span class="mono">#3E6B57</span></td>
+              <td><span class="tp-matrix-dot" style="background:#8FC0A6"></span><span class="mono">#8FC0A6</span></td>
+              <td><span class="tp-matrix-dot" style="background:#A93B2E"></span><span class="mono">#A93B2E</span></td>
+              <td><span class="tp-matrix-dot" style="background:#E89A8D"></span><span class="mono">#E89A8D</span></td>
+            </tr>
+            <tr><td>强调色</td>
+              <td><span class="mono">#8A6A2E</span></td><td><span class="mono">#D2B36A</span></td>
+              <td><span class="mono">#4C7767</span></td><td><span class="mono">#7FB3A1</span></td>
+              <td><span class="mono">#8A6A1F</span></td><td><span class="mono">#D9B44A</span></td>
+            </tr>
+            <tr><td>成功</td>
+              <td><span class="mono">#2E7D5B</span></td><td><span class="mono">#6FC29A</span></td>
+              <td><span class="mono">#2E7D5B</span></td><td><span class="mono">#6FC29A</span></td>
+              <td><span class="mono">#2E7D5B</span></td><td><span class="mono">#6FC29A</span></td>
+            </tr>
+            <tr><td>警告</td>
+              <td><span class="mono">#9A6A18</span></td><td><span class="mono">#E0B264</span></td>
+              <td><span class="mono">#9A6A18</span></td><td><span class="mono">#E0B264</span></td>
+              <td><span class="mono">#9A6A18</span></td><td><span class="mono">#E0B264</span></td>
+            </tr>
+            <tr><td>危险</td>
+              <td><span class="mono">#AF3A2E</span></td><td><span class="mono">#E88378</span></td>
+              <td><span class="mono">#AF3A2E</span></td><td><span class="mono">#E88378</span></td>
+              <td><span class="mono">#8C3A42</span></td><td><span class="mono">#E5A0A8</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= skin ================= -->
+    <section class="tp-skin" id="skin">
+      <div class="tp-theme-head" style="margin-bottom:18px">
+        <div>
+          <div class="tp-index">04 / BUSINESS SKIN</div>
+          <h2 class="serif">商务皮肤 <span>从「配色」到「气质」</span></h2>
+          <p>只换颜色，现有的 2px 墨线和硬投影仍会把界面拉回插画感。商务皮肤是一层独立的结构令牌：不影响纸上海洋，只作用于商务主题。</p>
+        </div>
+        <div class="tp-origin"><span>1px 发丝边</span><span>柔光阴影</span><span>8 / 14px 圆角</span><span>实心主按钮</span></div>
+      </div>
+      <div class="tp-skin-grid">
+        <div class="tp-skin-card">
+          <div class="tp-skin-card-head"><b>纸上海洋 · 现状</b><span>保留为独立风格</span></div>
+          <div class="tp-skin-demo">
+            <div class="tp-demo-card tp-paper"><div><b>审批流配置</b><p>2px 墨线 · 硬投影 · 珊瑚 CTA</p></div><span class="tp-demo-btn">保存配置</span></div>
+            <div class="tp-demo-card tp-paper"><div><b>待我审批</b><p>高对比、强描边、偏插画</p></div><span class="tp-demo-btn">立即处理</span></div>
+          </div>
+        </div>
+        <div class="tp-skin-card">
+          <div class="tp-skin-card-head"><b>商务皮肤 · 提案</b><span>1px 边 · 柔光 · 实心主色</span></div>
+          <div class="tp-skin-demo">
+            <div class="tp-demo-card tp-business"><div><b>审批流配置</b><p>1px 发丝边 · 柔光分层 · 实心主色</p></div><span class="tp-demo-btn">保存配置</span></div>
+            <div class="tp-demo-card tp-business"><div><b>待我审批</b><p>低对比、轻层级、偏商务文档</p></div><span class="tp-demo-btn">立即处理</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="tp-specs">
+        <div class="tp-spec"><b>结构边</b><p>新增 <code>--po-edge</code>，替代 2px <code>--po-ink</code> 描边。默认 1px，悬停 1px <code>--po-edge-strong</code>，焦点 2px 主色 + 3px 光环。</p></div>
+        <div class="tp-spec"><b>投影</b><p>卡片 <code>0 1px 2px / 0 10px 28px</code>；弹层 <code>0 4px 12px / 0 18px 48px</code>；弹窗 <code>0 24px 64px</code>。全部低透明度，不再使用墨色偏移。</p></div>
+        <div class="tp-spec"><b>圆角</b><p>控件 8px、按钮 8px、卡片 14px、弹层 12px、弹窗 18px、标签 999px。相比现有的 16/24px 更收敛。</p></div>
+        <div class="tp-spec"><b>主按钮</b><p>实心主色 + 同色 1px 边 + 米白文字；悬停加深 8%，按下加深 14%；焦点环 3px 主色 14% 透明度。次按钮为白底 + 发丝边。</p></div>
+        <div class="tp-spec"><b>字体层级</b><p>展示字重 900 → 600，标题 600，正文 400；正文 14px / 1.7；数字统一 <code>tabular-nums</code>，金额与编号右对齐。</p></div>
+        <div class="tp-spec"><b>表格与标签</b><p>表头用次级底；行分隔 1px；悬停主色 5%；标签改为同色 1px 描边 + 8% 底；状态点保留，但去掉粗描边。</p></div>
+      </div>
+    </section>
+
+    <!-- ================= appearance ================= -->
+    <section class="tp-settings" id="appearance">
+      <div class="tp-theme-head" style="margin-bottom:18px">
+        <div>
+          <div class="tp-index">05 / APPEARANCE</div>
+          <h2 class="serif">外观设置 <span>个人设置页新增一段</span></h2>
+          <p>风格与明暗都在这里一次选完。顶部导航保留现有的明暗快捷开关，不再新增第二个入口。</p>
+        </div>
+        <div class="tp-origin"><span>4 套风格</span><span>每套 明 / 暗</span><span>本地保存</span></div>
+      </div>
+      <div class="tp-settings-panel">
+        <div class="tp-settings-head">
+          <h3>外观</h3>
+          <p>选择一套主题风格，再决定明暗。偏好仅保存在当前浏览器。</p>
+        </div>
+        <div class="tp-setting-group">
+          <div class="tp-setting-label">主题风格</div>
+          <div class="tp-theme-cards">
+            <div class="tp-theme-card">
+              <div class="tp-theme-preview">
+                <span style="background:#fff9ee"></span><span style="background:#14284b"></span><span style="background:#ff7a6b"></span>
+              </div>
+              <span class="tp-theme-card-name">纸上海洋</span>
+              <span class="tp-theme-card-sub">现有风格</span>
+            </div>
+            <div class="tp-theme-card is-selected">
+              <div class="tp-theme-preview">
+                <span style="background:#f5f6f4"></span><span style="background:#2e5065"></span><span style="background:#d2b36a"></span>
+              </div>
+              <span class="tp-theme-card-check">✓</span>
+              <span class="tp-theme-card-name">玄青 · 鎏金</span>
+              <span class="tp-theme-card-sub">沉稳 · 金线</span>
+            </div>
+            <div class="tp-theme-card">
+              <div class="tp-theme-preview">
+                <span style="background:#f3f6f3"></span><span style="background:#3e6b57"></span><span style="background:#8fb6a6"></span>
+              </div>
+              <span class="tp-theme-card-name">竹月 · 清雅</span>
+              <span class="tp-theme-card-sub">清透 · 青绿</span>
+            </div>
+            <div class="tp-theme-card">
+              <div class="tp-theme-preview">
+                <span style="background:#f8f4ea"></span><span style="background:#a93b2e"></span><span style="background:#d9b44a"></span>
+              </div>
+              <span class="tp-theme-card-name">朱缃 · 典章</span>
+              <span class="tp-theme-card-sub">庄重 · 朱印</span>
+            </div>
+          </div>
+        </div>
+        <div class="tp-setting-group">
+          <div class="tp-setting-row">
+            <div>
+              <div class="tp-setting-label">明暗模式</div>
+              <div class="tp-setting-hint">只影响当前风格；站点默认主题仍是首次访问的初始值。</div>
+            </div>
+            <div class="tp-seg"><span class="is-active">月白</span><span>玄夜</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="tp-footer">
+      <div>
+        <h2 class="serif">需要你拍板</h2>
+        <ol>
+          <li><b>2 套还是 3 套？</b>范围选的是「保留纸上海洋 + 新增 2 套」，但色系选了三套。建议三套都保留：实现成本主要在令牌/皮肤层，新增一套主要是配色验收与截图回归。</li>
+          <li><b>商务皮肤是否按此收敛？</b>重点是 1px 发丝边、柔光阴影、实心主按钮。如果希望保留更强的「纸感」，可以把边改回 1.5px、阴影保留一层极轻的偏移。</li>
+          <li><b>朱缃的危险色</b>暂用绛红 <code>#8C3A42</code>，与主色朱砂区分；如果希望危险操作也保持朱砂同色，我会改为同色 + 图标/文案区分。</li>
+        </ol>
+      </div>
+      <div class="tp-next">
+        <b>确认后的落地顺序</b>
+        令牌注册表（4 套 × 明暗）→ Naive 主题工厂 → 商务皮肤 CSS 层 → 个人设置「外观」区 → 登录页回归 → 文档与截图验收。
+        <br><br>
+        所有色值已做 WCAG 校验：正文 ≥ 7:1，次级文字 ≥ 4.5:1，主按钮文字 ≥ 5:1。
+      </div>
+    </footer>
+  </div>
+</div>
+</body>
+</html>

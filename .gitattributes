@@ -1,0 +1,28 @@
+# Git stores text as LF and checks out CRLF in the working tree.
+# Linux editors and .NET/Node tooling accept CRLF; scripts that require LF are explicit exceptions.
+* text=auto eol=crlf
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.sh text eol=lf
+Dockerfile text eol=lf
+Jenkinsfile text eol=lf
+
+*.ai -text
+*.dll -text
+*.dylib -text
+*.exe -text
+*.gif -text
+*.ico -text
+*.jpeg -text
+*.jpg -text
+*.otf -text
+*.pdf -text
+*.pdb -text
+*.png -text
+*.so -text
+*.ttf -text
+*.webp -text
+*.woff -text
+*.woff2 -text
+*.zip -text

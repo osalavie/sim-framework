@@ -1,0 +1,35 @@
+<UserControl x:Class="Sim.Admin.Wpf.Client.Features.SystemManagement.TenantPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:Sim.Admin.Wpf.Client.Controls">
+  <controls:CustomCard Margin="8">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <WrapPanel Grid.Row="0" Margin="0,0,0,12">
+        <controls:CustomButton Content="刷新" Height="34" Margin="0,0,8,8" Click="RefreshClick"/>
+        <controls:CustomButton Content="新建租户" Variant="Primary" Height="34" Margin="0,0,8,8" Click="CreateClick"/>
+        <controls:CustomButton x:Name="AssignmentsButton" Content="查看分配" Height="34" Margin="0,0,8,8" Click="AssignmentsClick"/>
+        <controls:CustomButton x:Name="EnableButton" Content="启用" Height="34" Margin="0,0,8,8" Click="EnableClick"/>
+        <controls:CustomButton x:Name="DisableButton" Content="停用" Height="34" Margin="0,0,8,8" Click="DisableClick"/>
+        <controls:CustomButton x:Name="DeleteButton" Content="删除" Variant="Danger" Height="34" Margin="0,0,8,8" Click="DeleteClick"/>
+      </WrapPanel>
+      <controls:CustomDataGrid x:Name="Records" Grid.Row="1" EnableSelection="True" RowKeyPath="Id"
+                            SelectionChanged="SelectionChanged" MouseDoubleClick="RecordsDoubleClick">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="名称" Binding="{Binding Name}" Width="*" MinWidth="160"/>
+          <DataGridTextColumn Header="代码" Binding="{Binding Code}" Width="150"/>
+          <DataGridCheckBoxColumn Header="启用" Binding="{Binding IsActive}" Width="60" IsReadOnly="True"
+                                  ElementStyle="{StaticResource NaiveStatusCheckBoxStyle}"/>
+          <DataGridTextColumn Header="管理员邮箱" Binding="{Binding AdminEmail}" Width="220"/>
+          <DataGridTextColumn Header="创建时间" Binding="{Binding CreationTime, StringFormat=yyyy-MM-dd HH:mm}" Width="160"/>
+        </DataGrid.Columns>
+      </controls:CustomDataGrid>
+      <TextBlock x:Name="Status" Grid.Row="2" Foreground="{DynamicResource MutedBrush}"
+                 TextWrapping="Wrap" Margin="0,12,0,0"/>
+    </Grid>
+  </controls:CustomCard>
+</UserControl>

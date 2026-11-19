@@ -1,0 +1,14 @@
+stateDiagram-v2
+  [*] --> Running : Submit
+  Running --> Approved : 末节点通过
+  Running --> Rejected : 任一节点拒绝
+  Running --> Returned : ReturnToInitiator
+  Running --> Withdrawn : Withdraw
+  Running --> Terminated : Terminate(管理员)
+  Running --> Running : Approve 推进下一节点 / ReturnToPrevious / Transfer / AddSign / AutoPass
+  Returned --> Running : Resubmit（回到第一节点）
+  Returned --> Withdrawn : Withdraw
+  Approved --> [*]
+  Rejected --> [*]
+  Withdrawn --> [*]
+  Terminated --> [*]

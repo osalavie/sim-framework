@@ -1,0 +1,272 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(
+            name: 'TEST_DEPLOY_HOST',
+            defaultValue: 'deploy@sim-test',
+            description: '测试环境 SSH 目标，例如 deploy@10.0.0.10'
+        )
+        string(
+            name: 'PROD_DEPLOY_HOST',
+            defaultValue: 'deploy@sim-prod',
+            description: '生产环境 SSH 目标，仅由标签构建触发发布作业时使用'
+        )
+        booleanParam(
+            name: 'RUN_MIGRATION',
+            defaultValue: false,
+            description: '部署前执行数据库迁移（需要先确认已备份）'
+        )
+    }
+
+    environment {
+        DOTNET_CLI_TELEMETRY_OPTOUT = '1'
+        DOTNET_NOLOGO = '1'
+        BUILD_CONFIGURATION = 'Release'
+        IMAGE_NAME = 'sim-api'
+        REGISTRY = 'repo.dulm.net'
+        RELEASE_JOB = 'sim-release'
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout(time: 45, unit: 'MINUTES')
+        timestamps()
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                script {
+                    env.GIT_SHA = env.GIT_COMMIT ? env.GIT_COMMIT.take(12) : 'nogit'
+                    env.IMAGE_TAG = env.TAG_NAME
+                        ? env.TAG_NAME.replaceAll('[^A-Za-z0-9_.-]', '-')
+                        : "${env.BUILD_NUMBER}-${env.GIT_SHA}"
+                }
+            }
+        }
+
+        stage('Toolchain') {
+            steps {
+                dir('api') {
+                    sh 'dotnet --version'
+                    sh 'dotnet --info'
+                    sh 'dotnet tool restore'
+                }
+            }
+        }
+
+        stage('Restore') {
+            steps {
+                dir('api') {
+                    sh 'dotnet restore Sim.slnx --locked-mode'
+                }
+            }
+        }
+
+        stage('Dependency Audit') {
+            steps {
+                dir('api') {
+                    sh 'dotnet list Sim.slnx package --vulnerable --include-transitive --no-restore'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('api') {
+                    sh 'dotnet build Sim.slnx --configuration ${BUILD_CONFIGURATION} --no-restore'
+                }
+            }
+        }
+
+        stage('OpenAPI Contract') {
+            steps {
+                dir('api/src/Sim.Admin.HttpApi.Host') {
+                    withEnv([
+                        'DOTNET_ENVIRONMENT=Development',
+                        'JwtSettings__IssuerSigningKey=openapi-contract-generation-only-key',
+                        'App__OpenApiGeneration=true'
+                    ]) {
+                        script {
+                            ['admin', 'system', 'approval'].each { document ->
+                                sh "dotnet tool run swagger tofile --output ../../../web/src/api/definition/${document}.json bin/${BUILD_CONFIGURATION}/net10.0/Sim.Admin.HttpApi.Host.dll ${document}"
+                            }
+                        }
+                    }
+                }
+                sh 'git diff --exit-code -- web/src/api/definition'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('api') {
+                    sh 'dotnet test Sim.slnx --configuration ${BUILD_CONFIGURATION} --no-build --no-restore --logger "trx;LogFileName=tests.trx"'
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'api/**/TestResults/*.trx', allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Publish') {
+            steps {
+                dir('api') {
+                    sh 'dotnet publish src/Sim.Admin.HttpApi.Host/Sim.Admin.HttpApi.Host.csproj --configuration ${BUILD_CONFIGURATION} --no-build --no-restore --output publish /p:UseAppHost=false'
+                }
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'api/publish/**', fingerprint: true
+                }
+            }
+        }
+
+        stage('SBOM') {
+            steps {
+                dir('api') {
+                    withEnv(['DeleteManifestDirIfPresent=true']) {
+                        sh 'dotnet tool run sbom-tool generate -b publish -bc . -pn ${IMAGE_NAME} -pv ${IMAGE_TAG} -ps SimFramework -nsb https://sim.local/sbom'
+                    }
+                    sh 'dotnet tool run sbom-tool validate -b publish -o ./sbom-validation.json -mi SPDX:2.2'
+                    sh "grep -q '\"Result\":\"Success\"' sbom-validation.json"
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'api/publish/_manifest/**,api/sbom-validation.json', allowEmptyArchive: true, fingerprint: true
+                }
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                dir('api') {
+                    sh 'docker build --file Dockerfile --build-arg APP_VERSION="$IMAGE_TAG" --build-arg GIT_COMMIT="$GIT_SHA" --tag "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG" .'
+                }
+                sh '''
+                    set -eu
+                    image="$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+                    container="${IMAGE_NAME}-${BUILD_NUMBER}"
+
+                    image_user="$(docker image inspect "$image" --format '{{.Config.User}}')"
+                    test -n "$image_user"
+                    test "$image_user" != "0"
+                    test "$image_user" != "root"
+
+                    docker run --detach \
+                        --name "$container" \
+                        --read-only \
+                        --tmpfs /tmp:rw,noexec,nosuid,size=64m \
+                        --cap-drop ALL \
+                        --security-opt no-new-privileges:true \
+                        --publish 127.0.0.1::7777 \
+                        --env DOTNET_ENVIRONMENT=Production \
+                        --env JwtSettings__IssuerSigningKey=container-smoke-test-signing-key-only \
+                        --env DataBase__ConnectionConfigs__0__DbType=Sqlite \
+                        --env DataBase__ConnectionConfigs__0__ConnectionString=DataSource=/tmp/business.db \
+                        --env DataBase__EnabledCodeFirst=true \
+                        --env DataBase__EnabledDbSeed=false \
+                        --env Quartz__JobStore__Provider= \
+                        --env DataProtection__KeysPath=/tmp/data-protection \
+                        --env Logging__File__Enabled=false \
+                        "$image"
+
+                    test "$(docker exec "$container" id -u)" = "1000"
+                    host_port="$(docker port "$container" 7777/tcp | sed -n '1s/.*://p')"
+                    test -n "$host_port"
+
+                    ready=0
+                    for attempt in $(seq 1 60); do
+                        if curl --fail --silent "http://127.0.0.1:${host_port}/health/ready" >/dev/null; then
+                            ready=1
+                            break
+                        fi
+                        sleep 1
+                    done
+                    test "$ready" -eq 1
+                    curl --fail --silent --show-error "http://127.0.0.1:${host_port}/health/live" >/dev/null
+                    curl --fail --silent --show-error "http://127.0.0.1:${host_port}/health/ready" >/dev/null
+                '''
+            }
+            post {
+                failure {
+                    sh 'docker logs "${IMAGE_NAME}-${BUILD_NUMBER}" || true'
+                }
+                always {
+                    sh 'docker rm --force "${IMAGE_NAME}-${BUILD_NUMBER}" || true'
+                }
+            }
+        }
+
+        stage('Publish Image') {
+            when {
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                    tag 'v*'
+                }
+            }
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'registry-credentials',
+                    usernameVariable: 'REGISTRY_USER',
+                    passwordVariable: 'REGISTRY_PASSWORD'
+                )]) {
+                    sh '''
+                        set -eu
+                        trap 'docker logout "$REGISTRY" >/dev/null 2>&1 || true' EXIT
+                        echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY" -u "$REGISTRY_USER" --password-stdin
+                        docker push "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy Test') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                withCredentials([file(credentialsId: 'deploy-known-hosts', variable: 'KNOWN_HOSTS')]) {
+                    sshagent(['deploy-test-ssh']) {
+                        sh '''
+                            set -eu
+                            migrate=""
+                            if [ "${RUN_MIGRATION}" = "true" ]; then
+                                migrate="--migrate"
+                            fi
+
+                            scp -o UserKnownHostsFile="$KNOWN_HOSTS" -o StrictHostKeyChecking=yes \
+                                deploy/scripts/deploy.sh "$TEST_DEPLOY_HOST:/opt/sim/deploy.sh"
+                            ssh -o UserKnownHostsFile="$KNOWN_HOSTS" -o StrictHostKeyChecking=yes \
+                                "$TEST_DEPLOY_HOST" \
+                                "bash /opt/sim/deploy.sh test api ${IMAGE_TAG} ${REGISTRY} ${migrate}"
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Trigger Release') {
+            when {
+                tag 'v*'
+            }
+            steps {
+                build(
+                    job: "${RELEASE_JOB}",
+                    wait: false,
+                    parameters: [
+                        string(name: 'TAG', value: env.IMAGE_TAG),
+                        booleanParam(name: 'RUN_MIGRATION', value: params.RUN_MIGRATION),
+                        string(name: 'PROD_DEPLOY_HOST', value: params.PROD_DEPLOY_HOST)
+                    ]
+                )
+            }
+        }
+    }
+}

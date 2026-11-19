@@ -1,0 +1,68 @@
+erDiagram
+  ORGANIZATION_UNIT {
+    uuid Id PK
+    uuid TenantId
+    uuid ParentId FK
+    string Code
+    string Name
+    string Path
+    int Depth
+    uuid ManagerUserId
+    string Status
+    int Version
+  }
+
+  USER {
+    uuid Id PK
+    uuid TenantId
+    string UserName
+  }
+
+  ORGANIZATION_MEMBERSHIP {
+    uuid Id PK
+    uuid OrganizationUnitId FK
+    uuid UserId FK
+    bool IsPrimary
+    string MembershipType
+    datetime ValidFrom
+    datetime ValidTo
+  }
+
+  ROLE {
+    uuid Id PK
+    uuid TenantId
+    string Code
+    string Name
+  }
+
+  ROLE_DATA_SCOPE {
+    uuid Id PK
+    uuid RoleId FK
+    string Resource
+    string ScopeType
+    string AnchorMode
+    int ConditionVersion
+  }
+
+  ROLE_DATA_SCOPE_ORGANIZATION {
+    uuid Id PK
+    uuid RoleDataScopeId FK
+    uuid OrganizationUnitId FK
+    bool IncludeDescendants
+  }
+
+  BUSINESS_RESOURCE {
+    uuid Id PK
+    uuid TenantId
+    uuid OrganizationUnitId FK
+    uuid OwnerUserId FK
+  }
+
+  ORGANIZATION_UNIT ||--o{ ORGANIZATION_UNIT : "包含下级"
+  ORGANIZATION_UNIT ||--o{ ORGANIZATION_MEMBERSHIP : "拥有成员"
+  USER ||--o{ ORGANIZATION_MEMBERSHIP : "加入组织"
+  ROLE ||--o{ ROLE_DATA_SCOPE : "配置资源范围"
+  ROLE_DATA_SCOPE ||--o{ ROLE_DATA_SCOPE_ORGANIZATION : "指定节点"
+  ORGANIZATION_UNIT ||--o{ ROLE_DATA_SCOPE_ORGANIZATION : "被范围引用"
+  ORGANIZATION_UNIT ||--o{ BUSINESS_RESOURCE : "归属"
+  USER ||--o{ BUSINESS_RESOURCE : "拥有"

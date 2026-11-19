@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <NuGetLockFilePath Condition="'$(OS)' == 'Windows_NT'">packages.lock.json</NuGetLockFilePath>
+    <NuGetLockFilePath Condition="'$(OS)' != 'Windows_NT'">packages.linux.lock.json</NuGetLockFilePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AlibabaCloud.SDK.Dysmsapi20170525" />
+    <PackageReference Include="AlibabaCloud.SDK.Dyvmsapi20170525" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="TencentCloudSDK.Sms" />
+    <PackageReference Include="TencentCloudSDK.Vms" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Sim.Admin.HttpApi.Host\Sim.Admin.HttpApi.Host.csproj" />
+    <ProjectReference Include="..\..\framework\Sim.Framework.Application.Contracts\Sim.Framework.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\system\Sim.System.Application.Contracts\Sim.System.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\system\Sim.System.Application\Sim.System.Application.csproj" />
+    <ProjectReference Include="..\..\modules\system\Sim.System.Domain\Sim.System.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\system\Sim.System.SqlSugar\Sim.System.SqlSugar.csproj" />
+    <ProjectReference Include="..\..\modules\approval\Sim.Approval.Application\Sim.Approval.Application.csproj" />
+    <ProjectReference Include="..\..\modules\approval\Sim.Approval.Domain\Sim.Approval.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\approval\Sim.Approval.Domain.Shared\Sim.Approval.Domain.Shared.csproj" />
+  </ItemGroup>
+</Project>

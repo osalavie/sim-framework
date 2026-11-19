@@ -1,0 +1,105 @@
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sw?
+*.vs/
+
+# Node / frontend
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+dist/
+dist-ssr/
+coverage/
+*.tsbuildinfo
+.eslintcache
+.test-results/
+test-results/
+playwright-report/
+frontend-licenses.json
+.temp/
+.rn_temp/
+deploy_versions/
+
+# Build / temp artifacts
+bin/
+obj/
+out/
+[Bb]uild/
+[Ll]og/
+*.log
+*.tmp
+*.cache/
+*.local
+
+# Databases / local data
+**/business.db
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# .NET / package publish
+publish/
+artifacts/
+packages/
+*.nupkg
+*.snupkg
+*.publishsettings
+*.pfx
+
+# Environment files
+.env
+.env.*
+!.env.example
+# Backend per-environment config (may contain secrets): the repo only ships the shared
+# appsettings.json and the appsettings.Example.json template. Every appsettings.{Environment}.json
+# is local-only and is auto-generated from the template at startup when missing.
+api/src/Sim.Admin.HttpApi.Host/appsettings.Development.json
+api/src/Sim.Admin.HttpApi.Host/appsettings.Staging.json
+api/src/Sim.Admin.HttpApi.Host/appsettings.Production.json
+# Web frontend ships its env files (no secrets — only public API URLs and branding).
+!web/.env
+!web/.env.development
+!web/.env.test
+!web/.env.staging
+!web/.env.production
+
+# Misc
+__screenshots__/
+
+*.codex-build/*
+
+# AI tooling (local only)
+.claude/
+.workbuddy/
+
+# Runtime secrets / local config
+.cert/
+**/App_Data/keys/
+**/App_Data/files/
+deploy/api-data/
+deploy/config/
+deploy/secrets/
+deploy/nginx-ssl/
+deploy/nginx/.htpasswd
+
+.fake
+# Playwright MCP artifacts (local browser tooling output)
+.playwright-mcp/
+# Local UI QA artifacts (visual verification scripts and screenshots)
+.visual-qa/

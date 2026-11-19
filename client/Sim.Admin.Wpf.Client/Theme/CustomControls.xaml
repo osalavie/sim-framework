@@ -1,0 +1,11 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Naive UI 风格的 WPF 组件库样式入口。各控件族样式拆分到独立字典，便于维护。 -->
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="Controls.Base.xaml"/>
+    <ResourceDictionary Source="Controls.Inputs.xaml"/>
+    <ResourceDictionary Source="Controls.Display.xaml"/>
+    <ResourceDictionary Source="Controls.Container.xaml"/>
+    <ResourceDictionary Source="Controls.Overlay.xaml"/>
+  </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

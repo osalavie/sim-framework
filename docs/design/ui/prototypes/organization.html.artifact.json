@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "redesign/organization.html",
+  "entry": "redesign/organization.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-10-22T03:49:00.647Z",
+  "updatedAt": "2026-10-22T03:49:00.647Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

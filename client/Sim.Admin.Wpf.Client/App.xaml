@@ -1,0 +1,78 @@
+<Application x:Class="Sim.Admin.Wpf.Client.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:converters="clr-namespace:Sim.Admin.Wpf.Client.Converters" StartupUri="MainWindow.xaml">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Theme/CustomControls.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <converters:ApprovalStatusConverter x:Key="ApprovalStatus" />
+      <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+      <SolidColorBrush x:Key="PageBrush" Color="#FFF9EE" />
+      <SolidColorBrush x:Key="PageDeepBrush" Color="#F9F2E3" />
+      <SolidColorBrush x:Key="PaperBrush" Color="#FFFFFF" />
+      <SolidColorBrush x:Key="InkBrush" Color="#14284B" />
+      <SolidColorBrush x:Key="MutedBrush" Color="#4F6282" />
+      <SolidColorBrush x:Key="LineBrush" Color="#D9E2F1" />
+      <SolidColorBrush x:Key="EdgeBrush" Color="#14284B" />
+      <SolidColorBrush x:Key="PrimaryBrush" Color="#2F6BFF" />
+      <SolidColorBrush x:Key="PrimaryTextBrush" Color="#FFFFFF" />
+      <SolidColorBrush x:Key="ActionBrush" Color="#FF7A6B" />
+      <SolidColorBrush x:Key="ActionTextBrush" Color="#14284B" />
+      <SolidColorBrush x:Key="SoftBrush" Color="#E7F1FF" />
+      <SolidColorBrush x:Key="DangerBrush" Color="#C74640" />
+      <SolidColorBrush x:Key="DangerTextBrush" Color="#FFFFFF" />
+      <SolidColorBrush x:Key="SuccessBrush" Color="#2E7D4F" />
+      <SolidColorBrush x:Key="SuccessSoftBrush" Color="#E6F5EC" />
+      <SolidColorBrush x:Key="WarningBrush" Color="#A9761A" />
+      <SolidColorBrush x:Key="WarningSoftBrush" Color="#FBF2DD" />
+      <SolidColorBrush x:Key="InfoBrush" Color="#2F6BFF" />
+      <SolidColorBrush x:Key="InfoSoftBrush" Color="#E7F1FF" />
+      <SolidColorBrush x:Key="HoverBrush" Color="#EEF3FB" />
+      <SolidColorBrush x:Key="OverlayBrush" Color="#6614284B" />
+      <SolidColorBrush x:Key="DangerSoftBrush" Color="#FBE7E4" />
+      <Style TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Cascadia Code,Microsoft YaHei UI,Consolas" />
+      </Style>
+      <Style TargetType="TextBox">
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+        <Setter Property="Height" Value="42" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Background" Value="{DynamicResource PaperBrush}" />
+      </Style>
+      <Style TargetType="PasswordBox">
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+        <Setter Property="Height" Value="42" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Background" Value="{DynamicResource PaperBrush}" />
+      </Style>
+      <Style TargetType="ComboBox">
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+        <Setter Property="Background" Value="{DynamicResource PaperBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+      </Style>
+      <Style TargetType="ComboBoxItem">
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+        <Setter Property="Background" Value="{DynamicResource PaperBrush}" />
+        <Setter Property="Padding" Value="8,6" />
+      </Style>
+      <Style TargetType="Button">
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Height" Value="42" />
+        <Setter Property="Padding" Value="16,6" />
+        <Setter Property="Background" Value="{DynamicResource SoftBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Cursor" Value="Hand" />
+      </Style>
+      <Style x:Key="ActionButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Background" Value="{DynamicResource ActionBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ActionTextBrush}" />
+      </Style>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

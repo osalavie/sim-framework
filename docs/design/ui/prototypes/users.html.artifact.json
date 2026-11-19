@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "redesign/users.html",
+  "entry": "redesign/users.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-10-22T03:48:13.029Z",
+  "updatedAt": "2026-10-22T03:48:13.029Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

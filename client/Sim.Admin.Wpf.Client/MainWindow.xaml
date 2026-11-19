@@ -1,0 +1,350 @@
+<Window x:Class="Sim.Admin.Wpf.Client.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:controls="clr-namespace:Sim.Admin.Wpf.Client.Controls" xmlns:display="clr-namespace:Sim.Admin.Wpf.Client.Controls.Display" xmlns:inputs="clr-namespace:Sim.Admin.Wpf.Client.Controls.Inputs" xmlns:container="clr-namespace:Sim.Admin.Wpf.Client.Controls.Container" xmlns:common="clr-namespace:Sim.Admin.Wpf.Client.Features.Common" Title="Sim Admin WPF Client" Width="1280" Height="820" MinWidth="980" MinHeight="620" WindowStartupLocation="CenterScreen" Background="{DynamicResource PageBrush}" Foreground="{DynamicResource InkBrush}">
+  <Window.Resources>
+    <Style x:Key="PersonalMenuItemStyle" TargetType="Button">
+      <Setter Property="Height" Value="34"/>
+      <Setter Property="Padding" Value="10,6"/>
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="FontWeight" Value="Normal"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="Root" Background="{TemplateBinding Background}" CornerRadius="10"
+                    Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Root" Property="Background" Value="{DynamicResource HoverBrush}"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </Window.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition x:Name="HeaderRow" Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <Grid x:Name="HeaderBar" Grid.Row="0" Margin="24,14,24,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <Border Width="38" Height="38" CornerRadius="10" BorderThickness="2" BorderBrush="{DynamicResource EdgeBrush}" Background="{DynamicResource ActionBrush}">
+          <TextBlock Text="N" FontSize="22" FontWeight="Black" Foreground="{DynamicResource ActionTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+        <TextBlock Text="Sim Client" FontSize="19" FontWeight="Black" VerticalAlignment="Center" Margin="12,0,0,0"/>
+      </StackPanel>
+      <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
+        <Border Width="2" Height="18" Background="{DynamicResource EdgeBrush}" Margin="0,0,16,0"/>
+        <TextBlock x:Name="BreadcrumbGroup" FontSize="13" Foreground="{DynamicResource MutedBrush}"
+                   VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Visibility="Collapsed"/>
+        <TextBlock x:Name="BreadcrumbSeparator" Text="/" FontSize="13" Foreground="{DynamicResource MutedBrush}"
+                   Margin="8,0" VerticalAlignment="Center" Visibility="Collapsed"/>
+        <TextBlock x:Name="BreadcrumbCurrent" Text="工作台" FontSize="13" FontWeight="Bold"
+                   VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+      </StackPanel>
+      <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+        <controls:CustomButton x:Name="DarkModeButton" Width="34" Height="34" Padding="0"
+                               ToolTip="切换到玄夜" Click="DarkModeButtonClick">
+          <TextBlock x:Name="DarkModeGlyph" Text="&#xE708;" FontFamily="Segoe MDL2 Assets" FontSize="15"/>
+        </controls:CustomButton>
+      </StackPanel>
+    </Grid>
+
+    <Grid x:Name="LoginBody" Grid.Row="1" Grid.RowSpan="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="1.05*"/>
+        <ColumnDefinition Width="0.95*"/>
+      </Grid.ColumnDefinitions>
+
+      <!-- 品牌面板：整列主行动色，品牌锁定、欢迎标语与版权信息 -->
+      <Border Grid.Column="0" Background="{DynamicResource ActionBrush}" ClipToBounds="True">
+        <Grid ClipToBounds="True">
+          <Rectangle Opacity="0.16">
+            <Rectangle.Fill>
+              <DrawingBrush TileMode="Tile"
+                            Viewport="0,0,24,24" ViewportUnits="Absolute"
+                            Viewbox="0,0,24,24" ViewboxUnits="Absolute">
+                <DrawingBrush.Drawing>
+                  <DrawingGroup>
+                    <GeometryDrawing Brush="{DynamicResource ActionTextBrush}">
+                      <GeometryDrawing.Geometry>
+                        <EllipseGeometry Center="12,12" RadiusX="1" RadiusY="1"/>
+                      </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                  </DrawingGroup>
+                </DrawingBrush.Drawing>
+              </DrawingBrush>
+            </Rectangle.Fill>
+          </Rectangle>
+          <Ellipse Width="460" Height="460" Opacity="0.3"
+                   Stroke="{DynamicResource ActionTextBrush}" StrokeThickness="2"
+                   HorizontalAlignment="Right" VerticalAlignment="Top"
+                   Margin="0,-180,-160,0"/>
+          <Grid Margin="48,36,48,30">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+              <Border Width="44" Height="44" CornerRadius="14" BorderThickness="2"
+                      BorderBrush="{DynamicResource ActionTextBrush}" Background="Transparent"
+                      RenderTransformOrigin="0.5,0.5">
+                <Border.RenderTransform>
+                  <RotateTransform Angle="-4"/>
+                </Border.RenderTransform>
+                <TextBlock Text="N" FontSize="24" FontWeight="Black"
+                           Foreground="{DynamicResource ActionTextBrush}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              </Border>
+              <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                <TextBlock Text="Sim Client" FontSize="17" FontWeight="Black"
+                           Foreground="{DynamicResource ActionTextBrush}"/>
+                <TextBlock Text="管理工作台" FontSize="11" Opacity="0.82" Margin="0,1,0,0"
+                           Foreground="{DynamicResource ActionTextBrush}"/>
+              </StackPanel>
+            </StackPanel>
+            <TextBlock Grid.Row="1" Text="欢迎使用 Sim Client" FontSize="42" FontWeight="Black"
+                       MaxWidth="470" TextWrapping="Wrap" LineHeight="55"
+                       VerticalAlignment="Center" Foreground="{DynamicResource ActionTextBrush}"/>
+            <TextBlock Grid.Row="2" FontSize="11" Opacity="0.82" Foreground="{DynamicResource ActionTextBrush}">
+              <Run Text="© "/><Run x:Name="CopyrightYear"/><Run Text="  Sim Client"/><Run Text="    管理工作台"/>
+            </TextBlock>
+          </Grid>
+        </Grid>
+      </Border>
+
+      <!-- 登录面板：奶油纸底，右上角明暗切换图标按钮，居中 430px 表单卡 -->
+      <Grid Grid.Column="1" Background="{DynamicResource PageBrush}">
+        <controls:CustomButton x:Name="LoginDarkModeButton" Width="34" Height="34" Padding="0"
+                               HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,22,26,0"
+                               ToolTip="切换到玄夜" Click="DarkModeButtonClick">
+          <TextBlock x:Name="LoginDarkModeGlyph" Text="&#xE708;" FontFamily="Segoe MDL2 Assets" FontSize="15"/>
+        </controls:CustomButton>
+
+        <Border Width="430" Background="{DynamicResource PaperBrush}"
+                BorderBrush="{DynamicResource EdgeBrush}" BorderThickness="2" CornerRadius="24"
+                Padding="32" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Grid>
+            <StackPanel x:Name="LoginPanel">
+              <StackPanel Orientation="Horizontal">
+                <Ellipse Width="7" Height="7" Fill="{DynamicResource ActionBrush}" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                <TextBlock Text="账户登录" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource MutedBrush}"/>
+              </StackPanel>
+              <TextBlock Text="欢迎回来" FontSize="30" FontWeight="Black" Margin="0,10,0,0"/>
+              <TextBlock Text="使用你的企业账号继续。" FontSize="13" Foreground="{DynamicResource MutedBrush}" Margin="0,7,0,24"/>
+              <TextBlock FontWeight="Bold" Margin="0,0,0,7">
+                <Run Text="用户名"/><Run Text=" *" Foreground="{DynamicResource DangerBrush}"/>
+              </TextBlock>
+              <inputs:CustomInput x:Name="UserName" Height="46" Placeholder="请输入用户名" AllowClear="True" AutomationProperties.Name="用户名"/>
+              <TextBlock FontWeight="Bold" Margin="0,18,0,7">
+                <Run Text="密码"/><Run Text=" *" Foreground="{DynamicResource DangerBrush}"/>
+              </TextBlock>
+              <inputs:CustomPasswordInput x:Name="Password" Height="46" Placeholder="请输入密码" AutomationProperties.Name="密码"/>
+              <inputs:CustomCheckBox x:Name="RememberMe" Content="记住我" Margin="0,16,0,0"/>
+              <controls:CustomButton x:Name="LoginButton" Content="登录" Click="LoginClick" Variant="Primary"
+                                     Height="48" Margin="0,16,0,0"/>
+            </StackPanel>
+            <StackPanel x:Name="FactorPanel" Visibility="Collapsed">
+              <StackPanel Orientation="Horizontal">
+                <Ellipse Width="7" Height="7" Fill="{DynamicResource ActionBrush}" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                <TextBlock Text="双重验证" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource MutedBrush}"/>
+              </StackPanel>
+              <TextBlock Text="验证你的身份" FontSize="30" FontWeight="Black" Margin="0,10,0,0"/>
+              <TextBlock Text="选择验证方式并输入验证码。" FontSize="13" Foreground="{DynamicResource MutedBrush}" Margin="0,7,0,24"/>
+              <inputs:CustomSelect x:Name="FactorMethod" Placeholder="选择验证方式" Height="46"/>
+              <controls:CustomButton Content="发送验证码" Click="SendCodeClick" Margin="0,10,0,18" HorizontalAlignment="Left" Height="34" Padding="12,3"/>
+              <TextBlock FontWeight="Bold" Margin="0,0,0,7">
+                <Run Text="验证码或恢复码"/><Run Text=" *" Foreground="{DynamicResource DangerBrush}"/>
+              </TextBlock>
+              <inputs:CustomInput x:Name="FactorCode" Height="46" Placeholder="验证码或恢复码" AllowClear="True" AutomationProperties.Name="验证码或恢复码"/>
+              <controls:CustomButton Content="完成登录" Click="CompleteFactorClick" Variant="Primary" Height="48" Margin="0,24,0,0"/>
+              <controls:CustomButton Content="返回账号登录" Click="BackToLoginClick" Margin="0,10,0,0"/>
+            </StackPanel>
+          </Grid>
+        </Border>
+      </Grid>
+    </Grid>
+
+    <Grid x:Name="SessionPanel" Grid.Row="1" Visibility="Collapsed">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="252"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <Border Grid.Column="0" Background="{DynamicResource PaperBrush}" BorderBrush="{DynamicResource EdgeBrush}" BorderThickness="0,0,2,0">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+          <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="12,6,12,16">
+              <container:CustomMenu x:Name="MainNav" SelectionChanged="MainNavChanged"/>
+            </StackPanel>
+          </ScrollViewer>
+          <Border Grid.Row="1" BorderBrush="{DynamicResource EdgeBrush}" BorderThickness="0,2,0,0" Padding="10,8">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <controls:CustomButton x:Name="PersonalMenuAnchor" Variant="Text" Height="Auto" Padding="6"
+                                     HorizontalContentAlignment="Stretch" Click="TogglePersonalMenuClick" ToolTip="个人菜单">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid Width="28" Height="28" VerticalAlignment="Center">
+                    <Ellipse x:Name="NavAvatarFrame" Stroke="{DynamicResource PrimaryBrush}" StrokeThickness="2"
+                             Fill="{DynamicResource SoftBrush}"/>
+                    <TextBlock x:Name="NavAvatarText" Text="?" FontSize="12" FontWeight="Bold"
+                               Foreground="{DynamicResource PrimaryBrush}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
+                  <StackPanel Grid.Column="1" Margin="9,0,0,0" VerticalAlignment="Center">
+                    <TextBlock x:Name="NavUserName" FontSize="13" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock x:Name="NavUserRoles" FontSize="11" Foreground="{DynamicResource MutedBrush}" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
+                  </StackPanel>
+                </Grid>
+              </controls:CustomButton>
+              <controls:CustomButton Grid.Column="1" Width="34" Height="34" Padding="0" ToolTip="退出登录"
+                                     Click="LogoutClick" VerticalAlignment="Center" Margin="4,0,0,0">
+                <TextBlock Text="&#xE7E8;" FontFamily="Segoe MDL2 Assets" FontSize="15"/>
+              </controls:CustomButton>
+            </Grid>
+          </Border>
+          <Popup x:Name="PersonalMenuPopup" Grid.Row="1" Placement="Top"
+                 PlacementTarget="{Binding ElementName=PersonalMenuAnchor}"
+                 StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade" VerticalOffset="-8">
+            <Border Background="{DynamicResource PaperBrush}" BorderBrush="{DynamicResource EdgeBrush}"
+                    BorderThickness="2" CornerRadius="14" Padding="8" MinWidth="224">
+              <StackPanel>
+                <Button Style="{StaticResource PersonalMenuItemStyle}" Tag="profile" Click="PersonalMenuItemClick">
+                  <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" Width="20" FontSize="14" VerticalAlignment="Center"/>
+                    <TextBlock Text="个人资料" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                  </StackPanel>
+                </Button>
+                <Button Style="{StaticResource PersonalMenuItemStyle}" Tag="security" Click="PersonalMenuItemClick">
+                  <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE72E;" FontFamily="Segoe MDL2 Assets" Width="20" FontSize="14" VerticalAlignment="Center"/>
+                    <TextBlock Text="账号安全" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                  </StackPanel>
+                </Button>
+                <Button Style="{StaticResource PersonalMenuItemStyle}" Tag="notifications" Click="PersonalMenuItemClick">
+                  <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE7ED;" FontFamily="Segoe MDL2 Assets" Width="20" FontSize="14" VerticalAlignment="Center"/>
+                    <TextBlock Text="通知中心" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                  </StackPanel>
+                </Button>
+                <Border Height="1" Background="{DynamicResource LineBrush}" Margin="8,6"/>
+                <Button Style="{StaticResource PersonalMenuItemStyle}" Click="ThemeMenuItemClick">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                      <TextBlock Text="&#xE790;" FontFamily="Segoe MDL2 Assets" Width="20" FontSize="14" VerticalAlignment="Center"/>
+                      <TextBlock Text="主题" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock x:Name="ThemePreferenceValue" Grid.Column="1" FontSize="12" VerticalAlignment="Center"
+                               Foreground="{DynamicResource MutedBrush}" Margin="18,0,0,0"/>
+                  </Grid>
+                </Button>
+              </StackPanel>
+            </Border>
+          </Popup>
+        </Grid>
+      </Border>
+
+      <Grid Grid.Column="1" Margin="24,14,24,12">
+        <container:CustomTabs x:Name="WorkspaceTabs">
+          <container:CustomTabs.Template>
+            <ControlTemplate TargetType="{x:Type container:CustomTabs}">
+              <ContentPresenter ContentSource="SelectedContent"/>
+            </ControlTemplate>
+          </container:CustomTabs.Template>
+          <TabItem Header="工作台">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+              <StackPanel>
+                <TextBlock x:Name="SessionName" FontSize="23" FontWeight="Bold"/>
+                <TextBlock Text="欢迎回来，继续处理今天的工作。" Foreground="{DynamicResource MutedBrush}" Margin="0,5,0,18"/>
+                <Border Background="{DynamicResource SoftBrush}" BorderBrush="{DynamicResource EdgeBrush}" BorderThickness="2" CornerRadius="14" Padding="18">
+                  <StackPanel>
+                    <TextBlock Text="我的角色" FontWeight="Bold"/>
+                    <TextBlock x:Name="SessionRoles" TextWrapping="Wrap" Margin="0,8,0,14"/>
+                    <TextBlock x:Name="SummaryText" TextWrapping="Wrap" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryBrush}"/>
+                  </StackPanel>
+                </Border>
+                <controls:CustomButton Content="刷新工作区" Click="RefreshClick" HorizontalAlignment="Left" Margin="0,18,0,0"/>
+              </StackPanel>
+            </ScrollViewer>
+          </TabItem>
+          <TabItem Header="个人资料">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+              <StackPanel>
+                <common:AvatarPicker x:Name="ProfileAvatar"/>
+                <TextBlock Text="账号名" FontWeight="Bold"/>
+                <TextBlock x:Name="ProfileUserName" Margin="0,5,0,15"/>
+                <TextBlock Text="昵称 *" FontWeight="Bold"/>
+                <inputs:CustomInput x:Name="ProfileNickName" Margin="0,5,0,15" MaxLength="20" AllowClear="True"/>
+                <TextBlock Text="姓名" FontWeight="Bold"/>
+                <inputs:CustomInput x:Name="ProfileName" Margin="0,5,0,15" MaxLength="128" AllowClear="True"/>
+                <TextBlock Text="个人说明" FontWeight="Bold"/>
+                <inputs:CustomTextarea x:Name="ProfileDescription" Margin="0,5,0,15" MaxLength="1000" Height="80"/>
+                <TextBlock x:Name="ProfileContact" Foreground="{DynamicResource MutedBrush}" TextWrapping="Wrap"/>
+                <controls:CustomButton Content="保存资料" Click="SaveProfileClick" Variant="Primary" HorizontalAlignment="Left" Margin="0,18,0,0"/>
+              </StackPanel>
+            </ScrollViewer>
+          </TabItem>
+          <TabItem Header="账号安全">
+            <ContentControl x:Name="SecurityHost"/>
+          </TabItem>
+          <TabItem Header="通知中心">
+            <DockPanel>
+              <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
+                <TextBlock x:Name="UnreadCount" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,16,0"/>
+                <controls:CustomButton Content="刷新" Click="RefreshClick" Height="34" Margin="0,0,8,0"/>
+                <controls:CustomButton Content="标记选中为已读" Click="MarkReadClick" Height="34" Margin="0,0,8,0"/>
+                <controls:CustomButton Content="全部已读" Click="MarkAllReadClick" Height="34"/>
+              </StackPanel>
+              <controls:CustomDataGrid x:Name="NotificationGrid" IsReadOnly="True" AutoGenerateColumns="False" HeadersVisibility="Column">
+                <DataGrid.Columns>
+                  <DataGridCheckBoxColumn Header="已读" Binding="{Binding IsRead}" Width="60"
+                                          ElementStyle="{StaticResource NaiveStatusCheckBoxStyle}"
+                                          EditingElementStyle="{StaticResource NaiveCheckBoxStyle}"/>
+                  <DataGridTextColumn Header="标题" Binding="{Binding Title}" Width="180"/>
+                  <DataGridTextColumn Header="内容" Binding="{Binding Body}" Width="*"/>
+                  <DataGridTextColumn Header="时间" Binding="{Binding CreationTime, StringFormat=yyyy-MM-dd HH:mm}" Width="160"/>
+                </DataGrid.Columns>
+              </controls:CustomDataGrid>
+            </DockPanel>
+          </TabItem>
+          <TabItem Header="授权管理">
+            <ContentControl x:Name="AuthorizationHost"/>
+          </TabItem>
+          <TabItem Header="系统管理">
+            <ContentControl x:Name="SystemHost"/>
+          </TabItem>
+          <TabItem Header="审批中心">
+            <ContentControl x:Name="ApprovalHost"/>
+          </TabItem>
+        </container:CustomTabs>
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>

@@ -1,0 +1,66 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="AlibabaCloud.SDK.Dysmsapi20170525" Version="4.4.0" />
+    <PackageVersion Include="AlibabaCloud.SDK.Dyvmsapi20170525" Version="5.5.0" />
+    <PackageVersion Include="Asp.Versioning.Mvc" Version="10.0.1" />
+    <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.0.1" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.101.3" />
+    <PackageVersion Include="BouncyCastle.Cryptography" Version="2.6.2" />
+    <PackageVersion Include="Confluent.Kafka" Version="2.15.0" />
+    <PackageVersion Include="coverlet.collector" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.22.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.22.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.22.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
+    <PackageVersion Include="Npgsql" Version="10.0.3" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.17.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.17.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.17.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.17.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.17.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.17.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.17.0" />
+    <PackageVersion Include="Fido2" Version="4.3.1" />
+    <PackageVersion Include="MailKit" Version="4.17.0" />
+    <PackageVersion Include="MessagePack" Version="2.5.307" />
+    <PackageVersion Include="Quartz.Extensions.DependencyInjection" Version="3.15.0" />
+    <PackageVersion Include="Quartz.Serialization.Json" Version="3.15.0" />
+    <PackageVersion Include="RabbitMQ.Client" Version="7.2.1" />
+    <PackageVersion Include="RocketMQ.Client" Version="5.2.1" />
+    <PackageVersion Include="Mapster" Version="10.0.0" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageVersion Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+    <PackageVersion Include="Serilog.Formatting.Compact" Version="3.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Async" Version="2.1.0" />
+    <PackageVersion Include="Scriban" Version="7.2.5" />
+    <PackageVersion Include="SQLitePCLRaw.bundle_sqlite3" Version="2.1.11" />
+    <PackageVersion Include="SQLitePCLRaw.bundle_winsqlite3" Version="2.1.11" />
+    <PackageVersion Include="SqlSugarCoreNoDrive" Version="5.1.4.216" />
+    <PackageVersion Include="StackExchange.Redis" Version="3.0.17" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.Swagger" Version="10.2.3" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+    <PackageVersion Include="TencentCloudSDK.Sms" Version="3.0.1422" />
+    <PackageVersion Include="TencentCloudSDK.Vms" Version="3.0.1273" />
+    <PackageVersion Include="Volo.Abp.Core" Version="10.5.0" />
+    <PackageVersion Include="Volo.Abp.Localization" Version="10.5.0" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+  </ItemGroup>
+
+  <!-- 业务系统包版本入口。基座仓不修改本节点，业务仓统一维护 Directory.Packages.business.props。 -->
+  <Import Project="Directory.Packages.business.props" Condition="Exists('Directory.Packages.business.props')" />
+</Project>

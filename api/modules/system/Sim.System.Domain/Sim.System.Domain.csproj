@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\common.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle.Cryptography" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" />
+    <PackageReference Include="Volo.Abp.Core" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\framework\Sim.Framework.Core\Sim.Framework.Core.csproj" />
+    <ProjectReference Include="..\..\..\framework\Sim.Framework.Domain\Sim.Framework.Domain.csproj" />
+    <ProjectReference Include="..\..\..\framework\Sim.SqlSugar.Core\Sim.SqlSugar.Core.csproj" />
+    <ProjectReference Include="..\Sim.System.Domain.Shared\Sim.System.Domain.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="IRepositories\" />
+  </ItemGroup>
+
+</Project>

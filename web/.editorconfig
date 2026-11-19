@@ -1,0 +1,17 @@
+[*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue,css,scss,sass,less,styl,json,yaml,yml}]
+charset = utf-8
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = crlf
+max_line_length = 100
+
+[*.sh]
+end_of_line = lf
+
+[Dockerfile]
+end_of_line = lf
+
+[Jenkinsfile]
+end_of_line = lf

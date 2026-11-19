@@ -1,0 +1,309 @@
+/**
+ * Paper Ocean 设计令牌 · CSS 变量
+ *
+ * 依据 docs/design/ui/prototypes 设计原型（design-system.html / assets/ui.css）：
+ * - 浅色「纸上海洋」：奶油纸底 + 点阵纹理、海军蓝 2px 描边、无模糊硬投影、
+ *   电光蓝强调交互、珊瑚色主行动。
+ * - 深色「夜航」：在保持描边 / 硬投影语言的前提下，把纸底换成深海蓝，
+ *   文字换成米白，强调色提亮以保证对比度；投影沿用 `--po-ink`，
+ *   在深色下自动反相为米白，避免近黑投影在深底上不可见。
+ * - 本文件是唯一的令牌出口：页面与组件只消费变量，不写死颜色。
+ *
+ * 变量分三层：
+ * 1. --po-*：新设计令牌，新代码优先使用；
+ * 2. --ink-* / --theme-* / --admin-*：旧水墨主题变量别名，
+ *    映射到 Paper Ocean 取值，让存量页面无需逐个改色即完成换肤；
+ * 3. 语义色（success / warning / danger / info）保持语义不变，仅更新色相。
+ */
+
+:root {
+  /* ===== 基础色板 ===== */
+  --po-bg: #fff9ee; /* 奶油纸底 · 页面背景 */
+  --po-bg-deep: #f9f2e3; /* 次级纸面 · 表头 / 区块底 */
+  --po-paper: #ffffff; /* 卡面 */
+  --po-ink: #14284b; /* 海军蓝 · 主文字 / 描边 */
+  --po-ink-soft: #4f6282; /* 次级文字 */
+  --po-ink-faint: #70819f; /* 三级文字 / 占位符 */
+  --po-disabled: #a8b4c9; /* 禁用 */
+  --po-line: #d9e2f1; /* 分隔线 */
+  --po-line-mid: #c0cde2; /* 强调分隔线 */
+  --po-accent: #2f6bff; /* 电光蓝 · 可交互元素 */
+  --po-accent-hover: #1b4fd6;
+  --po-accent-pressed: #153fae;
+  --po-accent-soft: #e7f1ff; /* 选中底 / 悬停底 */
+  --po-scrollbar-size: 10px;
+  --po-scrollbar-track: transparent;
+  --po-scrollbar-thumb: var(--po-paper);
+  --po-scrollbar-thumb-hover: var(--po-accent-soft);
+  --po-scrollbar-border: var(--po-ink);
+  --po-coral: #ff7a6b; /* 珊瑚 · 主行动 */
+  --po-coral-hover: #ff9084;
+  --po-coral-deep: #da4339;
+  --po-on-bright: #14284b; /* 亮色贴纸（贴纸黄 / 柔色底）上的固定墨色文字 */
+  --po-on-coral: #14284b; /* 珊瑚底上的文字与图形；商务风格的珊瑚即主色，随调色盘反相 */
+  --po-sun: #ffc94d; /* 贴纸黄 */
+  --po-sun-soft: #fff0b8;
+  --po-sky: #dcebff; /* 浅海蓝 */
+  --po-peach: #ffe3d6; /* 蜜桃 */
+  --po-mint: #bff0d8; /* 薄荷 */
+  --po-lilac: #e6dcff; /* 丁香 */
+  --po-good: #018451; /* 成功 */
+  --po-warn: #a56d1c; /* 警告 */
+  --po-danger: #c1332f; /* 危险 */
+  --po-dot: rgba(20, 40, 75, 0.13); /* 点阵纹理 */
+  --po-scrim: rgba(20, 40, 75, 0.34); /* 遮罩 */
+
+  /* ===== 字体 ===== */
+  /* 全站唯一字体：Maple Mono CN（圆角等宽，中英宽度 2:1，含 400/700/900/斜体）。
+     中文切片按 unicode-range 懒加载；GB 2312 一级之外的生僻字回退系统中文字体。 */
+  --po-font-stack: 'Maple Mono CN', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei',
+    'Noto Sans CJK SC', ui-monospace, 'Cascadia Code', 'SFMono-Regular', Consolas, monospace;
+  --po-font-display: var(--po-font-stack);
+  --po-font-body: var(--po-font-stack);
+  --po-font-mono: var(--po-font-stack);
+
+  /* ===== 形状与投影 ===== */
+  --po-r-sm: 10px;
+  --po-r: 14px;
+  --po-r-control: 16px;
+  --po-r-button: 15px;
+  --po-r-lg: 24px;
+  --po-r-xl: 32px;
+  --po-shadow-hard: 2px 2px 0 var(--po-ink);
+  --po-shadow-card: 1px 1px 0 var(--po-ink);
+  --po-shadow-soft: 1px 1px 0 var(--po-ink);
+  --po-shadow-hover: 3px 3px 0 var(--po-ink);
+  --po-shadow-pop: 2px 2px 0 var(--po-ink);
+  --po-shadow-modal: 4px 4px 0 var(--po-ink);
+  --po-shadow-tilt: 10px 14px 0 var(--po-ink);
+  --po-shadow-tilt-lg: 6px 8px 0 var(--po-ink);
+  --po-shadow-mark: 2px 2px 0 var(--po-coral);
+  --po-focus-ring: 0 0 0 3px color-mix(in oklab, var(--po-coral) 34%, transparent);
+  --po-sidebar-w: 252px;
+  --po-header-h: 76px;
+
+  /* ===== 结构令牌（纸上海洋默认；商务皮肤层整体覆写） ===== */
+  --po-primary: var(--po-accent);
+  --po-primary-hover: var(--po-accent-hover);
+  --po-primary-pressed: var(--po-accent-pressed);
+  --po-primary-soft: var(--po-accent-soft);
+  --po-primary-soft-hover: var(--po-sky);
+  --po-primary-soft-pressed: #c7dbff;
+  --po-on-primary: var(--po-on-bright);
+  --po-gold: var(--po-sun);
+  --po-gold-soft: var(--po-sun-soft);
+  --po-raised: var(--po-paper);
+  --po-edge: var(--po-ink);
+  --po-edge-strong: var(--po-ink);
+  --po-success-soft: var(--po-mint);
+  --po-warning-soft: var(--po-sun-soft);
+  --po-danger-soft: var(--po-peach);
+  --po-info-soft: var(--po-sky);
+  --po-border: 2px solid var(--po-ink);
+  /* --po-border 的宽度分量：border-box 下需要按描边复算内容盒几何的地方使用 */
+  --po-border-width: 2px;
+  --po-border-hover: 2px solid var(--po-ink);
+  --po-border-focus: 2px solid var(--po-ink);
+  --po-border-disabled: 2px solid var(--po-line);
+  --po-border-thin: 1.5px solid var(--po-ink);
+  --po-border-hair: 1px solid var(--po-ink);
+  --po-arrow-border-width: 2px;
+  --po-weight-display: 900;
+  --po-weight-strong: 800;
+  --po-weight-bold: 700;
+
+  /* ===== 内容密度（小 / 中 / 大三档，仅作用于垂直方向） =====
+     由根节点 data-density 覆盖，驱动页面纵向间距与表格数据行高度。
+     默认值即「大」档，是三档中最宽松的一档；未设置属性时同样使用这一档。
+     按钮高度（--po-density-toolbar-button-h）不再随档位继续下调。 */
+  --po-density-page-gap: 16px;
+  --po-density-page-pad-y: clamp(16px, 2.2vw, 26px);
+  --po-density-stack-gap: 14px;
+  --po-density-grid-gap: 12px;
+  --po-density-toolbar-pad-y: 14px;
+  --po-density-toolbar-control-h: 46px;
+  --po-density-toolbar-control-sm-h: 40px;
+  --po-density-toolbar-button-h: 40px;
+  --po-density-cell-py: 10px;
+  --po-density-table-foot-py: 10px;
+
+  /* ===== 旧水墨变量别名（映射到 Paper Ocean） ===== */
+  --ink-bg: var(--po-bg);
+  --ink-surface: var(--po-paper);
+  --ink-surface-2: var(--po-bg-deep);
+  --ink-surface-3: #f3ead8;
+  --ink-fg: var(--po-ink);
+  --ink-muted: var(--po-ink-soft);
+  --ink-muted-2: var(--po-ink-faint);
+  --ink-disabled: var(--po-disabled);
+  --placeholder-color: rgba(79, 98, 130, 0.5);
+  --ink-border: var(--po-line);
+  --ink-border-2: var(--po-line-mid);
+
+  --ink-accent: var(--po-accent);
+  --ink-accent-hover: var(--po-accent-hover);
+  --ink-accent-pressed: var(--po-accent-pressed);
+  --ink-accent-wash: rgba(47, 107, 255, 0.1);
+  --ink-ripple: rgba(47, 107, 255, 0.22);
+
+  --ink-seal: var(--po-coral);
+  --ink-seal-deep: var(--po-coral-deep);
+  --ink-seal-wash: rgba(255, 122, 107, 0.14);
+
+  --ink-success: var(--po-good);
+  --ink-success-wash: rgba(1, 132, 81, 0.12);
+  --ink-warn: var(--po-warn);
+  --ink-warn-wash: rgba(165, 109, 28, 0.12);
+  --ink-danger: var(--po-danger);
+  --ink-danger-wash: rgba(193, 51, 47, 0.12);
+  --ink-info: var(--po-accent);
+  --ink-info-wash: rgba(47, 107, 255, 0.12);
+
+  --ink-glass: rgba(255, 255, 255, 0.82);
+  --ink-glass-strong: rgba(255, 255, 255, 0.95);
+
+  --ink-font-display: var(--po-font-display);
+  --ink-font-body: var(--po-font-body);
+  --ink-font-mono: var(--po-font-mono);
+
+  --ink-r-sm: var(--po-r-sm);
+  --ink-r-md: var(--po-r);
+  --ink-r-lg: var(--po-r-lg);
+  --ink-shadow-sm: var(--po-shadow-soft);
+  --ink-shadow-md: var(--po-shadow-card);
+  --ink-shadow-lg: var(--po-shadow-hard);
+
+  /* ===== 基础主题变量（运行时由 App.vue 同步覆盖） ===== */
+  --theme-primary: var(--po-accent);
+  --theme-primary-hover: var(--po-accent-hover);
+  --theme-primary-pressed: var(--po-accent-pressed);
+  --theme-info: var(--po-accent);
+  --theme-success: var(--po-good);
+  --theme-warning: var(--po-warn);
+  --theme-error: var(--po-danger);
+  --theme-text-base: var(--po-ink);
+  --theme-text-secondary: var(--po-ink-soft);
+  --theme-text-tertiary: var(--po-ink-faint);
+  --theme-text-disabled: var(--po-disabled);
+  --theme-bg-base: var(--po-paper);
+  --theme-bg-secondary: var(--po-bg);
+  --theme-bg-tertiary: var(--po-bg-deep);
+  --theme-border: var(--po-line);
+  --theme-border-hover: var(--po-line-mid);
+  --theme-divider: var(--po-line);
+
+  /* ===== 管理端语义令牌 ===== */
+  --admin-header-height: var(--po-header-h);
+  --admin-footer-height: 0px;
+  --admin-sidebar-width: var(--po-sidebar-w);
+  --admin-sidebar-collapsed-width: 76px;
+  --admin-canvas: var(--po-bg);
+  --admin-surface: var(--po-paper);
+  --admin-surface-solid: var(--po-paper);
+  --admin-surface-muted: var(--po-bg-deep);
+  --admin-accent-soft: var(--po-accent-soft);
+  --admin-accent-text: var(--po-accent);
+  --admin-shadow-sm: var(--po-shadow-soft);
+  --admin-shadow-lg: var(--po-shadow-hard);
+  --admin-brand-fill: var(--po-coral);
+  --admin-focus-ring: rgba(47, 107, 255, 0.45);
+  --admin-glass: rgba(255, 255, 255, 0.82);
+  --admin-glass-strong: rgba(255, 255, 255, 0.95);
+  color-scheme: light;
+}
+
+/* ===== 深色「夜航」 ===== */
+:root[data-theme='dark'] {
+  --po-bg: #121a2b;
+  --po-bg-deep: #182236;
+  --po-paper: #1c2740;
+  --po-ink: #f4eee1;
+  --po-ink-soft: #aab5cb;
+  --po-ink-faint: #8492ad;
+  --po-disabled: #5b6982;
+  --po-line: #33415f;
+  --po-line-mid: #465774;
+  --po-accent: #7ea2ff;
+  --po-accent-hover: #9db9ff;
+  --po-accent-pressed: #6b93ff;
+  --po-accent-soft: #22304d;
+  --po-primary-soft-pressed: #2f4b70;
+  --po-raised: #22304d;
+  --po-coral: #ff8b79;
+  --po-coral-hover: #ffa595;
+  --po-coral-deep: #ff6b57;
+  --po-on-bright: #14284b;
+  --po-on-coral: #14284b;
+  --po-sun: #f6d06a;
+  --po-sun-soft: #3b3320;
+  --po-sky: #263f5e;
+  --po-peach: #4a2f2b;
+  --po-mint: #203c32;
+  --po-lilac: #312c4f;
+  --po-good: #5fd39a;
+  --po-warn: #e0b264;
+  --po-danger: #ff9186;
+  --po-dot: rgba(244, 238, 225, 0.07);
+  --po-scrim: rgba(6, 10, 18, 0.55);
+  /* 投影不在暗色块里覆写：沿用 --po-ink，夜航下自动反相为米白，
+     保证硬投影在深色底上可见，且与按钮 / 描边的 ink 投影保持一致。 */
+
+  --ink-surface-3: #22304d;
+  --placeholder-color: rgba(170, 181, 203, 0.45);
+  --ink-accent-wash: rgba(126, 162, 255, 0.16);
+  --ink-ripple: rgba(126, 162, 255, 0.3);
+  --ink-seal-wash: rgba(255, 139, 121, 0.16);
+  --ink-success-wash: rgba(95, 211, 154, 0.14);
+  --ink-warn-wash: rgba(224, 178, 100, 0.14);
+  --ink-danger-wash: rgba(255, 145, 134, 0.14);
+  --ink-info-wash: rgba(126, 162, 255, 0.14);
+  --ink-glass: rgba(18, 26, 43, 0.78);
+  --ink-glass-strong: rgba(22, 32, 52, 0.92);
+
+  --admin-brand-fill: var(--po-coral);
+  --admin-focus-ring: rgba(126, 162, 255, 0.5);
+  --admin-glass: rgba(18, 26, 43, 0.78);
+  --admin-glass-strong: rgba(22, 32, 52, 0.92);
+  color-scheme: dark;
+}
+
+/* ===== 内容密度 · 小（紧凑） ===== */
+:root[data-density='compact'] {
+  --po-density-page-gap: 6px;
+  --po-density-page-pad-y: clamp(8px, 1.1vw, 13px);
+  --po-density-stack-gap: 5px;
+  --po-density-grid-gap: 4px;
+  --po-density-toolbar-pad-y: 6px;
+  --po-density-toolbar-control-h: 34px;
+  --po-density-toolbar-control-sm-h: 30px;
+  --po-density-toolbar-button-h: 28px;
+  --po-density-cell-py: 2px;
+  --po-density-table-foot-py: 4px;
+}
+
+/* ===== 内容密度 · 中 ===== */
+:root[data-density='standard'] {
+  --po-density-page-gap: 11px;
+  --po-density-page-pad-y: clamp(12px, 1.6vw, 20px);
+  --po-density-stack-gap: 9px;
+  --po-density-grid-gap: 8px;
+  --po-density-toolbar-pad-y: 10px;
+  --po-density-toolbar-control-h: 40px;
+  --po-density-toolbar-control-sm-h: 35px;
+  --po-density-toolbar-button-h: 34px;
+  --po-density-cell-py: 5px;
+  --po-density-table-foot-py: 7px;
+}
+
+/* 奶油纸底 + 点阵纹理（画布） */
+.ink-canvas {
+  background-color: var(--po-bg);
+  background-image: radial-gradient(var(--po-dot) 1px, transparent 1px);
+  background-size: 26px 26px;
+  background-attachment: fixed;
+}
+
+/* 数字使用等宽 + 表格对齐 */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}

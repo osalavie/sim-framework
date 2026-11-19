@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OAuth 2.0 × OpenID Connect 图解与接入指南</title>
+<style>
+  :root{
+    --ink:#22201c; --paper:#fbf6ea; --card:#fffdf8; --muted:#6f695e;
+    --coral:#ff6b57; --blue:#2f6bff; --green:#2f9e6f; --yellow:#f2c94c;
+    --line:#e6dcc4; --code:#1f1d1a; --shadow:6px 6px 0 var(--ink);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--ink); background:var(--paper);
+    font:15px/1.7 "Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background-image:radial-gradient(#e9e0cc 1px,transparent 1px);
+    background-size:22px 22px;
+  }
+  a{color:var(--blue); text-underline-offset:3px}
+  code,kbd,pre{font-family:"Cascadia Code",Consolas,"JetBrains Mono",monospace}
+  code{background:#f1e7d0; border:1px solid #e2d5b8; border-radius:5px; padding:1px 5px; font-size:.9em}
+  .hero{max-width:1240px; margin:28px auto 0; padding:0 22px}
+  .hero-card{
+    background:var(--card); border:2px solid var(--ink); border-radius:18px;
+    box-shadow:var(--shadow); padding:30px 34px; position:relative; overflow:hidden;
+  }
+  .hero-card:after{content:""; position:absolute; right:-50px; top:-60px; width:230px; height:230px;
+    border:2px solid var(--ink); border-radius:50%; background:var(--coral); opacity:.12}
+  .kicker{display:inline-flex; gap:8px; align-items:center; font-weight:700; letter-spacing:.12em;
+    text-transform:uppercase; font-size:12px; color:var(--coral)}
+  .kicker:before{content:""; width:26px; height:2px; background:var(--coral)}
+  h1{font:800 clamp(30px,4.4vw,52px)/1.08 Georgia,"Songti SC",serif; margin:12px 0 10px}
+  .lede{max-width:820px; color:var(--muted); font-size:16px; margin:0}
+  .hero-tags{display:flex; gap:10px; flex-wrap:wrap; margin-top:20px}
+  .tag{border:2px solid var(--ink); border-radius:999px; padding:5px 12px; font-size:12px; font-weight:700; background:var(--paper)}
+  .tag.coral{background:#ffe3de} .tag.blue{background:#dfe8ff} .tag.green{background:#dcf3e8}
+  .layout{max-width:1240px; margin:26px auto 70px; padding:0 22px; display:grid; grid-template-columns:238px minmax(0,1fr); gap:30px}
+  nav.toc{align-self:start; position:sticky; top:18px; background:var(--card); border:2px solid var(--ink);
+    border-radius:14px; box-shadow:4px 4px 0 var(--ink); padding:16px 14px; max-height:calc(100vh - 36px); overflow:auto}
+  nav.toc strong{display:block; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:0 6px 10px}
+  nav.toc a{display:block; text-decoration:none; color:var(--ink); font-size:13px; padding:7px 9px; border-radius:8px; border:2px solid transparent}
+  nav.toc a:hover{background:#f6ecd7}
+  nav.toc a.active{border-color:var(--ink); background:#ffe3de; font-weight:700}
+  nav.toc .n{display:inline-block; width:20px; color:var(--coral); font-weight:800}
+  main{min-width:0}
+  section{scroll-margin-top:16px; margin:0 0 34px}
+  .sec-head{display:flex; gap:12px; align-items:flex-start; margin:0 0 14px}
+  .sec-no{flex:none; width:40px; height:40px; border:2px solid var(--ink); border-radius:12px; background:var(--coral);
+    box-shadow:3px 3px 0 var(--ink); display:grid; place-items:center; font:800 16px Georgia,serif}
+  h2{font:800 clamp(21px,2.4vw,29px)/1.25 Georgia,"Songti SC",serif; margin:0}
+  .sub{color:var(--muted); font-size:13px; margin:2px 0 0}
+  .card{background:var(--card); border:2px solid var(--ink); border-radius:14px; box-shadow:var(--shadow); padding:20px 22px; margin:14px 0}
+  .card h3{font:800 17px/1.35 Georgia,"Songti SC",serif; margin:0 0 8px}
+  .card p{margin:6px 0}
+  .grid2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+  .grid3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px}
+  .grid4{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px}
+  .mini{border:2px solid var(--ink); border-radius:12px; background:#fffaf0; padding:12px 14px}
+  .mini b{display:block; font-size:13px; margin-bottom:3px}
+  .mini span{font-size:12px; color:var(--muted)}
+  .figure{margin:16px 0; border:2px solid var(--ink); border-radius:14px; background:var(--card);
+    box-shadow:var(--shadow); overflow:hidden}
+  .figure canvas{display:block; width:100%; height:auto; background:transparent}
+  figcaption{padding:10px 16px; border-top:2px dashed var(--line); font-size:12.5px; color:var(--muted)}
+  .figure .cap{font-weight:800; color:var(--ink)}
+  table{width:100%; border-collapse:collapse; font-size:13.5px; margin:10px 0; background:var(--card)}
+  th,td{border:2px solid var(--ink); padding:8px 10px; text-align:left; vertical-align:top}
+  th{background:#f4ead3; font-size:12.5px}
+  tbody tr:nth-child(even) td{background:#fffaf0}
+  .ex{border-left:6px solid var(--blue); background:#eef3ff; border-radius:0 10px 10px 0; padding:10px 14px; margin:12px 0; font-size:13px}
+  .ex b{font-size:12px; letter-spacing:.08em; color:var(--blue)}
+  .warn{border-left:6px solid var(--coral); background:#fff0ec; border-radius:0 10px 10px 0; padding:10px 14px; margin:12px 0; font-size:13px}
+  .ok{border-left:6px solid var(--green); background:#eaf8f1; border-radius:0 10px 10px 0; padding:10px 14px; margin:12px 0; font-size:13px}
+  pre{background:var(--code); color:#f6f0e3; border-radius:12px; padding:14px 16px; overflow:auto;
+    border:2px solid var(--ink); box-shadow:3px 3px 0 var(--ink); font-size:12.5px; line-height:1.55; margin:10px 0}
+  pre .c{color:#9a9284} pre .s{color:#9fe0b5} pre .k{color:#ff9f8d} pre .n{color:#ffd479}
+  .pill-row{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0}
+  .pill{border:2px solid var(--ink); border-radius:999px; padding:3px 10px; font-size:12px; font-weight:700; background:#fffaf0}
+  .pill.b{background:#dfe8ff}.pill.g{background:#dcf3e8}.pill.y{background:#fff1c9}.pill.r{background:#ffe3de}
+  .token{display:flex; border:2px solid var(--ink); border-radius:12px; overflow:hidden; margin:12px 0; font-size:12px}
+  .token>div{padding:10px 12px; min-width:0; word-break:break-all}
+  .token .h{background:#ffe3de; flex:.28} .token .p{background:#dfe8ff; flex:.34} .token .s{background:#dcf3e8; flex:.38}
+  .steps{counter-reset:step; display:grid; gap:10px; margin:12px 0}
+  .step{display:grid; grid-template-columns:30px 1fr; gap:10px; align-items:start; border:2px solid var(--ink);
+    border-radius:12px; background:#fffaf0; padding:10px 12px}
+  .step:before{counter-increment:step; content:counter(step); width:26px; height:26px; border-radius:50%;
+    border:2px solid var(--ink); background:var(--yellow); display:grid; place-items:center; font-weight:800; font-size:12px}
+  .step b{display:block; font-size:13px}
+  .step span{font-size:12px; color:var(--muted)}
+  .check{list-style:none; padding:0; margin:8px 0; display:grid; gap:8px}
+  .check li{display:grid; grid-template-columns:22px 1fr; gap:9px; font-size:13px; align-items:start}
+  .check li:before{content:"✓"; width:20px; height:20px; border:2px solid var(--ink); border-radius:6px;
+    background:#dcf3e8; display:grid; place-items:center; font-size:11px; font-weight:800}
+  .legend{display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin:6px 0 0}
+  .legend i{display:inline-block; width:22px; height:0; border-top:3px solid; vertical-align:middle; margin-right:5px}
+  .legend .req{border-color:var(--blue)} .legend .res{border-color:var(--muted); border-top-style:dashed}
+  .legend .note{width:14px; height:14px; border:2px solid var(--ink); background:var(--yellow); border-radius:3px}
+  footer{max-width:1240px; margin:0 auto 40px; padding:0 22px; color:var(--muted); font-size:12px}
+  @media (max-width:980px){
+    .layout{grid-template-columns:1fr}
+    nav.toc{position:static; max-height:none; display:flex; flex-wrap:wrap; gap:4px}
+    nav.toc strong{width:100%}
+    nav.toc a{display:inline-block}
+    .grid3,.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width:640px){
+    .grid2,.grid3,.grid4{grid-template-columns:1fr}
+    .hero-card{padding:22px}
+    .layout{padding:0 14px}
+  }
+  @media print{
+    body{background:#fff}
+    nav.toc{display:none}
+    .layout{display:block; max-width:none}
+    .card,.figure,.hero-card{box-shadow:none; break-inside:avoid}
+    section{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-card">
+    <div class="kicker">OAuth 2.0 / OpenID Connect</div>
+    <h1>授权、认证与接入：一页看懂</h1>
+    <p class="lede">OAuth 解决“能不能访问”，OIDC 解决“你是谁”。本文用 6 张时序图、2 张结构图、4 段真实请求，把协议原理落到业务系统。</p>
+    <div class="hero-tags">
+      <span class="tag coral">授权码 + PKCE</span>
+      <span class="tag blue">ID Token</span>
+      <span class="tag green">后端代理</span>
+      <span class="tag">state / nonce</span>
+      <span class="tag">Sim 实例</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <strong>目录</strong>
+    <a href="#map"><span class="n">01</span>角色与全局图</a>
+    <a href="#oauth"><span class="n">02</span>OAuth 是什么</a>
+    <a href="#flows"><span class="n">03</span>四种流程怎么选</a>
+    <a href="#code"><span class="n">04</span>授权码流程</a>
+    <a href="#pkce"><span class="n">05</span>PKCE</a>
+    <a href="#oidc"><span class="n">06</span>OIDC 身份层</a>
+    <a href="#refresh"><span class="n">07</span>刷新令牌</a>
+    <a href="#m2m"><span class="n">08</span>客户端凭证</a>
+    <a href="#sim"><span class="n">09</span>Sim 落地</a>
+    <a href="#integrate"><span class="n">10</span>接入八步</a>
+    <a href="#security"><span class="n">11</span>安全清单</a>
+    <a href="#errors"><span class="n">12</span>错误速查</a>
+    <a href="#cheatsheet"><span class="n">13</span>一页速查</a>
+  </nav>
+
+  <main>
+
+    <!-- 01 -->
+    <section id="map">
+      <div class="sec-head"><div class="sec-no">01</div><div><h2>角色与全局图</h2><p class="sub">先认清四个角色，后面所有流程都是它们之间的消息。</p></div></div>
+
+      <div class="grid4">
+        <div class="mini"><b>资源所有者</b><span>用户本人。只把“有限权限”委托出去。</span></div>
+        <div class="mini"><b>客户端</b><span>要访问资源的应用：Web、App、CLI、后端服务。</span></div>
+        <div class="mini"><b>授权服务器</b><span>发 token 的 IdP：Entra ID、Keycloak、Auth0。</span></div>
+        <div class="mini"><b>资源服务器</b><span>校验 token 并返回数据：业务 API、Graph。</span></div>
+      </div>
+
+      <figure class="figure">
+        <canvas data-fig="architecture" aria-label="OAuth 角色架构图"></canvas>
+        <figcaption><span class="cap">图 1</span> 信任边界：浏览器只拿 code，secret 与 token 交换只在后端；本地绑定表只存 sub 的哈希。</figcaption>
+      </figure>
+
+      <div class="ex"><b>例子 / Sim</b><br>
+        用户 = 博主；客户端 = Sim Web（公共客户端）+ Sim API（机密客户端）；授权服务器 = Microsoft Entra ID；资源服务器 = Sim API（以及可选的 Microsoft Graph）。
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section id="oauth">
+      <div class="sec-head"><div class="sec-no">02</div><div><h2>OAuth 是什么</h2><p class="sub">一句话：用“受控的令牌”代替“把密码交给第三方”。</p></div></div>
+
+      <div class="grid2">
+        <div class="card">
+          <h3>OAuth 2.0 = 授权委托</h3>
+          <p>客户端拿到 <code>access_token</code>，按 <code>scope</code> 访问资源。token 不证明“你是谁”，只证明“被允许做什么”。</p>
+          <div class="pill-row"><span class="pill b">access_token</span><span class="pill">scope</span><span class="pill">expires_in</span></div>
+        </div>
+        <div class="card">
+          <h3>OpenID Connect = 身份层</h3>
+          <p>在 OAuth 之上加一个 <code>id_token</code>（JWT）。它回答“你是谁”，并带 <code>nonce</code> 防重放。</p>
+          <div class="pill-row"><span class="pill g">id_token</span><span class="pill">openid</span><span class="pill">nonce</span></div>
+        </div>
+      </div>
+
+      <table>
+        <thead><tr><th>问题</th><th>OAuth 2.0</th><th>OpenID Connect</th></tr></thead>
+        <tbody>
+          <tr><td>回答什么</td><td>能不能访问、能访问多少</td><td>你是谁、何时登录、给哪个应用</td></tr>
+          <tr><td>核心产物</td><td><code>access_token</code></td><td><code>id_token</code>（JWT）+ <code>access_token</code></td></tr>
+          <tr><td>典型用途</td><td>调用 API、机器对机器</td><td>“使用 Microsoft 登录”</td></tr>
+          <tr><td>校验重点</td><td>scope、aud、过期时间</td><td>签名、iss、aud、exp、nonce、sub</td></tr>
+        </tbody>
+      </table>
+
+      <div class="warn"><b>不要用 access_token 当登录凭证。</b>它可能只代表“允许读通讯录”，不代表“这是谁”。登录请校验 <code>id_token</code>。</div>
+    </section>
+
+    <!-- 03 -->
+    <section id="flows">
+      <div class="sec-head"><div class="sec-no">03</div><div><h2>四种流程怎么选</h2><p class="sub">先看客户端有没有后端、有没有浏览器，再选流程。</p></div></div>
+
+      <div class="grid2">
+        <div class="card"><h3>有后端 + 有 secret</h3><p><b>授权码流程</b><br>后端换 token，secret 不出服务器。</p><div class="pill-row"><span class="pill g">推荐</span><span class="pill">Web 应用</span></div></div>
+        <div class="card"><h3>纯前端 / 移动端</h3><p><b>授权码 + PKCE</b><br>没有 secret，用一次性 verifier 防截获。</p><div class="pill-row"><span class="pill g">推荐</span><span class="pill">SPA / App</span></div></div>
+        <div class="card"><h3>机器对机器</h3><p><b>客户端凭证</b><br>没有用户，用应用身份换 token。</p><div class="pill-row"><span class="pill b">服务</span><span class="pill">定时任务</span></div></div>
+        <div class="card"><h3>无浏览器设备</h3><p><b>设备码</b><br>电视/CLI 显示码，用户在手机上确认。</p><div class="pill-row"><span class="pill y">CLI</span><span class="pill">TV</span></div></div>
+      </div>
+
+      <table>
+        <thead><tr><th>流程</th><th>secret</th><th>用户参与</th><th>典型场景</th><th>建议</th></tr></thead>
+        <tbody>
+          <tr><td>Authorization Code</td><td>需要</td><td>是</td><td>服务端渲染、BFF</td><td>默认首选</td></tr>
+          <tr><td>Authorization Code + PKCE</td><td>不需要</td><td>是</td><td>SPA、iOS/Android</td><td>公共客户端必选</td></tr>
+          <tr><td>Client Credentials</td><td>需要</td><td>否</td><td>服务间调用</td><td>不要用于登录</td></tr>
+          <tr><td>Device Code</td><td>不需要</td><td>是（另一设备）</td><td>CLI、电视</td><td>体验受限时使用</td></tr>
+          <tr><td>Implicit</td><td>不需要</td><td>是</td><td>历史 SPA</td><td>已淘汰，不要新用</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 04 -->
+    <section id="code">
+      <div class="sec-head"><div class="sec-no">04</div><div><h2>授权码流程</h2><p class="sub">浏览器只经手 code；code 一次性、短寿命；换 token 必须带 secret。</p></div></div>
+
+      <figure class="figure">
+        <canvas data-fig="authcode" aria-label="OAuth 授权码流程时序图"></canvas>
+        <figcaption><span class="cap">图 2</span> 授权码流程：state 原样回传用于防 CSRF；code 只能用一次。</figcaption>
+      </figure>
+
+      <div class="grid2">
+        <div class="ex"><b>例子 / 授权请求</b><br>
+          <code>GET /authorize?response_type=code&amp;client_id=...&amp;redirect_uri=https%3A%2F%2Fexample.com%2Fauth%2Fexternal%2Fcallback&amp;scope=openid%20profile%20email&amp;state=...&amp;nonce=...</code>
+        </div>
+        <div class="ex"><b>例子 / 换 token</b><br>
+          <code>POST /token</code><br>
+          <code>grant_type=authorization_code&amp;code=...&amp;redirect_uri=...&amp;client_id=...&amp;client_secret=...</code>
+        </div>
+      </div>
+
+<pre><span class="c">// 换 token 的响应（字段因 IdP 而异）</span>
+{
+  <span class="k">"token_type"</span>: <span class="s">"Bearer"</span>,
+  <span class="k">"expires_in"</span>: <span class="n">3600</span>,
+  <span class="k">"access_token"</span>: <span class="s">"eyJ0eXAi..."</span>,
+  <span class="k">"id_token"</span>: <span class="s">"eyJhbGci..."</span>,
+  <span class="k">"refresh_token"</span>: <span class="s">"0.AXoA..."</span>,
+  <span class="k">"scope"</span>: <span class="s">"openid profile email"</span>
+}</pre>
+
+      <div class="warn"><b>回调三件事：</b>校验 <code>state</code> 与 Cookie 一致；用 <code>code</code> 换 token；校验 <code>id_token</code>。任何一步失败都不要建立会话。</div>
+    </section>
+
+    <!-- 05 -->
+    <section id="pkce">
+      <div class="sec-head"><div class="sec-no">05</div><div><h2>PKCE</h2><p class="sub">公共客户端没有 secret，就用“一次性证明”防止授权码被截获。</p></div></div>
+
+      <figure class="figure">
+        <canvas data-fig="pkce" aria-label="PKCE 授权码流程时序图"></canvas>
+        <figcaption><span class="cap">图 3</span> <code>verifier</code> 只留在客户端；授权服务器只看到 <code>challenge</code>。</figcaption>
+      </figure>
+
+      <div class="grid2">
+        <div class="card"><h3>生成</h3>
+<pre><span class="c">// 浏览器 Web Crypto</span>
+<span class="k">const</span> verifier = base64url(crypto.getRandomValues(<span class="k">new</span> Uint8Array(<span class="n">32</span>)));
+<span class="k">const</span> digest = <span class="k">await</span> crypto.subtle.digest(<span class="s">"SHA-256"</span>, enc.encode(verifier));
+<span class="k">const</span> challenge = base64url(digest);</pre></div>
+        <div class="card"><h3>规则</h3>
+          <ul class="check">
+            <li><code>code_challenge_method=S256</code>，不要用 plain</li>
+            <li><code>verifier</code> 43–128 字符，只在本机保存</li>
+            <li>iOS/Android 用系统浏览器 + 自定义 scheme</li>
+            <li>回调后立即清除 verifier</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section id="oidc">
+      <div class="sec-head"><div class="sec-no">06</div><div><h2>OIDC 身份层</h2><p class="sub">ID Token 是一张“带签名的身份证”，先验签，再看 claims。</p></div></div>
+
+      <div class="token">
+        <div class="h"><b>Header</b><br>alg / kid / typ</div>
+        <div class="p"><b>Payload</b><br>iss / sub / aud / exp / nonce / email</div>
+        <div class="s"><b>Signature</b><br>IdP 私钥签名</div>
+      </div>
+
+<pre><span class="c">// 解码后的 payload（示例值）</span>
+{
+  <span class="k">"iss"</span>: <span class="s">"https://login.microsoftonline.com/{tenantid}/v2.0"</span>,
+  <span class="k">"sub"</span>: <span class="s">"AAAAAAAAAAAAAAAAAAAAAIkzqFVrSaSaFHy782bbtaQ"</span>,
+  <span class="k">"aud"</span>: <span class="s">"9cc43201-13ac-4f7e-8a24-bf3a02e80e4a"</span>,
+  <span class="k">"exp"</span>: <span class="n">1761792000</span>,
+  <span class="k">"iat"</span>: <span class="n">1761788100</span>,
+  <span class="k">"nonce"</span>: <span class="s">"0e406d9ccbe36182c819b5db76dc7f76"</span>,
+  <span class="k">"preferred_username"</span>: <span class="s">"fausto.feng@outlook.com"</span>,
+  <span class="k">"name"</span>: <span class="s">"Fausto Feng"</span>,
+  <span class="k">"tid"</span>: <span class="s">"9188040d-6c67-4c5b-b112-36a304b66dad"</span>
+}</pre>
+
+      <table>
+        <thead><tr><th>claim</th><th>用途</th><th>注意</th></tr></thead>
+        <tbody>
+          <tr><td><code>sub</code></td><td>稳定用户 ID</td><td>只存哈希；不要用 email 当主键</td></tr>
+          <tr><td><code>aud</code></td><td>目标应用</td><td>必须等于你的 Client ID</td></tr>
+          <tr><td><code>iss</code></td><td>签发者</td><td><code>/common</code> 时按 <code>tid</code> 校验模板</td></tr>
+          <tr><td><code>nonce</code></td><td>防重放</td><td>必须与发起时完全一致</td></tr>
+          <tr><td><code>email</code></td><td>展示 / 默认值</td><td>不要用于自动关联账号</td></tr>
+        </tbody>
+      </table>
+
+      <figure class="figure">
+        <canvas data-fig="oidc" aria-label="Sim OIDC 登录时序图"></canvas>
+        <figcaption><span class="cap">图 4</span> 后端代理模式：前端不接触 token；后端校验 ID Token 后只发本地会话。</figcaption>
+      </figure>
+
+      <div class="ex"><b>例子 / discovery</b><br>
+        <code>GET https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration</code><br>
+        返回 <code>authorization_endpoint</code>、<code>token_endpoint</code>、<code>jwks_uri</code>、<code>issuer</code>。不要硬编码端点。
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section id="refresh">
+      <div class="sec-head"><div class="sec-no">07</div><div><h2>刷新令牌</h2><p class="sub">短寿命 access_token + 长寿命 refresh_token；refresh 只放 HttpOnly Cookie 或服务端。</p></div></div>
+
+      <figure class="figure">
+        <canvas data-fig="refresh" aria-label="刷新令牌时序图"></canvas>
+        <figcaption><span class="cap">图 5</span> 轮换（rotation）：每次刷新返回新 refresh，旧的同时失效。</figcaption>
+      </figure>
+
+<pre><span class="c">// 刷新请求</span>
+POST /token
+grant_type=refresh_token&amp;refresh_token=...&amp;client_id=...&amp;client_secret=...</pre>
+
+      <div class="warn"><b>并发刷新会互相踢下线。</b>多标签页共享刷新结果，或用后端单飞（single-flight）合并并发的刷新请求。</div>
+    </section>
+
+    <!-- 08 -->
+    <section id="m2m">
+      <div class="sec-head"><div class="sec-no">08</div><div><h2>客户端凭证</h2><p class="sub">没有用户，只有应用身份；不要拿它当“登录”。</p></div></div>
+
+      <figure class="figure">
+        <canvas data-fig="m2m" aria-label="客户端凭证流程时序图"></canvas>
+        <figcaption><span class="cap">图 6</span> 服务用自己的 Client ID/Secret 换 token，audience/scope 决定能调什么。</figcaption>
+      </figure>
+
+<pre><span class="c"># curl 示例</span>
+curl -X POST https://idp.example.com/oauth2/token \
+  -d grant_type=client_credentials \
+  -d client_id=$CLIENT_ID \
+  -d client_secret=$CLIENT_SECRET \
+  -d scope=api://sim-api/.default</pre>
+
+      <div class="ok"><b>适用：</b>定时任务、CI、服务间 API。令牌里没有用户，审计只能追到“哪个应用”。</div>
+    </section>
+
+    <!-- 09 -->
+    <section id="sim">
+      <div class="sec-head"><div class="sec-no">09</div><div><h2>Sim 落地</h2><p class="sub">一个已经跑通的生产实现，可直接对照抄作业。</p></div></div>
+
+      <div class="grid2">
+        <div class="card"><h3>端点</h3>
+          <table>
+            <tbody>
+              <tr><td><code>GET /api/system/external-login/providers</code></td><td>启用的 Provider</td></tr>
+              <tr><td><code>GET .../redirect/{provider}</code></td><td>返回授权 URL</td></tr>
+              <tr><td><code>GET .../callback/{provider}</code></td><td>换 token / 建会话</td></tr>
+              <tr><td><code>POST .../register-with-external-login</code></td><td>注册补齐</td></tr>
+              <tr><td><code>GET .../my-binding-redirect/{p}</code></td><td>发起绑定</td></tr>
+              <tr><td><code>DELETE .../my-binding/{p}</code></td><td>解绑</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card"><h3>关键配置</h3>
+<pre>{
+  <span class="k">"ExternalLogin"</span>: {
+    <span class="k">"CallbackBaseUrl"</span>: <span class="s">"https://example.com/auth/external/callback"</span>,
+    <span class="k">"StateCookieSecure"</span>: <span class="k">true</span>,
+    <span class="k">"Microsoft"</span>: {
+      <span class="k">"Enabled"</span>: <span class="k">true</span>,
+      <span class="k">"Authority"</span>: <span class="s">"https://login.microsoftonline.com/common/v2.0"</span>,
+      <span class="k">"ClientId"</span>: <span class="s">"9cc43201-13ac-4f7e-8a24-bf3a02e80e4a"</span>,
+      <span class="k">"ClientSecret"</span>: <span class="s">"来自密钥文件"</span>,
+      <span class="k">"Scopes"</span>: [<span class="s">"openid"</span>, <span class="s">"profile"</span>, <span class="s">"email"</span>]
+    }
+  }
+}</pre></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card"><h3>身份映射</h3>
+          <p><code>ProviderKey = SHA256("microsoft:" + sub)</code>，绑定表唯一索引 <code>(provider, provider_key)</code>。</p>
+          <p>邮箱只做展示/默认用户名，<b>不自动关联已有账号</b>。</p>
+        </div>
+        <div class="card"><h3>会话与 2FA</h3>
+          <p>登录成功签发本地 JWT + HttpOnly 刷新 Cookie；已开启本地 2FA 的用户仍需完成 challenge，第三方登录不能绕过。</p>
+        </div>
+      </div>
+
+      <figure class="figure">
+        <canvas data-fig="binding" aria-label="账号绑定 Microsoft 时序图"></canvas>
+        <figcaption><span class="cap">图 7</span> 绑定意图写入 state 的 <code>BindingUserId</code>；回调时必须与当前登录用户一致。</figcaption>
+      </figure>
+
+      <div class="ex"><b>例子 / 前端发起</b>
+<pre><span class="k">const</span> { redirectUrl } = <span class="k">await</span> http.get(<span class="s">"/api/system/external-login/redirect/microsoft"</span>);
+location.assign(redirectUrl);</pre>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section id="integrate">
+      <div class="sec-head"><div class="sec-no">10</div><div><h2>接入业务系统：八步</h2><p class="sub">从注册应用走到上线回归，顺序不要颠倒。</p></div></div>
+
+      <figure class="figure">
+        <canvas data-fig="steps" aria-label="接入业务系统八步流程图"></canvas>
+        <figcaption><span class="cap">图 8</span> 前四步在 IdP/配置层，后四步在业务代码与测试层。</figcaption>
+      </figure>
+
+      <div class="steps">
+        <div class="step"><div><b>注册应用</b><span>平台选 Web（服务端换 token），Redirect URI 写完整路径，精确匹配。</span></div></div>
+        <div class="step"><div><b>对齐受众与 Authority</b><span>个人账号 <code>/consumers</code>；单租户 <code>/{tenantId}</code>；全部 <code>/common</code>。</span></div></div>
+        <div class="step"><div><b>密钥入密钥库</b><span>Client Secret 不进仓库；生产用文件密钥/环境变量。</span></div></div>
+        <div class="step"><div><b>后端发起授权</b><span>生成 state、nonce，写加密 HttpOnly Cookie，302 到授权端点。</span></div></div>
+        <div class="step"><div><b>回调换 token</b><span>校验 state → code 换 token → 验签/iss/aud/exp/nonce。</span></div></div>
+        <div class="step"><div><b>身份映射</b><span><code>sub</code> 哈希查绑定；未绑定走注册或拒绝。</span></div></div>
+        <div class="step"><div><b>建立本地会话</b><span>签发自己的 JWT/刷新令牌；不要把 IdP token 存 localStorage。</span></div></div>
+        <div class="step"><div><b>安全与回归</b><span>重放、过期、错 state、错 nonce、解绑、2FA 全部回归。</span></div></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card"><h3>后端校验（伪代码）</h3>
+<pre><span class="k">var</span> state = <span class="k">await</span> stateStore.ConsumeAsync(providerId);
+<span class="k">var</span> tokens = <span class="k">await</span> ExchangeCodeAsync(code, state.CallbackUrl);
+<span class="k">var</span> principal = <span class="k">await</span> ValidateIdTokenAsync(
+    tokens.IdToken, authority, clientId, state.Nonce);
+<span class="k">var</span> key = Sha256(providerId + <span class="s">":"</span> + principal.Sub);
+<span class="k">var</span> binding = <span class="k">await</span> db.ExternalLogins.FindAsync(providerId, key);
+<span class="k">if</span> (binding == <span class="k">null</span>) <span class="k">return</span> RegistrationOrReject();
+<span class="k">return</span> IssueLocalSession(binding.UserId);</pre></div>
+        <div class="card"><h3>绑定表（PostgreSQL）</h3>
+<pre><span class="k">create table</span> system_external_login (
+  id <span class="k">uuid primary key</span>,
+  provider <span class="k">varchar</span>(<span class="n">32</span>) <span class="k">not null</span>,
+  provider_key <span class="k">varchar</span>(<span class="n">64</span>) <span class="k">not null</span>, <span class="c">-- sha256("microsoft:"+sub)</span>
+  user_id <span class="k">uuid not null</span>,
+  created_at <span class="k">timestamptz not null default</span> now(),
+  <span class="k">unique</span> (provider, provider_key)
+);</pre></div>
+      </div>
+
+      <div class="card"><h3>如果改用 ASP.NET Core 内置处理器</h3>
+<pre>builder.Services.AddAuthentication()
+  .AddOpenIdConnect(<span class="s">"Microsoft"</span>, o =&gt; {
+    o.Authority = <span class="s">"https://login.microsoftonline.com/common/v2.0"</span>;
+    o.ClientId = cfg[<span class="s">"ExternalLogin:Microsoft:ClientId"</span>];
+    o.ClientSecret = cfg[<span class="s">"ExternalLogin:Microsoft:ClientSecret"</span>];
+    o.CallbackPath = <span class="s">"/signin-microsoft"</span>;
+    o.ResponseType = <span class="s">"code"</span>;
+    o.UsePkce = <span class="k">true</span>;
+    o.SaveTokens = <span class="k">false</span>;
+    o.GetClaimsFromUserInfoEndpoint = <span class="k">true</span>;
+    o.TokenValidationParameters.ValidAudience = o.ClientId;
+  });</pre>
+        <p class="sub">使用 <code>/common</code> 时 issuer 带租户 GUID，需按 <code>tid</code> 校验或配置模板；Sim 选择自研后端代理以统一五家 Provider 的登录/绑定流程。</p>
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section id="security">
+      <div class="sec-head"><div class="sec-no">11</div><div><h2>安全清单</h2><p class="sub">上线前逐条打勾；漏一条就可能被重放或接管。</p></div></div>
+
+      <div class="grid2">
+        <div class="card"><h3>协议层</h3>
+          <ul class="check">
+            <li>Redirect URI <b>完全一致</b>，不用通配符</li>
+            <li><code>state</code> 一次性、随机、与 Cookie 绑定</li>
+            <li><code>nonce</code> 精确匹配 ID Token</li>
+            <li>校验 <code>iss</code> / <code>aud</code> / <code>exp</code>，允许 5 分钟时钟偏差</li>
+            <li>只信 <code>sub</code>，不用 email 自动关联</li>
+            <li>公共客户端必须 PKCE</li>
+          </ul>
+        </div>
+        <div class="card"><h3>会话与密钥</h3>
+          <ul class="check">
+            <li>token 不放 URL、localStorage、日志</li>
+            <li>刷新令牌 HttpOnly + Secure + SameSite</li>
+            <li>Secret 只存密钥库，定期轮换</li>
+            <li>state Cookie 路径限定、加密、短期</li>
+            <li>绑定/解绑需要已登录会话 + 意图校验</li>
+            <li>本地 2FA 不被第三方登录绕过</li>
+          </ul>
+        </div>
+      </div>
+
+      <table>
+        <thead><tr><th>攻击</th><th>防线</th><th>失败表现</th></tr></thead>
+        <tbody>
+          <tr><td>授权码截获</td><td>PKCE / 机密客户端</td><td><code>invalid_grant</code></td></tr>
+          <tr><td>CSRF 回调</td><td>state + HttpOnly Cookie</td><td>state 无效 / 过期</td></tr>
+          <tr><td>ID Token 重放</td><td>nonce 精确匹配</td><td>nonce mismatch</td></tr>
+          <tr><td>账号接管</td><td>sub 哈希绑定，邮箱不自动关联</td><td>要求重新绑定</td></tr>
+          <tr><td>Secret 泄漏</td><td>密钥库 + 轮换 + 最小权限</td><td><code>invalid_client</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 12 -->
+    <section id="errors">
+      <div class="sec-head"><div class="sec-no">12</div><div><h2>错误速查</h2><p class="sub">先看错误码，再查这四类：回调、受众、密钥、时效。</p></div></div>
+
+      <table>
+        <thead><tr><th>错误</th><th>常见原因</th><th>修复</th></tr></thead>
+        <tbody>
+          <tr><td><code>AADSTS50011</code></td><td>redirect_uri 与注册值不一致</td><td>逐字符对齐（协议/端口/路径/结尾斜杠）</td></tr>
+          <tr><td><code>AADSTS7000215</code></td><td>Client Secret 错误或已过期</td><td>重新生成并更新密钥文件</td></tr>
+          <tr><td><code>AADSTS65001</code></td><td>用户/管理员未同意权限</td><td>管理员同意或调整 scope</td></tr>
+          <tr><td><code>invalid_request</code>（/common）</td><td>应用受众是 Consumer，却用了 <code>/common</code></td><td>改应用受众为 All，或 Authority 改 <code>/consumers</code></td></tr>
+          <tr><td><code>invalid_grant</code></td><td>code 过期/重复使用、PKCE 不匹配</td><td>重新发起授权；检查 verifier</td></tr>
+          <tr><td>state invalid</td><td>Cookie 丢失、过期、已消费</td><td>不要刷新旧回调；重新发起</td></tr>
+          <tr><td>nonce mismatch</td><td>多标签页并发或重放</td><td>每次发起独立 state/nonce</td></tr>
+          <tr><td>登录后仍 401</td><td>只拿到 access_token，没建本地会话</td><td>校验 id_token 后签发本地 JWT</td></tr>
+        </tbody>
+      </table>
+
+      <div class="warn"><b>Microsoft 受众矩阵：</b>个人 <code>/consumers</code>；组织多租户 <code>/organizations</code>；单租户 <code>/{tenantId}</code>；组织 + 个人 <code>/common</code>。应用注册的 Supported account types 必须与 Authority 匹配。</div>
+    </section>
+
+    <!-- 13 -->
+    <section id="cheatsheet">
+      <div class="sec-head"><div class="sec-no">13</div><div><h2>一页速查</h2><p class="sub">贴到工位旁的那张纸。</p></div></div>
+
+      <table>
+        <thead><tr><th>场景</th><th>流程</th><th>必带参数</th><th>校验</th></tr></thead>
+        <tbody>
+          <tr><td>Web 后端登录</td><td>Code</td><td><code>state</code> <code>nonce</code></td><td>state、id_token 全套</td></tr>
+          <tr><td>SPA / App</td><td>Code + PKCE</td><td><code>code_challenge</code> <code>state</code></td><td>verifier、nonce</td></tr>
+          <tr><td>服务调用</td><td>Client Credentials</td><td><code>scope</code></td><td>aud、scope、过期</td></tr>
+          <tr><td>续期</td><td>Refresh</td><td><code>refresh_token</code></td><td>轮换、并发合并</td></tr>
+          <tr><td>绑定第三方</td><td>Code（绑定意图）</td><td><code>BindingUserId</code> + state</td><td>当前用户一致性</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ok"><b>记住三句话：</b>浏览器只拿 code；后端只信校验过的 id_token；本地账号只认 sub 的哈希。</div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  OAuth 2.0 × OpenID Connect 图解 · 与 <a href="EXTERNAL_LOGIN.md">docs/ops/EXTERNAL_LOGIN.md</a> 配套 · 示例基于 Sim 生产实现（2026-10）
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var C = {
+    ink:"#22201c", paper:"#fffdf8", muted:"#6f695e", line:"#e6dcc4",
+    coral:"#ff6b57", blue:"#2f6bff", green:"#2f9e6f", yellow:"#f2c94c", grey:"#9a9284"
+  };
+  var FONT = '"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif';
+  var MONO = '"Cascadia Code",Consolas,monospace';
+
+  function dpr(){ return Math.max(1, Math.min(3, window.devicePixelRatio || 1)); }
+
+  function mount(canvas, draw, height){
+    var parent = canvas.parentElement;
+    function render(){
+      var w = Math.max(320, parent.clientWidth);
+      var h = typeof height === "function" ? height(w) : height;
+      var r = dpr();
+      canvas.width = Math.round(w * r);
+      canvas.height = Math.round(h * r);
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      var ctx = canvas.getContext("2d");
+      ctx.setTransform(r, 0, 0, r, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      draw(ctx, w, h);
+    }
+    render();
+    if (window.ResizeObserver){
+      var ro = new ResizeObserver(function(){ requestAnimationFrame(render); });
+      ro.observe(parent);
+    } else {
+      window.addEventListener("resize", render);
+    }
+  }
+
+  function roundRect(ctx, x, y, w, h, r){
+    r = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y, x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x, y+h, r);
+    ctx.arcTo(x, y+h, x, y, r);
+    ctx.arcTo(x, y, x+w, y, r);
+    ctx.closePath();
+  }
+
+  function wrap(ctx, text, maxWidth){
+    var out = [], line = "";
+    function flush(){ if (line.trim()) out.push(line.trim()); line = ""; }
+    var words = String(text).split(/(\s+)/);
+    words.forEach(function(word){
+      if (!word) return;
+      if (/^\s+$/.test(word)){ if (line) line += " "; return; }
+      var test = line ? line + word : word;
+      if (ctx.measureText(test).width <= maxWidth){ line = test; return; }
+      if (line) flush();
+      var chars = Array.from(word), buf = "";
+      chars.forEach(function(ch){
+        var t = buf + ch;
+        if (ctx.measureText(t).width > maxWidth && buf){ out.push(buf); buf = ch; }
+        else buf = t;
+      });
+      line = buf;
+    });
+    flush();
+    return out.length ? out : [""];
+  }
+
+  function text(ctx, s, x, y, size, color, align, weight){
+    ctx.font = (weight || 600) + " " + size + "px " + FONT;
+    ctx.fillStyle = color || C.ink;
+    ctx.textAlign = align || "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText(s, x, y);
+  }
+
+  // ---------- sequence ----------
+  function sequence(ctx, w, h, opt){
+    var actors = opt.actors, msgs = opt.messages;
+    var pad = Math.max(18, Math.min(34, w * 0.03));
+    var headTop = 14, headH = 44, lifeTop = headTop + headH;
+    var xs = actors.map(function(_, i){
+      return pad + (w - pad*2) * (i + 0.5) / actors.length;
+    });
+    var lifeBottom = h - 18;
+
+    // headers
+    actors.forEach(function(a, i){
+      ctx.font = "700 12.5px " + FONT;
+      var tw = ctx.measureText(a.name).width;
+      var bw = Math.min(w / actors.length - 14, Math.max(86, tw + 30));
+      var x = xs[i] - bw/2;
+      roundRect(ctx, x, headTop, bw, headH, 10);
+      ctx.fillStyle = a.color || C.paper; ctx.fill();
+      ctx.lineWidth = 2; ctx.strokeStyle = C.ink; ctx.stroke();
+      text(ctx, a.name, xs[i], headTop + 16, 12.5, C.ink, "center", 800);
+      if (a.sub) text(ctx, a.sub, xs[i], headTop + 32, 9.5, C.muted, "center", 500);
+      // lifeline
+      ctx.beginPath();
+      ctx.setLineDash([4,5]);
+      ctx.moveTo(xs[i], lifeTop);
+      ctx.lineTo(xs[i], lifeBottom);
+      ctx.strokeStyle = "#c9bda3";
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
+
+    var y = lifeTop + 30;
+    msgs.forEach(function(m, idx){
+      var x1 = xs[m.from], x2 = xs[m.to];
+      var color = m.color || C.blue;
+      var isSelf = m.from === m.to;
+      var labelMax = isSelf ? 220 : Math.max(120, Math.abs(x2-x1) - 12);
+      ctx.font = "600 12px " + FONT;
+      var lines = wrap(ctx, m.label, labelMax);
+
+      if (isSelf){
+        var lx = x1, ly = y;
+        ctx.beginPath();
+        ctx.moveTo(lx, ly);
+        ctx.lineTo(lx + 46, ly);
+        ctx.lineTo(lx + 46, ly + 24);
+        ctx.lineTo(lx + 8, ly + 24);
+        ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
+        arrowHead(ctx, lx + 8, ly + 24, Math.PI, color);
+
+        ctx.beginPath(); ctx.arc(lx + 10, ly, 8, 0, Math.PI*2);
+        ctx.fillStyle = color; ctx.fill();
+        text(ctx, String(idx+1), lx + 10, ly, 9, "#fff", "center", 800);
+
+        var tx = lx + 58;
+        var start = ly + 38;
+        lines.forEach(function(l, li){ text(ctx, l, tx, start + li*15, 12, C.ink, "left", 600); });
+        y += 48 + lines.length * 15;
+      } else {
+        var dir = x2 > x1 ? 1 : -1;
+        var sx = x1 + dir * 8, ex = x2 - dir * 10;
+        ctx.beginPath();
+        ctx.moveTo(sx, y);
+        ctx.lineTo(ex, y);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        if (m.dashed) ctx.setLineDash([6,5]); else ctx.setLineDash([]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        arrowHead(ctx, ex, y, dir > 0 ? 0 : Math.PI, color);
+
+        // step badge sits on the line at the sender side
+        var minX = Math.min(x1, x2);
+        ctx.beginPath(); ctx.arc(minX + 10, y, 8, 0, Math.PI*2);
+        ctx.fillStyle = color; ctx.fill();
+        ctx.lineWidth = 1.5; ctx.strokeStyle = C.paper; ctx.stroke();
+        text(ctx, String(idx+1), minX + 10, y, 9, "#fff", "center", 800);
+
+        var cx = (x1 + x2) / 2;
+        var start = y + 15;
+        lines.forEach(function(l, li){
+          text(ctx, l, cx, start + li * 15, 12, C.ink, "center", 600);
+        });
+        y += 26 + lines.length * 15;
+      }
+
+      if (m.note){
+        var nLines = wrap(ctx, m.note, w - pad*2 - 26);
+        ctx.font = "600 11.5px " + FONT;
+        var nh = nLines.length * 15 + 14;
+        roundRect(ctx, pad, y - 2, w - pad*2, nh, 8);
+        ctx.fillStyle = "#fff3cd"; ctx.fill();
+        ctx.strokeStyle = C.ink; ctx.lineWidth = 1.6; ctx.stroke();
+        nLines.forEach(function(l, li){
+          text(ctx, l, pad + 12, y + 8 + li*15, 11.5, "#5a4a1f", "left", 600);
+        });
+        y += nh + 14;
+      }
+    });
+  }
+
+  function arrowHead(ctx, x, y, angle, color){
+    var s = 7;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.lineTo(-s, -s*0.55);
+    ctx.lineTo(-s, s*0.55);
+    ctx.closePath();
+    ctx.fillStyle = color || C.ink;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function seqHeight(opt, w){
+    var pad = Math.max(18, Math.min(34, w * 0.03));
+    var xs = opt.actors.map(function(_, i){
+      return pad + (w - pad*2) * (i + 0.5) / opt.actors.length;
+    });
+    var measure = document.createElement("canvas").getContext("2d");
+    measure.font = "600 12px " + FONT;
+    var y = 14 + 44 + 30;
+    opt.messages.forEach(function(m){
+      var isSelf = m.from === m.to;
+      var labelMax = isSelf ? 220 : Math.max(140, Math.abs(xs[m.to] - xs[m.from]) - 12);
+      var lines = wrap(measure, m.label, labelMax);
+      y += isSelf ? (24 + lines.length * 15 + 18) : Math.max(46, 20 + lines.length * 15);
+      if (m.note){
+        var nl = wrap(measure, m.note, w - pad*2 - 26);
+        y += nl.length * 15 + 28;
+      }
+    });
+    return Math.max(260, y + 30);
+  }
+
+  // ---------- architecture ----------
+  function drawArchitecture(ctx, w, h){
+    var pad = 24;
+    var bw = Math.min(178, (w - pad*2 - 44) / 3);
+    var bh = 76;
+    var y1 = 52, y2 = 244;
+    var x1 = pad, x2 = w/2 - bw/2, x3 = w - pad - bw;
+
+    // trust boundary around the confidential client
+    ctx.setLineDash([7,6]);
+    ctx.strokeStyle = "#c9bda3"; ctx.lineWidth = 1.6;
+    roundRect(ctx, x3 - 12, y1 - 14, bw + 24, bh + 28, 16);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    text(ctx, "服务端", x3 + bw/2, y1 - 22, 10.5, C.muted, "center", 800);
+
+    box(ctx, x1, y1, bw, bh, "用户 / 浏览器", "资源所有者", "#ffe3de");
+    box(ctx, x2, y1, bw, bh, "Sim Web", "SPA · 公共客户端", "#dfe8ff");
+    box(ctx, x3, y1, bw, bh, "Sim API", "机密客户端 · 换 token", "#dcf3e8");
+
+    box(ctx, x1, y2, bw, bh, "Microsoft Entra ID", "授权服务器 / IdP", "#fff1c9");
+    box(ctx, x2, y2, bw, bh, "PostgreSQL", "users · external_login", "#f4ead3");
+    box(ctx, x3, y2, bw, bh, "Microsoft Graph", "可选资源服务器", "#f4ead3");
+
+    arrow(ctx, x1 + bw, y1 + bh/2, x2, y1 + bh/2, "访问");
+    arrow(ctx, x2 + bw, y1 + bh/2, x3, y1 + bh/2, "/redirect · /callback");
+    arrow(ctx, x3 + 10, y1 + bh, x1 + bw - 6, y2 + bh/2, "authorize / token", true);
+    arrow(ctx, x3 + bw*0.28, y1 + bh, x2 + bw*0.86, y2, "SQL", true);
+    arrow(ctx, x3 + bw/2, y1 + bh, x3 + bw/2, y2, "Bearer");
+
+    text(ctx, "只拿 code", (x1+bw+x2)/2, y1 + bh + 18, 10.5, C.coral, "center", 800);
+  }
+
+  function box(ctx, x, y, w, h, title, sub, fill){
+    roundRect(ctx, x, y, w, h, 12);
+    ctx.fillStyle = fill || C.paper; ctx.fill();
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 2; ctx.stroke();
+    text(ctx, title, x + w/2, y + 27, 13, C.ink, "center", 800);
+    if (sub) text(ctx, sub, x + w/2, y + 48, 10, C.muted, "center", 600);
+  }
+
+  function arrow(ctx, x1, y1, x2, y2, label, dashed){
+    var dx = x2 - x1, dy = y2 - y1;
+    var len = Math.sqrt(dx*dx + dy*dy) || 1;
+    var ux = dx/len, uy = dy/len;
+    var sx = x1 + ux*4, sy = y1 + uy*4, ex = x2 - ux*8, ey = y2 - uy*8;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy); ctx.lineTo(ex, ey);
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 2;
+    if (dashed) ctx.setLineDash([6,5]); else ctx.setLineDash([]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    arrowHead(ctx, ex, ey, Math.atan2(dy, dx), C.ink);
+    if (label){
+      var mx = (x1+x2)/2, my = (y1+y2)/2;
+      ctx.font = "700 10px " + FONT;
+      var tw = ctx.measureText(label).width + 10;
+      ctx.fillStyle = C.paper;
+      ctx.fillRect(mx - tw/2, my - 17, tw, 15);
+      text(ctx, label, mx, my - 9, 10, C.muted, "center", 700);
+    }
+  }
+
+  // ---------- steps ----------
+  function drawSteps(ctx, w, h){
+    var pad = 26, top = 16;
+    var rows = [
+      ["注册应用", "Web 平台 · 精确 Redirect URI"],
+      ["受众与 Authority", "consumers / organizations / tenant / common"],
+      ["密钥入库", "Secret 不进 Git"],
+      ["发起授权", "state + nonce + 加密 Cookie"],
+      ["回调换 token", "校验 state → code → id_token"],
+      ["身份映射", "sub 哈希 → 本地用户"],
+      ["本地会话", "JWT + HttpOnly 刷新 Cookie"],
+      ["安全回归", "重放 / 过期 / 解绑 / 2FA"]
+    ];
+    var startY = top + 26;
+    var gap = (h - startY - 26) / (rows.length - 1);
+    var railX = pad + 22;
+    ctx.beginPath();
+    ctx.moveTo(railX, startY);
+    ctx.lineTo(railX, startY + gap*(rows.length-1));
+    ctx.strokeStyle = "#c9bda3"; ctx.lineWidth = 2; ctx.stroke();
+
+    rows.forEach(function(r, i){
+      var y = startY + gap*i;
+      ctx.beginPath(); ctx.arc(railX, y, 15, 0, Math.PI*2);
+      ctx.fillStyle = i < 4 ? C.yellow : C.green; ctx.fill();
+      ctx.strokeStyle = C.ink; ctx.lineWidth = 2; ctx.stroke();
+      text(ctx, String(i+1), railX, y+1, 12, C.ink, "center", 800);
+
+      var bx = railX + 34, bw = w - bx - pad;
+      roundRect(ctx, bx, y - 24, bw, 48, 10);
+      ctx.fillStyle = C.paper; ctx.fill();
+      ctx.strokeStyle = C.ink; ctx.lineWidth = 1.8; ctx.stroke();
+      text(ctx, r[0], bx + 14, y - 6, 13, C.ink, "left", 800);
+      text(ctx, r[1], bx + 14, y + 13, 10.5, C.muted, "left", 600);
+    });
+  }
+
+  // ---------- figures ----------
+  var figs = {};
+
+  figs.architecture = {
+    h: 420,
+    draw: function(ctx,w,h){ drawArchitecture(ctx,w,h); }
+  };
+
+  figs.authcode = (function(){
+    var opt = {
+      actors:[
+        {name:"用户", sub:"资源所有者", color:"#ffe3de"},
+        {name:"浏览器", sub:"前端", color:"#fff1c9"},
+        {name:"业务后端", sub:"机密客户端", color:"#dcf3e8"},
+        {name:"授权服务器", sub:"IdP", color:"#dfe8ff"}
+      ],
+      messages:[
+        {from:0, to:1, label:"点击“登录”", color:C.blue},
+        {from:1, to:2, label:"GET /login（可选）", color:C.blue},
+        {from:2, to:1, label:"302 /authorize（state, nonce）", color:C.grey, dashed:true},
+        {from:1, to:3, label:"GET /authorize（response_type=code）", color:C.blue,
+          note:"浏览器只拿 code；state 防 CSRF，nonce 防 ID Token 重放。"},
+        {from:3, to:0, label:"登录 / 同意授权", color:C.grey, dashed:true},
+        {from:3, to:1, label:"302 redirect_uri?code=…&state=…", color:C.grey, dashed:true},
+        {from:1, to:2, label:"GET /callback（code + state）", color:C.blue},
+        {from:2, to:3, label:"POST /token（code + secret）", color:C.blue,
+          note:"后端校验 state 后换 token；code 一次性、约 60 秒有效。"},
+        {from:3, to:2, label:"access_token + id_token", color:C.grey, dashed:true},
+        {from:2, to:1, label:"Set-Cookie 会话 · /home", color:C.grey, dashed:true}
+      ]
+    };
+    return { h: function(w){ return seqHeight(opt, w); }, draw: function(ctx,w,h){ sequence(ctx,w,h,opt); } };
+  })();
+
+  figs.pkce = (function(){
+    var opt = {
+      actors:[
+        {name:"SPA / App", sub:"公共客户端", color:"#dfe8ff"},
+        {name:"系统浏览器", sub:"授权页", color:"#fff1c9"},
+        {name:"授权服务器", sub:"IdP", color:"#dcf3e8"}
+      ],
+      messages:[
+        {from:0, to:0, label:"生成 verifier + challenge", color:C.coral},
+        {from:0, to:1, label:"打开 /authorize（challenge + S256）", color:C.blue,
+          note:"verifier 只留在本机；授权服务器只看到 challenge。"},
+        {from:1, to:2, label:"GET /authorize（state + challenge）", color:C.blue},
+        {from:2, to:1, label:"302 app://callback?code=…&state=…", color:C.grey, dashed:true},
+        {from:1, to:0, label:"回传 code 与 state", color:C.grey, dashed:true},
+        {from:0, to:2, label:"POST /token + code_verifier", color:C.blue,
+          note:"校验 SHA256(verifier) == challenge；没有 client_secret。"},
+        {from:2, to:0, label:"access_token + id_token", color:C.grey, dashed:true}
+      ]
+    };
+    return { h: function(w){ return seqHeight(opt, w); }, draw: function(ctx,w,h){ sequence(ctx,w,h,opt); } };
+  })();
+
+  figs.oidc = (function(){
+    var opt = {
+      actors:[
+        {name:"用户", sub:"", color:"#ffe3de"},
+        {name:"Web SPA", sub:"Sim", color:"#dfe8ff"},
+        {name:"Sim API", sub:"后端代理", color:"#dcf3e8"},
+        {name:"Entra ID", sub:"Microsoft", color:"#fff1c9"},
+        {name:"PostgreSQL", sub:"绑定表", color:"#f4ead3"}
+      ],
+      messages:[
+        {from:0, to:1, label:"点击 Microsoft", color:C.blue},
+        {from:1, to:2, label:"GET /redirect/microsoft", color:C.blue},
+        {from:2, to:2, label:"生成 state + nonce，写加密 Cookie", color:C.coral},
+        {from:2, to:3, label:"读取 OIDC discovery", color:C.blue},
+        {from:2, to:1, label:"返回授权 URL", color:C.grey, dashed:true},
+        {from:1, to:3, label:"302 /authorize（openid profile email）", color:C.blue},
+        {from:3, to:0, label:"登录 / 同意", color:C.grey, dashed:true},
+        {from:3, to:1, label:"302 /auth/external/callback", color:C.grey, dashed:true},
+        {from:1, to:2, label:"GET /callback + state Cookie", color:C.blue},
+        {from:2, to:3, label:"POST /token（code + secret）", color:C.blue,
+          note:"校验 state 一次性消费；验签、iss、aud、exp、nonce。"},
+        {from:3, to:2, label:"id_token（sub / email / name）", color:C.grey, dashed:true},
+        {from:2, to:4, label:"查 sub 哈希", color:C.blue},
+        {from:4, to:2, label:"已绑定用户 / 空", color:C.grey, dashed:true},
+        {from:2, to:1, label:"本地会话 / 注册令牌 / 错误", color:C.grey, dashed:true}
+      ]
+    };
+    return { h: function(w){ return seqHeight(opt, w); }, draw: function(ctx,w,h){ sequence(ctx,w,h,opt); } };
+  })();
+
+  figs.refresh = (function(){
+    var opt = {
+      actors:[
+        {name:"浏览器", sub:"HttpOnly Cookie", color:"#fff1c9"},
+        {name:"业务后端", sub:"会话服务", color:"#dcf3e8"},
+        {name:"授权服务器", sub:"IdP", color:"#dfe8ff"}
+      ],
+      messages:[
+        {from:0, to:1, label:"请求（access_token 已过期）", color:C.blue},
+        {from:1, to:2, label:"POST /token grant_type=refresh_token", color:C.blue,
+          note:"refresh 只放 HttpOnly Cookie 或服务端；并发刷新要合并。"},
+        {from:2, to:1, label:"新 access + 新 refresh（轮换）", color:C.grey, dashed:true},
+        {from:1, to:1, label:"旧 refresh 立即失效", color:C.coral},
+        {from:1, to:0, label:"Set-Cookie 新会话", color:C.grey, dashed:true}
+      ]
+    };
+    return { h: function(w){ return seqHeight(opt, w); }, draw: function(ctx,w,h){ sequence(ctx,w,h,opt); } };
+  })();
+
+  figs.m2m = (function(){
+    var opt = {
+      actors:[
+        {name:"定时任务 / 服务", sub:"应用身份", color:"#dfe8ff"},
+        {name:"授权服务器", sub:"IdP", color:"#dcf3e8"},
+        {name:"业务 API", sub:"资源服务器", color:"#fff1c9"}
+      ],
+      messages:[
+        {from:0, to:1, label:"POST /token · client_credentials", color:C.blue,
+          note:"没有用户参与；token 里只有应用身份。"},
+        {from:1, to:0, label:"access_token（无 id_token）", color:C.grey, dashed:true},
+        {from:0, to:2, label:"GET /api/... Authorization: Bearer", color:C.blue},
+        {from:2, to:0, label:"校验 aud / scope / exp 后返回数据", color:C.grey, dashed:true}
+      ]
+    };
+    return { h: function(w){ return seqHeight(opt, w); }, draw: function(ctx,w,h){ sequence(ctx,w,h,opt); } };
+  })();
+
+  figs.binding = (function(){
+    var opt = {
+      actors:[
+        {name:"已登录用户", sub:"", color:"#ffe3de"},
+        {name:"Web SPA", sub:"", color:"#dfe8ff"},
+        {name:"Sim API", sub:"", color:"#dcf3e8"},
+        {name:"Entra ID", sub:"", color:"#fff1c9"},
+        {name:"PostgreSQL", sub:"", color:"#f4ead3"}
+      ],
+      messages:[
+        {from:0, to:1, label:"账户安全 → 绑定 Microsoft", color:C.blue},
+        {from:1, to:2, label:"GET /my-binding-redirect", color:C.blue},
+        {from:2, to:2, label:"state 写入 BindingUserId", color:C.coral},
+        {from:1, to:3, label:"302 授权页", color:C.blue},
+        {from:3, to:1, label:"302 回调?code&state", color:C.grey, dashed:true},
+        {from:1, to:2, label:"callback + Cookie + Bearer", color:C.blue},
+        {from:2, to:2, label:"校验 CurrentUser 一致", color:C.coral,
+          note:"防止把别人的外部身份绑到自己账号；一个外部身份只能绑一个本地用户。"},
+        {from:2, to:4, label:"insert（provider + sub 哈希）", color:C.blue},
+        {from:2, to:1, label:"绑定成功 / 已绑定其他用户", color:C.grey, dashed:true}
+      ]
+    };
+    return { h: function(w){ return seqHeight(opt, w); }, draw: function(ctx,w,h){ sequence(ctx,w,h,opt); } };
+  })();
+
+  figs.steps = {
+    h: 560,
+    draw: function(ctx,w,h){ drawSteps(ctx,w,h); }
+  };
+
+  // mount
+  Array.prototype.forEach.call(document.querySelectorAll("canvas[data-fig]"), function(cv){
+    var key = cv.getAttribute("data-fig");
+    var fig = figs[key];
+    if (!fig) return;
+    mount(cv, fig.draw, fig.h);
+  });
+
+  // toc active
+  var links = Array.prototype.slice.call(document.querySelectorAll("#toc a"));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute("href")); }).filter(Boolean);
+  if ("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        links.forEach(function(a){ a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id); });
+      });
+    }, {rootMargin:"-20% 0px -70% 0px", threshold:0});
+    sections.forEach(function(s){ io.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>

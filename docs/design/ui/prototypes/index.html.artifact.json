@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "redesign/index.html",
+  "entry": "redesign/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-10-22T03:52:47.520Z",
+  "updatedAt": "2026-10-22T03:52:47.520Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

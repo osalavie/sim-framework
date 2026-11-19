@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Sim.DeviceAgent.Contracts/Sim.DeviceAgent.Contracts.csproj" />
+    <Project Path="src/Sim.DeviceAgent/Sim.DeviceAgent.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Sim.DeviceAgent.Tests/Sim.DeviceAgent.Tests.csproj" />
+  </Folder>
+</Solution>

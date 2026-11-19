@@ -1,0 +1,88 @@
+@import 'tailwindcss';
+
+html,
+body,
+#app {
+  width: 100%;
+  min-width: 320px;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  color: var(--theme-text-base);
+  background: var(--theme-bg-secondary);
+  font-family: var(--ink-font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 展示文本：标题 / 大数字使用衬线（水墨） */
+.ink-display {
+  font-family: var(--ink-font-display);
+}
+
+/* 数据文本：等宽 + 表格数字 */
+.ink-mono,
+code,
+kbd,
+.mono {
+  font-family: var(--ink-font-mono);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+a,
+input,
+[tabindex] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Performance: CSS content-visibility for off-screen content rendering optimization.
+   Skips rendering work for elements not visible in the viewport. */
+.admin-content__panel,
+.route-view-container > *:not(.router-view-active) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* Performance: Isolate layout for card components to prevent layout thrashing */
+.n-card,
+.n-data-table {
+  contain: layout style;
+}
+
+/* Performance: Hint for scrollable containers
+   Note: contain: size 会让 scrollbar 容器高度无视内容塌陷为 0，导致弹窗内表单不可见，
+   因此这里只保留 layout/style 约束，不用 strict（strict 含 size）。 */
+.n-scrollbar-container {
+  contain: layout style;
+}
+
+/* Bugfix: 树形表格首列（含展开触发器/缩进）使用 ellipsis: { tooltip: true } 时，
+   naive-ui 的 NEllipsis 组件 max-width 仅为 100%，未像 __ellipsis 纯类名形式那样
+   减去缩进（--indent-offset × 16px）与展开触发器（24px）的占位宽度。
+   列宽拖窄到 [占位 + 文本] 超出单元格时，ellipsis 会被挤到第二行，
+   导致行高跳变、内容错位。此处对齐 naive-ui 自身的 calc 修正；
+   非树形单元格未定义 --indent-offset，回退值 -1.5 使 max-width 仍为 100%，行为不变。 */
+.n-data-table-td .n-ellipsis:not(.n-ellipsis--line-clamp) {
+  max-width: calc(100% - var(--indent-offset, -1.5) * 16px - 24px);
+}

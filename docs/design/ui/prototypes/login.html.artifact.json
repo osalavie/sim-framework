@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "redesign/login.html",
+  "entry": "redesign/login.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-10-22T03:51:53.118Z",
+  "updatedAt": "2026-10-22T03:51:53.118Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

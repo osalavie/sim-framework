@@ -1,0 +1,5 @@
+export const STORAGE_KEY = 'naive-theme'
+export const DENSITY_KEY = 'po-density'
+export const USER_KEY = 'user-info'
+export const ROUTE_KEY = 'async-routes'
+export const DEVICE_ID_KEY = 'login-device-id'

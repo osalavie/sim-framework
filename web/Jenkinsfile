@@ -1,0 +1,178 @@
+pipeline {
+    agent {
+        docker {
+            image 'mcr.microsoft.com/playwright:v1.56.1-noble'
+            args '--user root:root'
+            reuseNode true
+        }
+    }
+
+    parameters {
+        string(
+            name: 'TEST_DEPLOY_HOST',
+            defaultValue: 'deploy@sim-test',
+            description: '测试环境 SSH 目标，例如 deploy@10.0.0.10'
+        )
+    }
+
+    environment {
+        CI = 'true'
+        COREPACK_ENABLE_DOWNLOAD_PROMPT = '0'
+        IMAGE_NAME = 'sim-web'
+        REGISTRY = 'repo.dulm.net'
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout(time: 45, unit: 'MINUTES')
+        timestamps()
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                script {
+                    env.GIT_SHA = env.GIT_COMMIT ? env.GIT_COMMIT.take(12) : 'nogit'
+                    env.IMAGE_TAG = env.TAG_NAME
+                        ? env.TAG_NAME.replaceAll('[^A-Za-z0-9_.-]', '-')
+                        : "${env.BUILD_NUMBER}-${env.GIT_SHA}"
+                }
+            }
+        }
+
+        stage('Install') {
+            steps {
+                dir('web') {
+                    sh 'corepack enable'
+                    sh 'pnpm install --frozen-lockfile'
+                }
+            }
+        }
+
+        stage('API Contract') {
+            steps {
+                dir('web') {
+                    sh 'pnpm generate:api-types'
+                }
+                sh 'git diff --exit-code -- web/src/api/admin web/src/api/approval web/src/api/system'
+            }
+        }
+
+        stage('Dependency Audit') {
+            steps {
+                dir('web') {
+                    sh 'pnpm audit --registry=https://registry.npmjs.org --prod --audit-level moderate'
+                    sh 'pnpm licenses list --prod --json > frontend-licenses.json'
+                    sh 'pnpm check:licenses'
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'web/frontend-licenses.json', allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Type Check') {
+            steps {
+                dir('web') {
+                    sh 'pnpm type-check'
+                }
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                dir('web') {
+                    sh 'pnpm lint:check'
+                }
+            }
+        }
+
+        stage('Unit Test') {
+            steps {
+                dir('web') {
+                    sh 'pnpm test:unit -- --run'
+                }
+            }
+        }
+
+        stage('Production Build') {
+            steps {
+                dir('web') {
+                    sh 'pnpm build:production'
+                    sh 'pnpm check:bundle-budget'
+                    sh 'pnpm check:security'
+                    sh 'pnpm check:security --verify'
+                    sh 'pnpm check:e2ee-workers'
+                    sh 'pnpm check:e2ee-device-cache'
+                    sh 'pnpm check:e2ee-passkeys'
+                }
+                archiveArtifacts artifacts: 'web/dist/release-integrity.json', fingerprint: true
+                stash name: 'web-dist', includes: 'web/dist/**'
+            }
+        }
+
+        stage('Authentication E2E') {
+            steps {
+                dir('web') {
+                    sh 'pnpm test:e2e -- --project=chromium --reporter=line'
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'web/playwright-report/**,web/test-results/**', allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Build Image') {
+            agent any
+            steps {
+                checkout scm
+                unstash 'web-dist'
+                sh 'docker version'
+                sh 'docker build --file web/Dockerfile --build-arg APP_VERSION="$IMAGE_TAG" --build-arg GIT_COMMIT="$GIT_SHA" --tag "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG" web'
+                script {
+                    if (env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'main' || env.TAG_NAME) {
+                        withCredentials([usernamePassword(
+                            credentialsId: 'registry-credentials',
+                            usernameVariable: 'REGISTRY_USER',
+                            passwordVariable: 'REGISTRY_PASSWORD'
+                        )]) {
+                            sh '''
+                                set -eu
+                                trap 'docker logout "$REGISTRY" >/dev/null 2>&1 || true' EXIT
+                                echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY" -u "$REGISTRY_USER" --password-stdin
+                                docker push "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Test') {
+            when {
+                branch 'develop'
+            }
+            agent any
+            steps {
+                checkout scm
+                withCredentials([file(credentialsId: 'deploy-known-hosts', variable: 'KNOWN_HOSTS')]) {
+                    sshagent(['deploy-test-ssh']) {
+                        sh '''
+                            set -eu
+                            scp -o UserKnownHostsFile="$KNOWN_HOSTS" -o StrictHostKeyChecking=yes \
+                                deploy/scripts/deploy.sh "$TEST_DEPLOY_HOST:/opt/sim/deploy.sh"
+                            ssh -o UserKnownHostsFile="$KNOWN_HOSTS" -o StrictHostKeyChecking=yes \
+                                "$TEST_DEPLOY_HOST" \
+                                "bash /opt/sim/deploy.sh test web ${IMAGE_TAG} ${REGISTRY}"
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}

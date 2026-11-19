@@ -1,0 +1,823 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Open Platform API",
+    "description": "开放平台模块 API - 第三方应用接入与令牌签发",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/openplatform/open-platform-access-log": {
+      "get": {
+        "tags": [
+          "OpenPlatformAccessLog"
+        ],
+        "summary": "分页查询访问日志（令牌签发审计记录）。",
+        "parameters": [
+          {
+            "name": "AppId",
+            "in": "query",
+            "description": "按应用 AppId 精确过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Succeeded",
+            "in": "query",
+            "description": "按签发结果过滤：true 仅成功，false 仅失败，null 表示全部。",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "ClientIp",
+            "in": "query",
+            "description": "按客户端 IP 模糊过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "StartTime",
+            "in": "query",
+            "description": "起始时间（含）。",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "EndTime",
+            "in": "query",
+            "description": "结束时间（含）。",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "Sorting",
+            "in": "query",
+            "description": "Sorting expression, e.g. \"Name asc, CreationTime desc\".",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MaxResultCount",
+            "in": "query",
+            "description": "Max number of items to return. Default 10.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SkipCount",
+            "in": "query",
+            "description": "Number of items to skip. Default 0.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimPagedResultDtoOfOpenPlatformAccessLogDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimPagedResultDtoOfOpenPlatformAccessLogDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimPagedResultDtoOfOpenPlatformAccessLogDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/openplatform/open-platform-application": {
+      "get": {
+        "tags": [
+          "OpenPlatformApplication"
+        ],
+        "summary": "获取全部第三方应用列表（按创建时间倒序）。",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpenPlatformApplicationDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpenPlatformApplicationDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpenPlatformApplicationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "OpenPlatformApplication"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOpenPlatformApplicationDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOpenPlatformApplicationDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOpenPlatformApplicationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateOpenPlatformApplicationResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateOpenPlatformApplicationResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateOpenPlatformApplicationResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/openplatform/open-platform-application/{id}": {
+      "get": {
+        "tags": [
+          "OpenPlatformApplication"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenPlatformApplicationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenPlatformApplicationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenPlatformApplicationDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "OpenPlatformApplication"
+        ],
+        "summary": "更新第三方应用信息（仅更新传入的非空字段）。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "应用唯一标识。",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "应用更新数据。",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOpenPlatformApplicationDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOpenPlatformApplicationDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOpenPlatformApplicationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenPlatformApplicationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenPlatformApplicationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenPlatformApplicationDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "OpenPlatformApplication"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/openplatform/open-platform-application/{id}/enable": {
+      "post": {
+        "tags": [
+          "OpenPlatformApplication"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/openplatform/open-platform-application/{id}/disable": {
+      "post": {
+        "tags": [
+          "OpenPlatformApplication"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/openplatform/open-platform-application/{id}/reset-secret": {
+      "post": {
+        "tags": [
+          "OpenPlatformApplication"
+        ],
+        "summary": "重置第三方应用的 AppSecret，旧密钥立即失效。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "应用唯一标识。",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetOpenPlatformSecretResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetOpenPlatformSecretResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetOpenPlatformSecretResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/openplatform/open-platform-scope": {
+      "get": {
+        "tags": [
+          "OpenPlatformScope"
+        ],
+        "summary": "获取可授予第三方应用的权限范围列表（只读权限目录）。",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpenPlatformScopeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpenPlatformScopeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpenPlatformScopeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/openplatform/token": {
+      "post": {
+        "tags": [
+          "Token"
+        ],
+        "summary": "使用 AppId/AppSecret 换取 Access Token（client_credentials 模式）。\r\n校验应用状态、密钥与客户端 IP，所有签发尝试均写入访问日志。",
+        "requestBody": {
+          "description": "令牌请求参数：AppId、AppSecret 与 GrantType。",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenPlatformTokenRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenPlatformTokenRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenPlatformTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenPlatformTokenResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenPlatformTokenResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenPlatformTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateOpenPlatformApplicationDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "应用名称（必填）。",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "应用描述。",
+            "nullable": true
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "授予的权限范围（权限码列表）。",
+            "nullable": true
+          },
+          "allowedIps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "允许调用令牌端点的客户端 IP 列表（为空表示不限制）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "创建第三方应用的请求参数。"
+      },
+      "CreateOpenPlatformApplicationResultDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "应用唯一标识。",
+            "format": "uuid"
+          },
+          "appId": {
+            "type": "string",
+            "description": "应用 AppId（对外唯一标识）。",
+            "nullable": true
+          },
+          "appSecret": {
+            "type": "string",
+            "description": "仅创建时明文返回一次，之后不再回显。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "创建第三方应用的结果，包含一次性返回的明文 AppSecret。"
+      },
+      "OpenPlatformAccessLogDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "日志记录唯一标识。",
+            "format": "uuid"
+          },
+          "applicationId": {
+            "type": "string",
+            "description": "发起请求的第三方应用 ID。",
+            "format": "uuid"
+          },
+          "appId": {
+            "type": "string",
+            "description": "发起请求的第三方应用 AppId。",
+            "nullable": true
+          },
+          "succeeded": {
+            "type": "boolean",
+            "description": "签发结果：true 成功，false 失败。"
+          },
+          "reason": {
+            "type": "string",
+            "description": "失败原因（成功时为 null）。",
+            "nullable": true
+          },
+          "clientIp": {
+            "type": "string",
+            "description": "发起请求的客户端 IP。",
+            "nullable": true
+          },
+          "creationTime": {
+            "type": "string",
+            "description": "请求时间。",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "开放平台访问日志 DTO（令牌签发审计记录）。"
+      },
+      "OpenPlatformApplicationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "应用唯一标识。",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "description": "应用名称。",
+            "nullable": true
+          },
+          "appId": {
+            "type": "string",
+            "description": "应用 AppId（对外唯一标识）。",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "应用描述。",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "是否启用：仅启用状态可换取 Access Token。"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "已授予的权限范围（权限码列表）。",
+            "nullable": true
+          },
+          "allowedIps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "允许调用令牌端点的客户端 IP 列表（为空表示不限制）。",
+            "nullable": true
+          },
+          "creationTime": {
+            "type": "string",
+            "description": "创建时间。",
+            "format": "date-time"
+          },
+          "creatorId": {
+            "type": "string",
+            "description": "创建人标识。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lastModificationTime": {
+            "type": "string",
+            "description": "最后修改时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "description": "最后修改人标识。",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "第三方应用 DTO（管理端查看与列表展示）。"
+      },
+      "OpenPlatformScopeDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "权限码，例如 blog:article:read。",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "权限名称。",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "权限说明。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "可授予第三方应用的权限范围，来自系统权限目录，仅供管理端选择，只读。"
+      },
+      "OpenPlatformTokenRequest": {
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string",
+            "description": "第三方应用 AppId（对应 OAuth2 的 client_id）。",
+            "nullable": true
+          },
+          "appSecret": {
+            "type": "string",
+            "description": "第三方应用 AppSecret（对应 OAuth2 的 client_secret）。",
+            "nullable": true
+          },
+          "grantType": {
+            "type": "string",
+            "description": "授权类型，固定为 client_credentials（对应 OAuth2 的 grant_type）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "开放平台令牌请求参数 — 第三方系统以客户端凭证（AppId/AppSecret）换取 Access Token。"
+      },
+      "OpenPlatformTokenResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "访问令牌，后续请求需在 Authorization 头中以 Bearer 方式携带。",
+            "nullable": true
+          },
+          "tokenType": {
+            "type": "string",
+            "description": "令牌类型，固定为 Bearer。",
+            "nullable": true
+          },
+          "expiresIn": {
+            "type": "integer",
+            "description": "令牌有效期（秒）。",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "开放平台令牌响应 — 包含可调用的 Access Token 及其有效期。"
+      },
+      "ResetOpenPlatformSecretResultDto": {
+        "type": "object",
+        "properties": {
+          "appSecret": {
+            "type": "string",
+            "description": "仅重置时明文返回一次，之后不再回显。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "重置第三方应用 AppSecret 的结果，包含一次性返回的明文 AppSecret。"
+      },
+      "SimPagedResultDtoOfOpenPlatformAccessLogDto": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "integer",
+            "description": "总记录数。",
+            "format": "int64"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenPlatformAccessLogDto"
+            },
+            "description": "当前页数据列表。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Paged result wrapper. Replaces Volo.Abp.Application.Dtos.PagedResultDto<T>."
+      },
+      "UpdateOpenPlatformApplicationDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "应用名称。",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "应用描述。",
+            "nullable": true
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "授予的权限范围（权限码列表）。",
+            "nullable": true
+          },
+          "allowedIps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "允许调用令牌端点的客户端 IP 列表（为空表示不限制）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "更新第三方应用的请求参数，仅更新传入的非空字段。"
+      }
+    },
+    "securitySchemes": {
+      "JWT Auth": {
+        "type": "http",
+        "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    { }
+  ],
+  "tags": [
+    {
+      "name": "OpenPlatformAccessLog",
+      "description": "开放平台访问日志 — 查询令牌签发审计记录，便于追踪第三方接入。\r\n只读：审计记录由令牌端点写入，管理端不做修改。"
+    },
+    {
+      "name": "OpenPlatformApplication",
+      "description": "开放平台应用管理 — 管理端维护第三方接入应用及其授权范围。"
+    },
+    {
+      "name": "OpenPlatformScope",
+      "description": "开放平台授权范围 — 返回管理端可选择的权限码目录（只读，不允许第三方应用自行维护）。"
+    },
+    {
+      "name": "Token",
+      "description": "开放平台令牌端点 — 第三方系统使用 AppId/AppSecret 换取 Access Token。\r\n匿名可访问；所有签发尝试（成功/失败）均写入访问日志。"
+    }
+  ]
+}

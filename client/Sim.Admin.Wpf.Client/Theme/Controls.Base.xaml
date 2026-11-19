@@ -1,0 +1,789 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Sim.Admin.Wpf.Client.Controls"
+                    xmlns:inputs="clr-namespace:Sim.Admin.Wpf.Client.Controls.Inputs">
+
+  <!-- 基础控件样式：CustomText / CustomButton / CustomCard / CustomDataGrid。
+       WPF 端不使用投影，层级只由 2px 描边、圆角和语义色表达。 -->
+
+  <Style TargetType="{x:Type controls:CustomText}">
+    <Setter Property="FontFamily" Value="Cascadia Code,Microsoft YaHei UI,Consolas"/>
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+    <Style.Triggers>
+      <Trigger Property="Tone" Value="Muted">
+        <Setter Property="Foreground" Value="{DynamicResource MutedBrush}"/>
+      </Trigger>
+      <Trigger Property="Tone" Value="Primary">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
+      </Trigger>
+      <Trigger Property="Tone" Value="Success">
+        <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}"/>
+      </Trigger>
+      <Trigger Property="Tone" Value="Warning">
+        <Setter Property="Foreground" Value="{DynamicResource WarningBrush}"/>
+      </Trigger>
+      <Trigger Property="Tone" Value="Error">
+        <Setter Property="Foreground" Value="{DynamicResource DangerBrush}"/>
+      </Trigger>
+      <Trigger Property="Strong" Value="True">
+        <Setter Property="FontWeight" Value="Bold"/>
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+
+  <Style TargetType="{x:Type controls:CustomButton}">
+    <Setter Property="Height" Value="36"/>
+    <Setter Property="MinWidth" Value="0"/>
+    <Setter Property="Padding" Value="12,5"/>
+    <Setter Property="FontSize" Value="13"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="FontFamily" Value="Cascadia Code,Microsoft YaHei UI,Consolas"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="SnapsToDevicePixels" Value="True"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="Background" Value="{DynamicResource PaperBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}"/>
+    <Setter Property="BorderThickness" Value="2"/>
+    <Setter Property="CornerRadius" Value="10"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type controls:CustomButton}">
+          <Border x:Name="Root"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  SnapsToDevicePixels="True">
+            <Grid Margin="{TemplateBinding Padding}">
+              <StackPanel x:Name="ContentHost"
+                          Orientation="Horizontal"
+                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                <ContentControl x:Name="IconHost"
+                                Content="{TemplateBinding Icon}"
+                                Margin="0,0,6,0"
+                                VerticalAlignment="Center"
+                                Focusable="False"
+                                IsTabStop="False"/>
+                <ContentPresenter x:Name="TextHost"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                  VerticalAlignment="Center"
+                                  RecognizesAccessKey="True"/>
+              </StackPanel>
+              <Ellipse x:Name="Spinner"
+                       Width="14"
+                       Height="14"
+                       Stroke="{TemplateBinding Foreground}"
+                       StrokeThickness="2"
+                       StrokeDashArray="2 2"
+                       Visibility="Collapsed"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       RenderTransformOrigin="0.5,0.5">
+                <Ellipse.RenderTransform>
+                  <RotateTransform x:Name="SpinnerRotate"/>
+                </Ellipse.RenderTransform>
+              </Ellipse>
+            </Grid>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="Icon" Value="{x:Null}">
+              <Setter TargetName="IconHost" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="Loading" Value="True">
+              <Setter TargetName="ContentHost" Property="Visibility" Value="Collapsed"/>
+              <Setter TargetName="Spinner" Property="Visibility" Value="Visible"/>
+              <Setter TargetName="Spinner" Property="HorizontalAlignment" Value="Center"/>
+              <Trigger.EnterActions>
+                <BeginStoryboard x:Name="SpinnerStory">
+                  <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="SpinnerRotate"
+                                     Storyboard.TargetProperty="Angle"
+                                     From="0"
+                                     To="360"
+                                     Duration="0:0:0.9"
+                                     RepeatBehavior="Forever"/>
+                  </Storyboard>
+                </BeginStoryboard>
+              </Trigger.EnterActions>
+              <Trigger.ExitActions>
+                <StopStoryboard BeginStoryboardName="SpinnerStory"/>
+              </Trigger.ExitActions>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+    <Style.Triggers>
+      <Trigger Property="Variant" Value="Primary">
+        <Setter Property="Background" Value="{DynamicResource ActionBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ActionTextBrush}"/>
+      </Trigger>
+      <Trigger Property="Variant" Value="Danger">
+        <Setter Property="Background" Value="{DynamicResource DangerBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource DangerTextBrush}"/>
+      </Trigger>
+      <Trigger Property="Variant" Value="Ghost">
+        <Setter Property="Background" Value="Transparent"/>
+      </Trigger>
+      <Trigger Property="Variant" Value="Text">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+      </Trigger>
+      <Trigger Property="Variant" Value="Tertiary">
+        <Setter Property="Background" Value="{DynamicResource SoftBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+      </Trigger>
+      <Trigger Property="Size" Value="Small">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Padding" Value="10,3"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="CornerRadius" Value="8"/>
+      </Trigger>
+      <Trigger Property="Size" Value="Large">
+        <Setter Property="Height" Value="42"/>
+        <Setter Property="Padding" Value="16,8"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="CornerRadius" Value="12"/>
+      </Trigger>
+      <Trigger Property="IsEnabled" Value="False">
+        <Setter Property="Opacity" Value="0.45"/>
+        <Setter Property="Cursor" Value="Arrow"/>
+      </Trigger>
+      <Trigger Property="IsKeyboardFocused" Value="True">
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+      </Trigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="Variant" Value="Secondary"/>
+          <Condition Property="IsMouseOver" Value="True"/>
+        </MultiTrigger.Conditions>
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+      </MultiTrigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="Variant" Value="Ghost"/>
+          <Condition Property="IsMouseOver" Value="True"/>
+        </MultiTrigger.Conditions>
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+      </MultiTrigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="Variant" Value="Text"/>
+          <Condition Property="IsMouseOver" Value="True"/>
+        </MultiTrigger.Conditions>
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+      </MultiTrigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="Variant" Value="Secondary"/>
+          <Condition Property="IsPressed" Value="True"/>
+        </MultiTrigger.Conditions>
+        <Setter Property="Background" Value="{DynamicResource SoftBrush}"/>
+      </MultiTrigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="Variant" Value="Primary"/>
+          <Condition Property="IsMouseOver" Value="True"/>
+        </MultiTrigger.Conditions>
+        <Setter Property="Opacity" Value="0.9"/>
+      </MultiTrigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="Variant" Value="Primary"/>
+          <Condition Property="IsPressed" Value="True"/>
+        </MultiTrigger.Conditions>
+        <Setter Property="Opacity" Value="0.82"/>
+      </MultiTrigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="Variant" Value="Danger"/>
+          <Condition Property="IsMouseOver" Value="True"/>
+        </MultiTrigger.Conditions>
+        <Setter Property="Opacity" Value="0.9"/>
+      </MultiTrigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="Variant" Value="Danger"/>
+          <Condition Property="IsPressed" Value="True"/>
+        </MultiTrigger.Conditions>
+        <Setter Property="Opacity" Value="0.82"/>
+      </MultiTrigger>
+    </Style.Triggers>
+  </Style>
+
+  <Style TargetType="{x:Type controls:CustomCard}">
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type controls:CustomCard}">
+          <Border Background="{DynamicResource PaperBrush}"
+                  BorderBrush="{DynamicResource EdgeBrush}"
+                  BorderThickness="2"
+                  CornerRadius="14"
+                  Padding="18"
+                  SnapsToDevicePixels="True">
+            <DockPanel LastChildFill="True">
+              <Grid x:Name="HeaderRow" DockPanel.Dock="Top" Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="HeaderText"
+                           Text="{TemplateBinding Header}"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           TextWrapping="Wrap"/>
+                <ContentPresenter Grid.Column="1"
+                                  Content="{TemplateBinding HeaderExtra}"
+                                  VerticalAlignment="Center"
+                                  Margin="12,0,0,0"/>
+              </Grid>
+              <Border x:Name="FooterRow"
+                      DockPanel.Dock="Bottom"
+                      BorderBrush="{DynamicResource EdgeBrush}"
+                      BorderThickness="0,2,0,0"
+                      Padding="0,12,0,0"
+                      Margin="0,14,0,0">
+                <ContentPresenter Content="{TemplateBinding Footer}"/>
+              </Border>
+              <ContentPresenter Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"/>
+            </DockPanel>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="Footer" Value="{x:Null}">
+              <Setter TargetName="FooterRow" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="Header" Value="">
+              <Setter TargetName="HeaderRow" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- 数据表格：复刻 n-data-table 默认外观——浅色表头、1px 分隔线、无独立外框（外框交给卡片）。 -->
+  <Style x:Key="CustomDataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+    <Setter Property="Background" Value="{DynamicResource PageDeepBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
+    <Setter Property="BorderThickness" Value="0,0,1,1"/>
+    <Setter Property="Padding" Value="14,0"/>
+    <Setter Property="Height" Value="44"/>
+    <Setter Property="FontSize" Value="14"/>
+    <Setter Property="FontWeight" Value="Medium"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+          <Grid>
+            <Border Background="{TemplateBinding Background}"
+                    Padding="{TemplateBinding Padding}"
+                    SnapsToDevicePixels="True">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ContentPresenter x:Name="HeaderContent"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  RecognizesAccessKey="True"/>
+                <TextBlock x:Name="SortGlyph"
+                           Grid.Column="1"
+                           Text="↓"
+                           FontSize="12"
+                           Margin="6,0,0,0"
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource MutedBrush}"
+                           Visibility="Collapsed"/>
+              </Grid>
+            </Border>
+            <Rectangle Width="1" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                       Fill="{DynamicResource LineBrush}" IsHitTestVisible="False"/>
+            <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                       Fill="{DynamicResource LineBrush}" IsHitTestVisible="False"/>
+            <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Cursor="SizeWE" Width="8">
+              <Thumb.Template>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                  <Border Background="Transparent"/>
+                </ControlTemplate>
+              </Thumb.Template>
+            </Thumb>
+            <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Cursor="SizeWE" Width="8">
+              <Thumb.Template>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                  <Grid Background="Transparent">
+                    <Border x:Name="GripLine"
+                            Width="2"
+                            Height="20"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Background="{DynamicResource LineBrush}"
+                            CornerRadius="1"/>
+                  </Grid>
+                  <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                      <Setter TargetName="GripLine" Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+                    </Trigger>
+                    <Trigger Property="IsDragging" Value="True">
+                      <Setter TargetName="GripLine" Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+                    </Trigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </Thumb.Template>
+            </Thumb>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="SortDirection" Value="Ascending">
+              <Setter TargetName="SortGlyph" Property="Visibility" Value="Visible"/>
+              <Setter TargetName="SortGlyph" Property="Text" Value="↑"/>
+            </Trigger>
+            <Trigger Property="SortDirection" Value="Descending">
+              <Setter TargetName="SortGlyph" Property="Visibility" Value="Visible"/>
+              <Setter TargetName="SortGlyph" Property="Text" Value="↓"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style x:Key="CustomDataGridRowStyle" TargetType="{x:Type DataGridRow}">
+    <Setter Property="Background" Value="{DynamicResource PaperBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="MinHeight" Value="46"/>
+    <Setter Property="SnapsToDevicePixels" Value="True"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type DataGridRow}">
+          <Border x:Name="Root" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+            <DataGridCellsPresenter ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+              <Setter TargetName="Root" Property="Background" Value="{DynamicResource PageBrush}"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Root" Property="Background" Value="{DynamicResource HoverBrush}"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter TargetName="Root" Property="Background" Value="{DynamicResource SoftBrush}"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style x:Key="CustomDataGridCenteredHeaderStyle" TargetType="{x:Type DataGridColumnHeader}"
+         BasedOn="{StaticResource CustomDataGridColumnHeaderStyle}">
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+  </Style>
+
+  <!-- 全局隐式表头样式：XAML 中声明的列若不单独指定 HeaderStyle，也统一走 n-data-table 外观。 -->
+  <Style TargetType="{x:Type DataGridColumnHeader}"
+         BasedOn="{StaticResource CustomDataGridColumnHeaderStyle}"/>
+
+  <Style x:Key="CustomDataGridCellStyle" TargetType="{x:Type DataGridCell}">
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="Padding" Value="14,0"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type DataGridCell}">
+          <Border Background="Transparent"
+                  BorderBrush="{DynamicResource LineBrush}"
+                  BorderThickness="0,0,1,1"
+                  Padding="{TemplateBinding Padding}"
+                  SnapsToDevicePixels="True">
+            <ContentPresenter VerticalAlignment="Center"/>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style x:Key="CustomDataGridSelectionCellStyle" TargetType="{x:Type DataGridCell}"
+         BasedOn="{StaticResource CustomDataGridCellStyle}">
+    <Setter Property="Padding" Value="0"/>
+  </Style>
+
+  <!-- 右侧冻结列：左侧补 1px 分隔线；宿主左移 2px 用不透明表头/行背景盖住普通列末列右边线，只留一条分隔线。 -->
+  <Style x:Key="CustomDataGridFrozenCellStyle" TargetType="{x:Type DataGridCell}"
+         BasedOn="{StaticResource CustomDataGridCellStyle}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type DataGridCell}">
+          <Border Background="Transparent"
+                  BorderBrush="{DynamicResource LineBrush}"
+                  BorderThickness="1,0,1,1"
+                  Padding="{TemplateBinding Padding}"
+                  SnapsToDevicePixels="True">
+            <ContentPresenter VerticalAlignment="Center"/>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+
+  <!-- 业务表格复选列：勾选状态由 CustomDataGrid 按 RowKeyPath 维护，绑定在行容器上。 -->
+  <DataTemplate x:Key="SelectableRowCheckTemplate">
+    <inputs:CustomCheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsChecked="{Binding Path=(controls:CustomDataGrid.IsRowChecked),
+                                              RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}},
+                                              Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+  </DataTemplate>
+
+  <!-- ============ 滚动条：10px 胶囊滑块，透明轨道，悬停描边转主色 ============ -->
+
+  <ControlTemplate x:Key="SimVerticalScrollBarTemplate" TargetType="{x:Type ScrollBar}">
+    <Grid Background="Transparent">
+      <Track x:Name="PART_Track" IsDirectionReversed="True" Orientation="Vertical"
+             Maximum="{TemplateBinding Maximum}" Minimum="{TemplateBinding Minimum}"
+             Value="{TemplateBinding Value}" ViewportSize="{TemplateBinding ViewportSize}">
+        <Track.DecreaseRepeatButton>
+          <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Opacity="0" Focusable="False" IsTabStop="False"/>
+        </Track.DecreaseRepeatButton>
+        <Track.IncreaseRepeatButton>
+          <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Opacity="0" Focusable="False" IsTabStop="False"/>
+        </Track.IncreaseRepeatButton>
+        <Track.Thumb>
+          <Thumb MinHeight="24">
+            <Thumb.Template>
+              <ControlTemplate TargetType="{x:Type Thumb}">
+                <Border x:Name="ThumbFill" Background="{DynamicResource PaperBrush}"
+                        BorderBrush="{DynamicResource EdgeBrush}" BorderThickness="1"
+                        Margin="2.5,0" CornerRadius="2.5"/>
+                <ControlTemplate.Triggers>
+                  <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="ThumbFill" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                  </Trigger>
+                  <Trigger Property="IsDragging" Value="True">
+                    <Setter TargetName="ThumbFill" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                  </Trigger>
+                </ControlTemplate.Triggers>
+              </ControlTemplate>
+            </Thumb.Template>
+          </Thumb>
+        </Track.Thumb>
+      </Track>
+    </Grid>
+  </ControlTemplate>
+
+  <ControlTemplate x:Key="SimHorizontalScrollBarTemplate" TargetType="{x:Type ScrollBar}">
+    <Grid Background="Transparent">
+      <Track x:Name="PART_Track" IsDirectionReversed="False" Orientation="Horizontal"
+             Maximum="{TemplateBinding Maximum}" Minimum="{TemplateBinding Minimum}"
+             Value="{TemplateBinding Value}" ViewportSize="{TemplateBinding ViewportSize}">
+        <Track.DecreaseRepeatButton>
+          <RepeatButton Command="{x:Static ScrollBar.PageLeftCommand}" Opacity="0" Focusable="False" IsTabStop="False"/>
+        </Track.DecreaseRepeatButton>
+        <Track.IncreaseRepeatButton>
+          <RepeatButton Command="{x:Static ScrollBar.PageRightCommand}" Opacity="0" Focusable="False" IsTabStop="False"/>
+        </Track.IncreaseRepeatButton>
+        <Track.Thumb>
+          <Thumb MinWidth="24">
+            <Thumb.Template>
+              <ControlTemplate TargetType="{x:Type Thumb}">
+                <Border x:Name="ThumbFill" Background="{DynamicResource PaperBrush}"
+                        BorderBrush="{DynamicResource EdgeBrush}" BorderThickness="1"
+                        Margin="0,2.5" CornerRadius="2.5"/>
+                <ControlTemplate.Triggers>
+                  <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="ThumbFill" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                  </Trigger>
+                  <Trigger Property="IsDragging" Value="True">
+                    <Setter TargetName="ThumbFill" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                  </Trigger>
+                </ControlTemplate.Triggers>
+              </ControlTemplate>
+            </Thumb.Template>
+          </Thumb>
+        </Track.Thumb>
+      </Track>
+    </Grid>
+  </ControlTemplate>
+
+  <Style TargetType="{x:Type ScrollBar}">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Width" Value="10"/>
+    <Setter Property="Template" Value="{StaticResource SimVerticalScrollBarTemplate}"/>
+    <Style.Triggers>
+      <Trigger Property="Orientation" Value="Horizontal">
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="Height" Value="10"/>
+        <Setter Property="Template" Value="{StaticResource SimHorizontalScrollBarTemplate}"/>
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+
+  <!-- ============ ListBox：主题化的选择列表（文件存储提供方等） ============ -->
+
+  <Style TargetType="{x:Type ListBoxItem}">
+    <Setter Property="FontFamily" Value="Cascadia Code,Microsoft YaHei UI,Consolas"/>
+    <Setter Property="FontSize" Value="13"/>
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="Padding" Value="10,6"/>
+    <Setter Property="Margin" Value="0,1"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+          <Border x:Name="Root" Background="Transparent" BorderBrush="Transparent"
+                  BorderThickness="2" CornerRadius="8" Padding="{TemplateBinding Padding}"
+                  SnapsToDevicePixels="True">
+            <ContentPresenter VerticalAlignment="Center"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Root" Property="Background" Value="{DynamicResource HoverBrush}"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter TargetName="Root" Property="Background" Value="{DynamicResource SoftBrush}"/>
+              <Setter TargetName="Root" Property="BorderBrush" Value="{DynamicResource EdgeBrush}"/>
+              <Setter Property="FontWeight" Value="Bold"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Opacity" Value="0.45"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="{x:Type ListBox}">
+    <Setter Property="Background" Value="{DynamicResource PaperBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}"/>
+    <Setter Property="BorderThickness" Value="2"/>
+    <Setter Property="Padding" Value="4"/>
+    <Setter Property="FontFamily" Value="Cascadia Code,Microsoft YaHei UI,Consolas"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ListBox}">
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="10"
+                  Padding="{TemplateBinding Padding}"
+                  SnapsToDevicePixels="True">
+            <ScrollViewer Focusable="False">
+              <ItemsPresenter/>
+            </ScrollViewer>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- ============ TreeView：主题化树（组织架构等），2px 细线 chevron 展开器 ============ -->
+
+  <Style TargetType="{x:Type TreeView}">
+    <Setter Property="Background" Value="{DynamicResource PaperBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="0,4"/>
+    <Setter Property="FontFamily" Value="Cascadia Code,Microsoft YaHei UI,Consolas"/>
+  </Style>
+
+  <Style TargetType="{x:Type TreeViewItem}">
+    <Setter Property="FontFamily" Value="Cascadia Code,Microsoft YaHei UI,Consolas"/>
+    <Setter Property="FontSize" Value="13"/>
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="Padding" Value="8,5"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+          <StackPanel>
+            <Border x:Name="Header"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    BorderThickness="2"
+                    CornerRadius="8"
+                    Padding="{TemplateBinding Padding}"
+                    SnapsToDevicePixels="True">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="18"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ToggleButton x:Name="Expander"
+                              Width="14" Height="14"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              Focusable="False" ClickMode="Press"
+                              IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                  <ToggleButton.Template>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                      <Grid Background="Transparent">
+                        <Path x:Name="Chevron"
+                              Data="M 1,0 L 5,4 L 1,8"
+                              Stroke="{DynamicResource InkBrush}"
+                              StrokeThickness="2"
+                              StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round"
+                              StrokeLineJoin="Round"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              RenderTransformOrigin="0.5,0.5">
+                          <Path.RenderTransform>
+                            <RotateTransform Angle="0"/>
+                          </Path.RenderTransform>
+                        </Path>
+                      </Grid>
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                          <Setter TargetName="Chevron" Property="RenderTransform">
+                            <Setter.Value>
+                              <RotateTransform Angle="90"/>
+                            </Setter.Value>
+                          </Setter>
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </ToggleButton.Template>
+                </ToggleButton>
+                <ContentPresenter Grid.Column="1" ContentSource="Header"
+                                  VerticalAlignment="Center" RecognizesAccessKey="True"/>
+              </Grid>
+            </Border>
+            <ItemsPresenter x:Name="ItemsHost" Margin="16,0,0,0"/>
+          </StackPanel>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsExpanded" Value="False">
+              <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="HasItems" Value="False">
+              <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter TargetName="Header" Property="Background" Value="{DynamicResource SoftBrush}"/>
+              <Setter TargetName="Header" Property="BorderBrush" Value="{DynamicResource EdgeBrush}"/>
+              <Setter Property="FontWeight" Value="Bold"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Header" Property="Background" Value="{DynamicResource HoverBrush}"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="{x:Type controls:CustomDataGrid}">
+    <Setter Property="Background" Value="{DynamicResource PaperBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource InkBrush}"/>
+    <Setter Property="FontSize" Value="13"/>
+    <Setter Property="BorderBrush" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="RowBackground" Value="{DynamicResource PaperBrush}"/>
+    <Setter Property="AlternationCount" Value="2"/>
+    <Setter Property="SelectionUnit" Value="FullRow"/>
+    <Setter Property="ColumnHeaderStyle" Value="{StaticResource CustomDataGridColumnHeaderStyle}"/>
+    <Setter Property="RowStyle" Value="{StaticResource CustomDataGridRowStyle}"/>
+    <Setter Property="CellStyle" Value="{StaticResource CustomDataGridCellStyle}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type controls:CustomDataGrid}">
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  ClipToBounds="True"
+                  SnapsToDevicePixels="True">
+            <ScrollViewer x:Name="DG_ScrollViewer" Focusable="False">
+              <ScrollViewer.Template>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="*"/>
+                      <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1"/>
+                    <ScrollContentPresenter x:Name="PART_ScrollContentPresenter"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            Grid.Row="1"
+                                            CanContentScroll="{TemplateBinding CanContentScroll}"/>
+                    <!-- 右侧冻结列宿主：位于主内容与垂直滚动条之间，互不遮挡。
+                         Margin 左移 2px 超过 1px 线宽，让不透明表头/行背景盖住主表末列右边框。 -->
+                    <ContentControl x:Name="PART_FrozenColumnsHost"
+                                    Grid.Column="2"
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Margin="-2,0,0,0"
+                                    VerticalAlignment="Stretch"
+                                    ClipToBounds="True"
+                                    Visibility="Collapsed"/>
+                    <!-- 冻结列表头的左侧分隔线，与单元格左边线衔接。 -->
+                    <Rectangle Grid.Column="2"
+                               Grid.Row="0"
+                               Width="1"
+                               Height="44"
+                               Margin="-2,0,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Fill="{DynamicResource LineBrush}"
+                               IsHitTestVisible="False"
+                               Visibility="{Binding Visibility, ElementName=PART_FrozenColumnsHost}"/>
+                    <ScrollBar x:Name="PART_VerticalScrollBar"
+                               Grid.Column="3"
+                               Grid.Row="1"
+                               Orientation="Vertical"
+                               Maximum="{TemplateBinding ScrollableHeight}"
+                               ViewportSize="{TemplateBinding ViewportHeight}"
+                               Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                               Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                    <!-- 横向滚动条横跨整张表格（含冻结列与滚动条区域），内容仍只滚动非冻结列。 -->
+                    <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="2">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                        <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                 Grid.Column="1"
+                                 Orientation="Horizontal"
+                                 Maximum="{TemplateBinding ScrollableWidth}"
+                                 ViewportSize="{TemplateBinding ViewportWidth}"
+                                 Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                 Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                    </Grid>
+                  </Grid>
+                </ControlTemplate>
+              </ScrollViewer.Template>
+              <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+            </ScrollViewer>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>设计规范 · SimFramework</title>
+<meta name="description" content="SimFramework Paper Ocean 设计系统 · 色彩、字体与组件规范">
+<link rel="stylesheet" href="assets/ui.css">
+</head>
+<body data-shell="app" data-page="design-system" data-title="设计规范">
+<a class="skip-link" href="#main">跳到主要内容</a>
+<div class="shell" id="shell">
+  <div class="shell__main">
+    <main class="page" id="main">
+
+      <div class="page-head" data-od-id="ds-head">
+        <div class="page-head__main">
+          <span class="kicker">设计系统 · Paper Ocean</span>
+          <h1>设计规范</h1>
+          <p>奶油纸底、海军蓝描边、硬投影与电光蓝。所有页面共用这一套 token 与组件，改动从这里出发。</p>
+        </div>
+        <div class="page-head__actions">
+          <a class="btn btn--ghost" href="index.html">改版总览</a>
+          <button class="btn btn--primary" type="button" data-toast="已复制 design-tokens.json">导出 Token</button>
+        </div>
+      </div>
+
+      <div class="card card--flush" data-tabs data-od-id="ds-tabs">
+        <div style="padding:14px 20px 0;border-bottom:2px solid var(--line)">
+          <div class="tabs" role="tablist" aria-label="规范分类">
+            <button type="button" role="tab" id="ds-tab-base" aria-controls="ds-base" aria-selected="true">基础</button>
+            <button type="button" role="tab" id="ds-tab-comp" aria-controls="ds-comp" aria-selected="false">组件</button>
+            <button type="button" role="tab" id="ds-tab-pattern" aria-controls="ds-pattern" aria-selected="false">页面模式</button>
+          </div>
+        </div>
+
+        <section id="ds-base" role="tabpanel" aria-labelledby="ds-tab-base" style="padding:22px 20px">
+          <h2 style="font-size:17px">色彩</h2>
+          <p class="small muted" style="margin-top:4px">强调色只用于可交互元素与关键数据；珊瑚色留给主行动与风险提示。</p>
+          <div class="swatches" style="margin-top:14px">
+            <div class="swatch"><div class="swatch__color" style="background:var(--bg)"></div><div class="swatch__meta"><b>纸底</b><code>--bg</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--paper)"></div><div class="swatch__meta"><b>卡面</b><code>--paper</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--ink)"></div><div class="swatch__meta"><b>墨蓝</b><code>--ink</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--ink-soft)"></div><div class="swatch__meta"><b>次级文字</b><code>--ink-soft</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--line)"></div><div class="swatch__meta"><b>分隔线</b><code>--line</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--accent)"></div><div class="swatch__meta"><b>电光蓝</b><code>--accent</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--coral)"></div><div class="swatch__meta"><b>珊瑚 CTA</b><code>--coral</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--sun)"></div><div class="swatch__meta"><b>贴纸黄</b><code>--sun</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--sky)"></div><div class="swatch__meta"><b>浅海蓝</b><code>--sky</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--mint)"></div><div class="swatch__meta"><b>薄荷</b><code>--mint</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--peach)"></div><div class="swatch__meta"><b>蜜桃</b><code>--peach</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--lilac)"></div><div class="swatch__meta"><b>丁香</b><code>--lilac</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--good)"></div><div class="swatch__meta"><b>成功</b><code>--good</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--warn)"></div><div class="swatch__meta"><b>警告</b><code>--warn</code></div></div>
+            <div class="swatch"><div class="swatch__color" style="background:var(--danger)"></div><div class="swatch__meta"><b>危险</b><code>--danger</code></div></div>
+          </div>
+
+          <h2 style="font-size:17px;margin-top:26px">字体</h2>
+          <div style="margin-top:6px">
+            <div class="spec-row"><span class="tag">display / 900</span><span class="spec-display" style="font-size:30px">把审批做成一条河</span></div>
+            <div class="spec-row"><span class="tag">heading / 800</span><span class="spec-display" style="font-size:20px">工作台 · 待我审批</span></div>
+            <div class="spec-row"><span class="tag">body / 400</span><span class="spec-body" style="font-size:14px;max-width:52ch">正文使用 Noto Sans SC，行高 1.8。每段控制在 3 行以内，避免大段说明文字。</span></div>
+            <div class="spec-row"><span class="tag">mono / 500</span><span class="spec-mono" style="font-size:13px">APR-2026-0418 · ¥46,800.00</span></div>
+            <div class="spec-row"><span class="tag">tiny / 11.5</span><span class="tiny muted">辅助信息与元数据使用 11.5px，颜色降至次级文字。</span></div>
+          </div>
+
+          <h2 style="font-size:17px;margin-top:26px">形状与投影</h2>
+          <div class="grid grid--3" style="margin-top:12px">
+            <div class="card card--cream" style="box-shadow:none">
+              <b style="font-size:13px">描边</b>
+              <p class="tiny muted" style="margin-top:4px">统一 2px 墨蓝描边，禁止使用 1px 浅灰边框。</p>
+              <div style="height:44px;border:2px solid var(--ink);border-radius:12px;margin-top:10px"></div>
+            </div>
+            <div class="card card--cream" style="box-shadow:none">
+              <b style="font-size:13px">硬投影</b>
+              <p class="tiny muted" style="margin-top:4px">无模糊，偏移 2–6px，颜色与描边一致。</p>
+              <div style="height:44px;border:2px solid var(--ink);border-radius:12px;box-shadow:5px 5px 0 var(--ink);margin:10px 6px 0 0"></div>
+            </div>
+            <div class="card card--cream" style="box-shadow:none">
+              <b style="font-size:13px">圆角</b>
+              <p class="tiny muted" style="margin-top:4px">卡片 16px、按钮 999px、输入 12px。</p>
+              <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+                <span style="width:34px;height:34px;border:2px solid var(--ink);border-radius:16px;background:var(--sun)"></span>
+                <span style="width:34px;height:34px;border:2px solid var(--ink);border-radius:50%;background:var(--mint)"></span>
+                <span style="width:34px;height:34px;border:2px solid var(--ink);border-radius:12px;background:var(--sky)"></span>
+              </div>
+            </div>
+          </div>
+
+          <h2 style="font-size:17px;margin-top:26px">布局网格</h2>
+          <div class="spec-row"><span class="tag">shell</span><span>侧栏 252px + 顶栏 76px，内容区最大宽度 1320px，外边距 28px。</span></div>
+          <div class="spec-row"><span class="tag">spacing</span><span>4 / 8 / 12 / 18 / 26 / 38，组件间距优先使用 18px。</span></div>
+          <div class="spec-row"><span class="tag">breakpoint</span><span>1240 / 1080 / 820 / 560，1080 以下侧栏收起为抽屉。</span></div>
+        </section>
+
+        <section id="ds-comp" role="tabpanel" aria-labelledby="ds-tab-comp" style="padding:22px 20px" hidden>
+          <h2 style="font-size:17px">按钮</h2>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+            <button class="btn btn--primary" type="button" data-toast="主行动">主行动</button>
+            <button class="btn btn--dark" type="button" data-toast="深色按钮">深色</button>
+            <button class="btn" type="button" data-toast="次级按钮">次级</button>
+            <button class="btn btn--ghost" type="button" data-toast="幽灵按钮">幽灵</button>
+            <button class="btn btn--danger" type="button" data-toast="危险操作需二次确认">危险</button>
+            <button class="btn" type="button" disabled>禁用</button>
+          </div>
+          <div class="note" style="margin-top:12px"><span>一屏只允许一个主行动。危险按钮必须配合确认弹窗，不可直接执行。</span></div>
+
+          <h2 style="font-size:17px;margin-top:26px">标签与状态</h2>
+          <div class="chip-row" style="margin-top:12px">
+            <span class="pill pill--mint pill--dot">运行中</span>
+            <span class="pill pill--sky">待审批</span>
+            <span class="pill pill--sun">进行中</span>
+            <span class="pill pill--peach">需关注</span>
+            <span class="pill pill--coral">已驳回</span>
+            <span class="pill pill--lilac">草稿</span>
+            <span class="pill pill--outline">已归档</span>
+          </div>
+          <div class="chip-row" style="margin-top:12px">
+            <button class="chip" type="button" aria-pressed="true">筛选选中</button>
+            <button class="chip" type="button" aria-pressed="false">筛选未选</button>
+          </div>
+
+          <h2 style="font-size:17px;margin-top:26px">表单</h2>
+          <div class="grid grid--2" style="margin-top:12px">
+            <div class="field"><label for="ds-input">文本输入</label><input class="input" id="ds-input" type="text" placeholder="请输入部门名称"><span class="field__hint">输入框高度 40px，聚焦时描边变电光蓝。</span></div>
+            <div class="field"><label for="ds-select">下拉选择</label><select class="select" id="ds-select"><option>请选择角色</option><option>部门负责人</option><option>审批人</option></select></div>
+          </div>
+          <div class="field" style="margin-top:12px"><label for="ds-textarea">多行文本</label><textarea class="textarea" id="ds-textarea" placeholder="补充说明（选填）"></textarea></div>
+          <div class="list__row" style="grid-template-columns:minmax(0,1fr) auto;margin-top:12px;border-bottom:none">
+            <div><div class="list__title">开关</div><div class="list__sub">用于立即生效的二元设置</div></div>
+            <span class="switch"><input type="checkbox" checked aria-label="示例开关"><span class="switch__track"></span></span>
+          </div>
+
+          <h2 style="font-size:17px;margin-top:26px">数据展示</h2>
+          <div class="table-wrap" style="margin-top:12px;overflow-x:auto">
+            <table class="table">
+              <thead><tr><th>成员</th><th>部门</th><th>角色</th><th>状态</th></tr></thead>
+              <tbody>
+                <tr><td><div style="display:flex;align-items:center;gap:9px"><span class="avatar avatar--sky">林</span>林知远</div></td><td>信息技术部</td><td>平台管理员</td><td><span class="pill pill--mint">启用</span></td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:9px"><span class="avatar avatar--peach">周</span>周雨桐</div></td><td>市场部</td><td>部门负责人</td><td><span class="pill pill--mint">启用</span></td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:9px"><span class="avatar avatar--sun">陈</span>陈嘉禾</div></td><td>市场部</td><td>编辑</td><td><span class="pill pill--sun">待激活</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="grid grid--3" style="margin-top:16px">
+            <div class="card stat"><div class="stat__label">待我审批</div><div class="stat__value">8</div><div class="stat__foot"><span class="delta delta--up">↑ 3</span> 较昨日</div></div>
+            <div class="card stat"><div class="stat__label">今日通过</div><div class="stat__value">23</div><div class="stat__foot">平均 2.4 小时</div></div>
+            <div class="card stat"><div class="stat__label">超时率</div><div class="stat__value">4.1%</div><div class="stat__foot"><span class="delta delta--down">↓ 1.2%</span> 较上周</div></div>
+          </div>
+        </section>
+
+        <section id="ds-pattern" role="tabpanel" aria-labelledby="ds-tab-pattern" style="padding:22px 20px" hidden>
+          <div class="grid grid--2">
+            <div>
+              <h2 style="font-size:17px">列表页骨架</h2>
+              <div class="card card--cream" style="box-shadow:none;margin-top:10px">
+                <div class="tiny muted" style="line-height:2">
+                  1. 页头：后台仅保留指标与主行动（页面标题由顶栏承担）；记录详情保留标题层级<br>
+                  2. 统计条：3–4 个关键数字，不重复表格信息<br>
+                  3. 工具栏：搜索、筛选、批量操作<br>
+                  4. 数据表 / 卡片列表<br>
+                  5. 分页或加载更多
+                </div>
+              </div>
+            </div>
+            <div>
+              <h2 style="font-size:17px">详情页骨架</h2>
+              <div class="card card--cream" style="box-shadow:none;margin-top:10px">
+                <div class="tiny muted" style="line-height:2">
+                  1. 返回路径与对象标题<br>
+                  2. 状态与关键字段（KV 网格）<br>
+                  3. 主内容：表单 / 时间线 / 日志<br>
+                  4. 右侧：属性、关联对象、危险操作<br>
+                  5. 底部固定操作栏（有未保存改动时出现）
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 style="font-size:17px;margin-top:26px">状态与反馈</h2>
+          <div class="grid grid--3" style="margin-top:12px">
+            <div class="card"><div class="empty"><b>暂无数据</b><p>调整筛选条件，或新建第一条记录。</p><button class="btn btn--sm" type="button" data-toast="新建入口">新建</button></div></div>
+            <div class="card"><div class="empty"><b>加载中</b><p>骨架屏保持与真实内容相同的行高。</p><div class="progress" style="width:80%"><span style="width:60%"></span></div></div></div>
+            <div class="card"><div class="empty"><b>出错了</b><p>给出原因与下一步，而不是只显示错误码。</p><button class="btn btn--sm" type="button" data-toast="正在重试">重试</button></div></div>
+          </div>
+
+          <div class="note" style="margin-top:18px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.4 2.9 7.6 7 9.5 4.1-1.9 7-5.1 7-9.5V6Z"/><path d="m9.2 12 2 2 3.6-3.8"/></svg>
+            <span>可达性：所有交互元素保留 2px 可见焦点环；正文对比度不低于 4.5:1；动效在 <span class="mono">prefers-reduced-motion</span> 下关闭位移。</span>
+          </div>
+        </section>
+      </div>
+
+      <div class="grid grid--3" style="margin-top:18px" data-od-id="ds-principles">
+        <div class="card"><span class="pill pill--sun">原则 01</span><h3 style="margin-top:8px;font-size:15px">先让人看懂</h3><p class="small muted" style="margin-top:5px;line-height:1.8">每个页面只回答一个问题。标题说人话，术语放进说明里。</p></div>
+        <div class="card"><span class="pill pill--sky">原则 02</span><h3 style="margin-top:8px;font-size:15px">状态永远可见</h3><p class="small muted" style="margin-top:5px;line-height:1.8">加载、空、错误、成功都有明确反馈，禁止静默失败。</p></div>
+        <div class="card"><span class="pill pill--peach">原则 03</span><h3 style="margin-top:8px;font-size:15px">危险操作慢一点</h3><p class="small muted" style="margin-top:5px;line-height:1.8">删除、驳回、轮换密钥需要二次确认，并说明后果。</p></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="assets/ui.js"></script>
+</body>
+</html>

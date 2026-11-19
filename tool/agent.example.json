@@ -1,0 +1,105 @@
+{
+  "agent": {
+    "id": "agent-line-a-01",
+    "displayName": "A line test host",
+    "tray": {
+      "enabled": true
+    },
+    "localWs": {
+      "enabled": true,
+      "bind": "127.0.0.1",
+      "port": 18080,
+      "allowedOrigins": [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+      ],
+      "token": ""
+    }
+  },
+  "sources": [
+    {
+      "id": "com3-pulltest",
+      "type": "serial",
+      "port": "COM3",
+      "baudRate": 9600,
+      "dataBits": 8,
+      "parity": "None",
+      "stopBits": "One"
+    },
+    {
+      "id": "tcp-dieshear",
+      "type": "tcpClient",
+      "host": "192.168.1.50",
+      "port": 5000,
+      "reconnectMinSeconds": 1,
+      "reconnectMaxSeconds": 30
+    },
+    {
+      "id": "dir-pulltest",
+      "type": "file",
+      "directory": "./data/in",
+      "pattern": "PT02_*.csv",
+      "stableSeconds": 5,
+      "pollIntervalSeconds": 5,
+      "archiveDirectory": "./data/archive",
+      "errorDirectory": "./data/error"
+    }
+  ],
+  "sinks": {
+    "local": {
+      "type": "wsServer"
+    }
+  },
+  "channels": [
+    {
+      "id": "pt-01",
+      "deviceId": "PT-001",
+      "deviceType": "pullTest",
+      "deviceName": "Wire pull tester 01",
+      "sourceRef": "com3-pulltest",
+      "codec": {
+        "type": "delimiter",
+        "delimiter": "\r\n",
+        "encoding": "ascii",
+        "parse": {
+          "pattern": "^RESULT,FORCE=(?<force>\\d+\\.\\d+)N"
+        }
+      },
+      "sinks": ["local"]
+    },
+    {
+      "id": "ds-01",
+      "deviceId": "DS-001",
+      "deviceType": "dieShear",
+      "deviceName": "Die shear tester 01",
+      "sourceRef": "tcp-dieshear",
+      "codec": {
+        "type": "delimiter",
+        "delimiter": "\r\n",
+        "encoding": "ascii",
+        "parse": {
+          "pattern": "^SHEAR,DIE=(?<dieId>\\S+),FORCE=(?<force>\\d+\\.\\d+)N"
+        }
+      },
+      "sinks": ["local"]
+    },
+    {
+      "id": "pt-02-file",
+      "deviceId": "PT-002",
+      "deviceType": "pullTest",
+      "deviceName": "Wire pull tester 02 (file)",
+      "sourceRef": "dir-pulltest",
+      "codec": {
+        "type": "csv",
+        "csvDelimiter": ",",
+        "hasHeader": true,
+        "encoding": "utf-8",
+        "columns": {
+          "sampleId": "Sample",
+          "force": "ForceN"
+        }
+      },
+      "sinks": ["local"]
+    }
+  ]
+}

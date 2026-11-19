@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "redesign/settings.html",
+  "entry": "redesign/settings.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-10-22T03:49:21.097Z",
+  "updatedAt": "2026-10-22T03:49:21.097Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

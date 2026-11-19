@@ -1,0 +1,67 @@
+{
+  "agent": {
+    "id": "agent-line-a-01",
+    "displayName": "A line test host",
+    "stateDirectory": "./data/state",
+    "tray": {
+      "enabled": true
+    },
+    "localWs": {
+      "enabled": true,
+      "bind": "127.0.0.1",
+      "port": 18080,
+      "allowedOrigins": [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+      ],
+      "token": ""
+    }
+  },
+  "sources": [
+    {
+      "id": "dir-pulltest",
+      "type": "file",
+      "directory": "./data/in",
+      "pattern": "PT02_*.csv",
+      "stableSeconds": 5,
+      "pollIntervalSeconds": 5,
+      "archiveDirectory": "./data/archive",
+      "errorDirectory": "./data/error"
+    }
+  ],
+  "sinks": {
+    "local": {
+      "type": "wsServer"
+    },
+    "center": {
+      "type": "wsClient",
+      "url": "wss://qms.example.com/device-gateway",
+      "token": "",
+      "reconnectMinSeconds": 1,
+      "reconnectMaxSeconds": 30,
+      "spoolSegmentMegabytes": 64,
+      "spoolMaxMegabytes": 1024,
+      "spoolDirectory": "./data/spool/center"
+    }
+  },
+  "channels": [
+    {
+      "id": "pt-02-file",
+      "deviceId": "PT-002",
+      "deviceType": "pullTest",
+      "deviceName": "Wire pull tester 02 (file)",
+      "sourceRef": "dir-pulltest",
+      "codec": {
+        "type": "csv",
+        "csvDelimiter": ",",
+        "hasHeader": true,
+        "encoding": "utf-8",
+        "columns": {
+          "sampleId": "Sample",
+          "force": "ForceN"
+        }
+      },
+      "sinks": ["local", "center"]
+    }
+  ]
+}

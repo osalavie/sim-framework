@@ -1,0 +1,17 @@
+.git
+.idea
+.vs
+.vscode
+**/bin
+**/obj
+**/Logs
+**/App_Data
+**/appsettings.Development.json
+**/appsettings.Production.json
+**/appsettings.Staging.json
+**/.env
+**/*.db
+**/*.db-*
+**/*.user
+TestResults
+publish

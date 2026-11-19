@@ -1,0 +1,107 @@
+pipeline {
+    agent none
+
+    parameters {
+        string(
+            name: 'TAG',
+            defaultValue: '',
+            description: '要发布的 Git 标签/镜像标签，例如 v1.0.0'
+        )
+        booleanParam(
+            name: 'RUN_MIGRATION',
+            defaultValue: false,
+            description: '部署前执行数据库迁移（需要先确认已备份）'
+        )
+        string(
+            name: 'PROD_DEPLOY_HOST',
+            defaultValue: 'deploy@sim-prod',
+            description: '生产环境 SSH 目标，例如 deploy@10.0.0.20'
+        )
+    }
+
+    environment {
+        DOCKER_CLI_EXPERIMENTAL = 'enabled'
+        REGISTRY = 'repo.dulm.net'
+        API_IMAGE = 'sim-api'
+        WEB_IMAGE = 'sim-web'
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '30'))
+        disableConcurrentBuilds()
+        timeout(time: 60, unit: 'MINUTES')
+        timestamps()
+    }
+
+    stages {
+        stage('Validate') {
+            steps {
+                script {
+                    if (!params.TAG?.trim()) {
+                        error('TAG is required')
+                    }
+                    env.RELEASE_TAG = params.TAG.trim()
+                    env.MIGRATE_FLAG = params.RUN_MIGRATION ? '--migrate' : ''
+                }
+            }
+        }
+
+        stage('Verify Images') {
+            agent any
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'registry-credentials',
+                    usernameVariable: 'REGISTRY_USER',
+                    passwordVariable: 'REGISTRY_PASSWORD'
+                )]) {
+                    sh '''
+                        set -eu
+                        trap 'docker logout "$REGISTRY" >/dev/null 2>&1 || true' EXIT
+
+                        echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY" -u "$REGISTRY_USER" --password-stdin
+
+                        for attempt in $(seq 1 60); do
+                            if docker manifest inspect "$REGISTRY/$API_IMAGE:$RELEASE_TAG" >/dev/null 2>&1 && \
+                               docker manifest inspect "$REGISTRY/$WEB_IMAGE:$RELEASE_TAG" >/dev/null 2>&1; then
+                                echo "Both images are available: $RELEASE_TAG"
+                                exit 0
+                            fi
+
+                            echo "Waiting for images ($attempt/60): $RELEASE_TAG"
+                            sleep 20
+                        done
+
+                        echo "Images were not available after 20 minutes: $RELEASE_TAG" >&2
+                        exit 1
+                    '''
+                }
+            }
+        }
+
+        stage('Approve Production') {
+            steps {
+                input message: "Deploy ${env.RELEASE_TAG} to production?", ok: 'Deploy'
+            }
+        }
+
+        stage('Deploy Production') {
+            agent any
+            steps {
+                checkout scm
+                withCredentials([file(credentialsId: 'deploy-known-hosts', variable: 'KNOWN_HOSTS')]) {
+                    sshagent(['deploy-prod-ssh']) {
+                        sh '''
+                            set -eu
+
+                            scp -o UserKnownHostsFile="$KNOWN_HOSTS" -o StrictHostKeyChecking=yes \
+                                deploy/scripts/deploy.sh "$PROD_DEPLOY_HOST:/opt/sim/deploy.sh"
+                            ssh -o UserKnownHostsFile="$KNOWN_HOSTS" -o StrictHostKeyChecking=yes \
+                                "$PROD_DEPLOY_HOST" \
+                                "bash /opt/sim/deploy.sh prod all ${RELEASE_TAG} ${REGISTRY} ${MIGRATE_FLAG}"
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}

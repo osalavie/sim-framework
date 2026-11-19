@@ -1,0 +1,6 @@
+trustLockfile: true
+
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: false
+  vue-demi: true

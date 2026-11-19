@@ -1,0 +1,9 @@
+* text=auto eol=crlf
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.sh text eol=lf
+Dockerfile text eol=lf
+Jenkinsfile text eol=lf
+
+**/wwwroot/libs/** linguist-vendored
