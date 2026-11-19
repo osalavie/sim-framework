@@ -68,7 +68,8 @@ public static class AgentConfigLoader
             }
         }
 
-        return Environment.GetEnvironmentVariable(ConfigPathEnvironmentVariable) ?? "agent.json";
+        return Environment.GetEnvironmentVariable(ConfigPathEnvironmentVariable)
+               ?? Path.Combine(AppContext.BaseDirectory, "agent.json");
     }
 
     private static void ResolveRelativeDirectories(AgentConfig config, string baseDirectory)

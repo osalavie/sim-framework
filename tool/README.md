@@ -56,7 +56,7 @@ cp agent.example.json agent.json
 dotnet run --project src/Sim.DeviceAgent -- --config agent.json
 ```
 
-也可以使用 `SIM_DEVICE_AGENT_CONFIG` 指定配置路径。配置中的相对目录按配置文件所在目录解析。
+配置路径按以下顺序确定：命令行 `--config <path>`（或 `-c`、`--config=<path>`）→ 环境变量 `SIM_DEVICE_AGENT_CONFIG` → **程序所在目录下的 `agent.json`**（即 exe 所在目录；`dotnet run` 调试时为 `bin/Debug/net10.0-windows/`，此时需用 `--config` 指定仓库中的配置）。配置中的相对目录按配置文件所在目录解析。
 
 启动后 Windows 托盘出现 `Device Agent` 图标；本机可直接访问：
 
