@@ -59,9 +59,9 @@
 | [`../web/docs/ARCHITECTURE.md`](../web/docs/ARCHITECTURE.md) | Web 模块体系、路由、认证与主题 |
 | [`../web/docs/DEVELOPMENT.md`](../web/docs/DEVELOPMENT.md) | Web 环境变量、模块扩展、测试与构建 |
 | [`../deploy/README.md`](../deploy/README.md) | 生产部署、CI/CD、密钥、TLS 与回滚 |
-| [`../tool/README.md`](../tool/README.md) | 多设备接入 Agent 的构建、运行、配置热加载、Windows 托盘、本机/中心 WebSocket 协议、spool 与验证说明 |
-| [`../tool/DEVICE_AGENT_DESIGN.md`](../tool/DEVICE_AGENT_DESIGN.md) | 多设备接入 Agent（串口/TCP/文件 → WebSocket）架构、按设备解析插件、消息协议、可靠性与实施计划（P0 MVP、中心 wsClient/spool、配置热加载和 Windows 托盘已实现；Windows 服务、平台中心网关、解析插件与 P2 能力待实施） |
-| [`../tool/DEVICE_AGENT_UI_DESIGN.md`](../tool/DEVICE_AGENT_UI_DESIGN.md) | DeviceAgent WinUI3 一体化托盘宿主、数据源配置管理、JS 解析脚本（Jint 沙箱）、页面结构与关键 XAML 骨架设计（未实施） |
+| [`../tool/README.md`](../tool/README.md) | 多设备接入 Agent 的构建、运行、配置热加载、WinUI3 托盘宿主、本机/中心 WebSocket 协议、spool 与验证说明 |
+| [`../tool/DEVICE_AGENT_DESIGN.md`](../tool/DEVICE_AGENT_DESIGN.md) | 多设备接入 Agent（串口/TCP/文件 → WebSocket）架构、按设备解析插件、消息协议、可靠性与实施计划（P0 MVP、中心 wsClient/spool、配置热加载、WinUI3 宿主外壳已实现；Windows 服务、平台中心网关、解析插件与 P2 能力待实施） |
+| [`../tool/DEVICE_AGENT_UI_DESIGN.md`](../tool/DEVICE_AGENT_UI_DESIGN.md) | DeviceAgent WinUI3 一体化托盘宿主、数据源配置管理、JS 解析脚本（Jint 沙箱）、页面结构与关键 XAML 骨架设计（宿主外壳 P0 已实施，P1 页面未实施） |
 | [`../AGENTS.md`](../AGENTS.md) | AI 编码协作规则与文档同步要求 |
 | [`../CLAUDE.md`](../CLAUDE.md) | Claude Code 仓库入口与快速命令 |
 

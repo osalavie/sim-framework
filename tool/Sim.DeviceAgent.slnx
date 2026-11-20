@@ -1,9 +1,23 @@
 <Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <Platform Name="x64" />
+  </Configurations>
   <Folder Name="/src/">
-    <Project Path="src/Sim.DeviceAgent.Contracts/Sim.DeviceAgent.Contracts.csproj" />
-    <Project Path="src/Sim.DeviceAgent/Sim.DeviceAgent.csproj" />
+    <Project Path="src/Sim.DeviceAgent.App/Sim.DeviceAgent.App.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="src/Sim.DeviceAgent.Contracts/Sim.DeviceAgent.Contracts.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="src/Sim.DeviceAgent.Core/Sim.DeviceAgent.Core.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/Sim.DeviceAgent.Tests/Sim.DeviceAgent.Tests.csproj" />
+    <Project Path="tests/Sim.DeviceAgent.Tests/Sim.DeviceAgent.Tests.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
   </Folder>
 </Solution>

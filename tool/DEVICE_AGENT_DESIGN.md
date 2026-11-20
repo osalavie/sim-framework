@@ -1,10 +1,10 @@
 # 设备接入 Agent（多设备：串口/TCP/文件 → WebSocket）设计方案
 
-> 状态：P0 MVP、中心 `wsClient`/spool、配置热加载和 Windows 托盘已实现（2026-11-16）；Windows 服务/自启动、平台侧中心网关与 P2 能力待实施。当前宿主目标为 `net10.0-windows`，本机模式不需要 TLS 和令牌。实现范围与运行方式见 [`README.md`](README.md) 与第 17 节。
+> 状态：P0 MVP、中心 `wsClient`/spool、配置热加载已实现（2026-11-16）；WinUI3 一体化托盘宿主 P0 已实施（2026-11-20），工程拆分为 Core 类库与 WinUI3 应用。Windows 服务/自启动、平台侧中心网关与 P2 能力待实施。当前宿主为 Windows 专用，本机模式不需要 TLS 和令牌。实现范围与运行方式见 [`README.md`](README.md) 与第 17 节。
 >
 > 设计日期：2026-11-16
 >
-> 桌面端设计：[`DEVICE_AGENT_UI_DESIGN.md`](DEVICE_AGENT_UI_DESIGN.md)（WinUI3 一体化托盘宿主、数据源配置管理、JS 解析脚本与开机启动；未实施）。
+> 桌面端设计：[`DEVICE_AGENT_UI_DESIGN.md`](DEVICE_AGENT_UI_DESIGN.md)（WinUI3 一体化托盘宿主、数据源配置管理、JS 解析脚本与开机启动；宿主外壳 P0 已实施，P1 页面未实施）。
 >
 > 适用范围：新增根级 `tool/` 目录；与 `api`、`web` 的集成边界见第 12 节。
 >
@@ -406,7 +406,7 @@ Die 推力测试数据（同一上位机、不同解析插件）：
 ## 9. 部署与运维
 
 - 发布形态：`dotnet publish` 单文件自包含 `win-x64`（可裁剪），同时提供框架依赖版用于内网统一运行时环境。
-- 安装形态：当前为 Windows 控制台进程 + 进程内托盘（打开状态/配置、重载配置、退出）；Windows 服务形态待实施。
+- 安装形态：当前为 WinUI3 桌面应用（原生 Win32 `Shell_NotifyIcon` 托盘，关闭窗口驻留托盘）；Windows 服务形态待实施。
 - 自启动：Windows 服务与登录自启待实施。
 - 升级：P2 引入签名升级包与中心下发；升级前备份配置与 spool，失败自动回滚上一版本。
 - 日志：结构化 JSON 行，按天/大小滚动，本地保留 14 天；关键事件包括连接状态、配置变更、事务结果、spool 水位。
@@ -444,12 +444,13 @@ tool/
 ├── DEVICE_AGENT_DESIGN.md          # 本文档
 ├── Sim.DeviceAgent.slnx            # 独立解决方案，不加入 api/Sim.slnx
 ├── src/
-│   ├── Sim.DeviceAgent/            # Worker 宿主、配置、管理 API、本机 WebSocket
+│   ├── Sim.DeviceAgent.App/        # WinUI3 宿主：概览页、Shell_NotifyIcon 托盘、单实例
+│   ├── Sim.DeviceAgent.Core/       # 类库：配置、源、编解码、运行时、spool、本机 WebSocket、Hosting
 │   ├── Sim.DeviceAgent.Contracts/  # 消息信封、配置模型、插件契约
-│   ├── Sim.DeviceAgent.Sources/    # serial / tcp / udp / file 适配器
-│   ├── Sim.DeviceAgent.Codecs/     # 帧切分与解析器
-│   ├── Sim.DeviceAgent.Sinks/      # ws-server / ws-client / http / spool
-│   └── Sim.DeviceAgent.PluginHost/ # 解析插件与厂商 SDK 插件宿主
+│   ├── Sim.DeviceAgent.Sources/    # serial / tcp / udp / file 适配器（后续拆出）
+│   ├── Sim.DeviceAgent.Codecs/     # 帧切分与解析器（后续拆出）
+│   ├── Sim.DeviceAgent.Sinks/      # ws-server / ws-client / http / spool（后续拆出）
+│   └── Sim.DeviceAgent.PluginHost/ # 解析插件与厂商 SDK 插件宿主（后续）
 ├── plugins/                        # 设备专用解析器插件（按设备独立发布）
 │   └── Sim.DeviceAgent.Plugin.Sample/
 └── tests/
@@ -572,14 +573,14 @@ tool/
 | 跨重启设备序号 | 已实现 | `stateDirectory/sequences.json` 按设备预留 100000 序号块，重启跳块避免序号复用，允许空洞 |
 | 平台侧中心网关 | 未实现 | 当前缺少接收端点、去重入库、在线状态与业务转发；Agent 只定义了 `hello` / `data` / `ack` / `heartbeat` 协议 |
 | 解析插件 / 厂商 SDK 插件 | 未实现 | `plugin` codec 会被启动校验拒绝 |
-| WinUI3 桌面端 / JS 解析脚本 | 未实现 | 一体化托盘宿主、设备数据源与脚本管理页面、Jint 沙箱解析；设计见 [`DEVICE_AGENT_UI_DESIGN.md`](DEVICE_AGENT_UI_DESIGN.md) |
+| WinUI3 桌面端 / JS 解析脚本 | 部分实现 | 宿主外壳 P0 已实施：Core 拆分、Shell_NotifyIcon 托盘、单实例、概览页；设备数据源与脚本管理页面、Jint 沙箱解析待 P1，设计见 [`DEVICE_AGENT_UI_DESIGN.md`](DEVICE_AGENT_UI_DESIGN.md) |
 | 配置热加载 | 已实现 | 文件监听 0.4 秒防抖、`POST /api/config/reload`、托盘手动重载；校验失败保留旧配置；`agent.id`、状态目录、本机监听端口等字段要求重启 |
-| Windows 托盘 | 已实现 | 打开状态页、打开配置、重新加载配置、退出；托盘失败不阻止 Agent 运行 |
-| Windows 服务 / 开机自启 / 自动升级 | 未实现 | 当前为 Windows 控制台进程 + 托盘，控制台不隐藏 |
+| Windows 托盘 | 已实现 | WinUI3 宿主内的原生 Win32 `Shell_NotifyIcon`：打开主界面、打开配置、重新加载配置、退出；关闭窗口最小化到托盘；托盘失败不阻止 Agent 运行 |
+| Windows 服务 / 开机自启 / 自动升级 | 未实现 | 当前为 WinUI3 托盘应用，关闭窗口后驻留托盘 |
 | 宿主目标 | `net10.0-windows` | 本机模式不需要 TLS 和令牌；跨平台宿主后续拆分 |
 | `tcpServer` / `udp` / HTTP / MQTT | 未实现 | 后续阶段 |
 | `file-state.json` 持久化 | 未实现 | MVP 使用归档移动 + 进程内去重，极端窗口内可能重复处理 |
 
 设计边界：源与设备固定 1:1，不支持共享源 `demux`。若现场一条物理链路确实承载多台设备（RS-485 多从站、聚合器多工位），由设备侧网关/前置采集器拆分后接入。
 
-验证：`dotnet test tool/Sim.DeviceAgent.slnx` 当前 35 个测试通过，覆盖编解码、配置校验（含两个示例配置、空令牌与可选中心令牌）、文件源、命令事务、设备订阅、信封序列化、序号跨重启、spool 顺序/未确认回放/重启水位恢复/活动分段续读/配额、运行时配置重载与需重启字段拒绝，以及带 ack 的模拟中心 WebSocket 集成。真实进程冒烟验证了：无令牌访问状态接口、修改配置后自动重建通道、修改端口被拒绝并保留旧监听、托盘图标启动、CSV → 通道 → spool、中心断线 pending 计数和重启后序号延续。尚未与平台侧真实中心网关联调，因为该网关未实现。
+验证：`dotnet test tool/Sim.DeviceAgent.slnx` 当前 38 个测试通过，覆盖编解码、配置校验（含两个示例配置、空令牌与可选中心令牌）、配置路径解析、文件源、命令事务、设备订阅、信封序列化、序号跨重启、spool 顺序/未确认回放/重启水位恢复/活动分段续读/配额、运行时配置重载与需重启字段拒绝，以及带 ack 的模拟中心 WebSocket 集成。真实进程冒烟验证了：无令牌访问状态接口、修改配置后自动重建通道、修改端口被拒绝并保留旧监听、WinUI3 主窗口启动、托盘隐藏窗口注册、单实例唤醒、关闭窗口最小化到托盘、CSV → 通道 → spool、中心断线 pending 计数和重启后序号延续。尚未与平台侧真实中心网关联调，因为该网关未实现。

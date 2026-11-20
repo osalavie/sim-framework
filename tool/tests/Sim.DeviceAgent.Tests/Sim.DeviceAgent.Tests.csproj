@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
@@ -16,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Sim.DeviceAgent\Sim.DeviceAgent.csproj" />
+    <ProjectReference Include="..\..\src\Sim.DeviceAgent.Core\Sim.DeviceAgent.Core.csproj" />
     <ProjectReference Include="..\..\src\Sim.DeviceAgent.Contracts\Sim.DeviceAgent.Contracts.csproj" />
   </ItemGroup>
 

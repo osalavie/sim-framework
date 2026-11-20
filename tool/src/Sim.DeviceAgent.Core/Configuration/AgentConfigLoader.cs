@@ -8,6 +8,8 @@ public static class AgentConfigLoader
     public const string TokenEnvironmentVariable = "SIM_DEVICE_AGENT_TOKEN";
     public const string CenterTokenEnvironmentVariable = "SIM_DEVICE_AGENT_CENTER_TOKEN";
 
+    public static string ProgramDirectory { get; } = ResolveProgramDirectory();
+
     public static AgentConfig Load(string path)
     {
         var fullPath = Path.GetFullPath(path);
@@ -69,7 +71,26 @@ public static class AgentConfigLoader
         }
 
         return Environment.GetEnvironmentVariable(ConfigPathEnvironmentVariable)
-               ?? Path.Combine(AppContext.BaseDirectory, "agent.json");
+               ?? Path.Combine(ProgramDirectory, "agent.json");
+    }
+
+    private static string ResolveProgramDirectory()
+    {
+        // For single-file bundles AppContext.BaseDirectory is the %TEMP%\.net extraction
+        // directory; Environment.ProcessPath keeps pointing at the actual executable.
+        var processPath = Environment.ProcessPath;
+        if (!string.IsNullOrEmpty(processPath))
+        {
+            var directory = Path.GetDirectoryName(processPath);
+            var fileName = Path.GetFileNameWithoutExtension(processPath);
+            if (!string.IsNullOrEmpty(directory) &&
+                !string.Equals(fileName, "dotnet", StringComparison.OrdinalIgnoreCase))
+            {
+                return directory;
+            }
+        }
+
+        return AppContext.BaseDirectory;
     }
 
     private static void ResolveRelativeDirectories(AgentConfig config, string baseDirectory)

@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>Sim.DeviceAgent.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <UseWinUI>true</UseWinUI>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <PublishSingleFile>false</PublishSingleFile>
+    <KeepWinUIMuiCultures>zh-CN;en-us</KeepWinUIMuiCultures>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sim.DeviceAgent.Core\Sim.DeviceAgent.Core.csproj" />
+  </ItemGroup>
+
+  <!-- WinUI ships native MUI resources for ~79 cultures; keep only the configured set. -->
+  <UsingTask
+      TaskName="Sim_RemoveUnneededMuiFolders"
+      TaskFactory="RoslynCodeTaskFactory"
+      AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <PublishDirectory ParameterType="System.String" Required="true" />
+      <KeepCultures ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Linq" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+      var root = Path.GetFullPath(PublishDirectory);
+      if (!Directory.Exists(root))
+      {
+          return true;
+      }
+
+      var keep = new System.Collections.Generic.HashSet<string>(
+          (KeepCultures ?? string.Empty).Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries),
+          StringComparer.OrdinalIgnoreCase);
+
+      foreach (var directory in Directory.GetDirectories(root))
+      {
+          if (keep.Contains(Path.GetFileName(directory)))
+          {
+              continue;
+          }
+
+          var files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
+          if (files.Length > 0 && files.All(file => file.EndsWith(".mui", StringComparison.OrdinalIgnoreCase)))
+          {
+              Directory.Delete(directory, true);
+          }
+      }
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="TrimWinUIMuiLanguages" AfterTargets="Publish">
+    <Sim_RemoveUnneededMuiFolders
+        PublishDirectory="$(PublishDir)"
+        KeepCultures="$(KeepWinUIMuiCultures)" />
+  </Target>
+</Project>

@@ -1,6 +1,6 @@
 # DeviceAgent WinUI3 桌面端设计（设备数据源与 JS 解析脚本）
 
-> 状态：设计稿，未实施（2026-11-16）。宿主形态已确定：现有控制台 + WinForms 托盘改为 **WinUI3 一体化托盘应用**，界面、托盘与采集运行时同进程；关闭主窗口默认最小化到托盘，可设置开机启动。
+> 状态：P0 已实施（2026-11-20）——Core/App 工程拆分、WinUI3 壳、原生 Win32 `Shell_NotifyIcon` 托盘、单实例、概览页；P1 页面（配置编辑、脚本、实时数据、日志）未实施。宿主形态已确定：现有控制台 + WinForms 托盘改为 **WinUI3 一体化托盘应用**，界面、托盘与采集运行时同进程；关闭主窗口默认最小化到托盘，可设置开机启动。
 >
 > 关联：[`DEVICE_AGENT_DESIGN.md`](DEVICE_AGENT_DESIGN.md)（采集链路与协议基线）、[`README.md`](README.md)（当前实现与运行方式）。
 >
@@ -13,6 +13,7 @@
 | 决策项 | 结论 |
 | --- | --- |
 | 宿主形态 | WinUI3 一体化宿主：UI、托盘、采集运行时在同一个 `Sim.DeviceAgent.App.exe` 进程内 |
+| 托盘实现 | 原生 Win32 `Shell_NotifyIconW` + 隐藏顶层窗口接收回调（可接收 `TaskbarCreated` 广播），菜单用 `TrackPopupMenu`；不引入 H.NotifyIcon 等第三方托盘包 |
 | 窗口行为 | 关闭主窗口默认最小化到托盘；只有托盘“退出”或设置页显式退出才结束进程 |
 | 开机启动 | 设置页开关，写入 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`；带 `--autostart` 启动时只驻留托盘 |
 | 配置事实 | 继续以 `agent.json` 为唯一运行配置；UI 结构化编辑后原子写回并触发现有热加载 |
@@ -50,7 +51,7 @@
 │  │ WebView2 + Monaco（脚本）   │           │ Sinks：wsServer/wsClient/spool │ │
 │  └─────────────────────────────┘           │ ConfigWatcher / Reloader       │ │
 │                                            │ 本机 /ws、/api/status          │ │
-│  H.NotifyIcon 托盘                          └────────────────────────────────┘ │
+│  Shell_NotifyIcon 托盘                       └────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────────────────────────┘
           │                                                     │
           ▼                                                     ▼
@@ -85,15 +86,15 @@ tool/src/
 ```
 
 - 命名空间继续使用 `Sim.DeviceAgent.*`，便于与现有代码和文档对齐。
-- `Sim.DeviceAgent.slnx` 由两个工程变为三个工程；`Directory.Packages.props` 增加 WinUI、Jint、WebView2、托盘包。
+- `Sim.DeviceAgent.slnx` 由两个工程变为三个工程；`Directory.Packages.props` 增加 WinUI、Jint、WebView2；托盘直接调用 Win32 `Shell_NotifyIcon`，不引入第三方托盘包。
 
 ### 2.3 启动、单实例与退出
 
 启动顺序：
 
-1. 解析命令行：`--config <path>`；未指定时读 `SIM_DEVICE_AGENT_CONFIG`；再回退到应用数据目录的 `agent.json`。
+1. 解析命令行：`--config <path>`；未指定时读 `SIM_DEVICE_AGENT_CONFIG`；再回退到程序所在目录的 `agent.json`。
 2. 读取 `ui-settings.json`（窗口尺寸、主题、关闭行为、上次页面）。
-3. 注册单实例键（Windows App SDK `AppInstance`）；已有实例则激活其主窗口并退出当前进程。若目标 Windows App SDK 版本对非打包单实例支持不完整，使用命名 Mutex + 命名管道兜底。
+3. 注册单实例：P0 使用命名 Mutex + 命名管道（第二实例发送 `SHOW` 唤醒主实例窗口）；打包形态可改用 Windows App SDK `AppInstance` 重定向激活。
 4. 在后台启动运行时宿主（Kestrel + 通道）；同时创建主窗口。
 5. 配置校验失败时**不退出进程**：主窗口直接打开“配置错误”状态（InfoBar + 错误列表 + 打开配置文件/重新加载按钮），运行时保持停止。
 6. 带 `--autostart` 启动时不显示主窗口，只创建托盘；托盘菜单可打开主界面。
@@ -731,7 +732,7 @@ function parse(input) {
 | `SourceProbe` | 新增 | 未绑定源限时监听测试 |
 | `StartupRegistration` | 新增 | HKCU Run 读写与路径校验 |
 | `UiSettingsStore` | 新增 | `ui-settings.json` 读写 |
-| 单实例 | 新增 | `AppInstance` 重定向激活 |
+| 单实例 | 新增 | P0：命名 Mutex + 命名管道；打包形态可改用 `AppInstance` 重定向激活 |
 | 测试 | 修改 | 项目引用 Core；新增脚本沙箱、配置路径、ViewModel 测试 |
 
 保留不变：`Contracts` 消息信封、本机 WebSocket 协议、中心 `wsClient` 与 spool、命令事务、序号持久化、配置热加载语义。
@@ -758,7 +759,6 @@ function parse(input) {
 | --- | --- |
 | Windows App SDK（稳定版，支持当前 .NET） | WinUI3、Mica、AppWindow、AppInstance |
 | CommunityToolkit.Mvvm | ObservableObject、RelayCommand |
-| H.NotifyIcon.WinUI | 托盘图标与菜单 |
 | Microsoft.Web.WebView2 | Monaco 编辑器宿主 |
 | Jint | JS 解析脚本引擎 |
 | Microsoft.Extensions.Hosting / ASP.NET Core FrameworkReference | 进程内 Generic Host 与 Kestrel |
@@ -766,7 +766,7 @@ function parse(input) {
 
 - 非打包部署（`WindowsPackageType=None`），避免 MSIX 对文件路径、串口与开机启动的限制。
 - WebView2 使用 Evergreen Runtime；工业内网需随安装包提供离线安装器或预装说明。
-- 托盘库固定一个，避免同时引入 WinUIEx 与 H.NotifyIcon 造成生命周期冲突。
+- 托盘不引入第三方库，统一由 Win32 `Shell_NotifyIconW` 封装：隐藏顶层窗口（不显示，可接收 `TaskbarCreated` 广播）接收 `WM_APP` 回调，Explorer 重启后重新添加图标；菜单用 `TrackPopupMenu` 在光标处弹出，左键双击显示/激活主窗口。托盘对象不依赖 WinUI 窗口生命周期，主窗口关闭后图标仍在。
 
 ### 8.2 MVVM 与线程
 
@@ -1225,7 +1225,7 @@ function parse(input) {
 | Q-UI-02 | 工业内网是否统一预装 WebView2 Evergreen Runtime？ | 建议随安装包提供离线安装器，并保留外部编辑器降级 |
 | Q-UI-03 | 安装按当前用户还是全用户？是否需要提权运行？ | P1 当前用户免提权；全用户/服务化留 P2 |
 | Q-UI-04 | 脚本编辑权限与审计要求（谁能改线边脚本）？ | 建议由 Windows 文件 ACL 控制，日志记录 SHA-256 与变更 |
-| Q-UI-05 | 托盘库最终选型？ | 建议 H.NotifyIcon.WinUI，若与 Windows App SDK 版本冲突再评估 WinUIEx |
+| Q-UI-05 | 托盘库最终选型？ | 已定：原生 Win32 `Shell_NotifyIcon`，不引入第三方托盘库 |
 | Q-UI-06 | 自定义切帧与流式大文件何时进入脚本能力？ | P2；P1 保持分隔符切帧 + 整文件解析 |
 | Q-UI-07 | 平台中心管理页上线后，本机 UI 的定位？ | 本机 UI 保留为现场配置与诊断入口，中心页做车队总览 |
 | Q-UI-08 | UI 是否需要中英双语？ | 首期中文；资源以 resw 组织，后续可扩展 |

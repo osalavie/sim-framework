@@ -23,7 +23,7 @@ public sealed class ConfigPathTests
 
             var path = AgentConfigLoader.ResolveConfigPath([]);
 
-            Assert.Equal(Path.Combine(AppContext.BaseDirectory, "agent.json"), path);
+            Assert.Equal(Path.Combine(AgentConfigLoader.ProgramDirectory, "agent.json"), path);
         }
         finally
         {

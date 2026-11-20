@@ -2,4 +2,4 @@ agent.json
 data/
 *.log
 .smoke-*/
-src/Sim.DeviceAgent/Properties/
+src/**/Properties/

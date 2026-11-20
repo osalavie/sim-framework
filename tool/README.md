@@ -1,10 +1,10 @@
 # Sim.DeviceAgent
 
-一台上位机并行接入多台设备的采集转发 Agent。P0 MVP 已实现，设计基线见 [`DEVICE_AGENT_DESIGN.md`](DEVICE_AGENT_DESIGN.md)。
+一台上位机并行接入多台设备的采集转发 Agent。采集运行时 P0 MVP 已实现，设计基线见 [`DEVICE_AGENT_DESIGN.md`](DEVICE_AGENT_DESIGN.md)。
 
-桌面端（WinUI3 一体化托盘宿主、数据源配置管理、JS 解析脚本与开机启动）设计见 [`DEVICE_AGENT_UI_DESIGN.md`](DEVICE_AGENT_UI_DESIGN.md)，尚未实施。
+桌面端 WinUI3 一体化托盘宿主 P0 已实施（2026-11-20）：工程拆分为 `Sim.DeviceAgent.Core` 类库与 `Sim.DeviceAgent.App` WinUI3 应用，原生 Win32 `Shell_NotifyIcon` 托盘、单实例和概览页可用。配置编辑、JS 解析脚本、实时数据与日志页面按 [`DEVICE_AGENT_UI_DESIGN.md`](DEVICE_AGENT_UI_DESIGN.md) 设计，尚未实施。
 
-> 状态：P0 MVP、中心上报、配置热加载和 Windows 托盘已实现（2026-11-16）。当前宿主目标为 `net10.0-windows`，面向单台上位机本机使用：本机 WebSocket 仅回环监听，令牌可留空，不需要 TLS。解析插件、Windows 服务/开机自启和自动升级待后续阶段。平台侧中心网关尚未实现。
+> 状态：采集运行时 P0 MVP、中心上报和配置热加载已实现（2026-11-16）；WinUI3 桌面壳 P0 已实施（2026-11-20）。当前宿主面向单台上位机本机使用：本机 WebSocket 仅回环监听，令牌可留空，不需要 TLS。解析插件、Windows 服务/开机自启和自动升级待后续阶段。平台侧中心网关尚未实现。
 >
 > 拓扑关系：一个 Agent 进程对应一台上位机，可同时承载多台设备；每台设备使用独立的串口、TCP 连接或文件目录，不共用链路。因此源与设备固定 1:1，不需要 demux。
 
@@ -18,7 +18,8 @@
 - 按设备 spool：追加式 JSONL 分段、发送前落盘、中心 ack 后推进水位并删除分段、断线/重启后重放未确认数据。
 - 跨重启设备序号：按设备预留 100000 个序号块，重启跳到下一个块，避免复用序号（允许出现序号空洞）。
 - 配置热加载：保存配置文件后自动校验并重建通道/出口；需重启的字段会被明确拒绝。托盘和 `POST /api/config/reload` 也可手动触发。
-- Windows 托盘：打开状态页、打开配置文件、重新加载配置、退出；托盘不可用时 Agent 继续运行。
+- WinUI3 桌面壳：`Sim.DeviceAgent.App` 承载原生 Win32 `Shell_NotifyIcon` 托盘、单实例（命名 Mutex + 命名管道）和概览页；关闭窗口默认最小化到托盘，`--autostart` 启动时仅驻留托盘。
+- Windows 托盘菜单：打开主界面、打开配置文件、重新加载配置、退出；托盘初始化失败时 Agent 继续运行。
 - 管理接口：`/health` 匿名存活检查，`/api/status` 匿名返回通道、出口和最近一次配置重载状态。
 
 ## 尚未实现
@@ -27,8 +28,9 @@
 - 解析器插件与厂商 SDK 插件。
 - 中心设备凭据换短期令牌；当前中心出口使用可选静态 Bearer 令牌。
 - spool 按天滚动、保留期清理与全局配额；当前只按设备大小滚动和限流。
-- Windows 服务、开机自启、托盘隐藏控制台、自动升级。
-- 跨平台宿主与 Linux 服务；当前宿主为 `net10.0-windows`。
+- Windows 服务、开机自启和自动升级。
+- WinUI3 配置编辑、解析脚本、实时数据与日志页面（P1）；当前桌面壳只提供概览与托盘。
+- 跨平台宿主与 Linux 服务；当前宿主为 Windows 专用。
 - `tcpServer`、`udp`、HTTP/MQTT 出口、MQTT 采样聚合。
 - 文件处理状态持久化：当前使用归档移动 + 进程内去重；重启后若文件未归档可能在极端窗口内重复处理。
 
@@ -40,31 +42,53 @@ dotnet build Sim.DeviceAgent.slnx
 dotnet test Sim.DeviceAgent.slnx
 ```
 
-需要 Windows 10/11 与 .NET 10 SDK（包含 Windows Desktop 组件）。宿主和测试目标均为 `net10.0-windows`。
+需要 Windows 10 1809 及以上与 .NET 10 SDK；首次构建会还原 Windows App SDK（`Microsoft.WindowsAppSDK`）包。Core 与测试目标为 `net10.0-windows`，桌面宿主为 `net10.0-windows10.0.19041.0`（x64）。
 
 ## 运行
 
-1. 复制示例配置并按现场修改：
+1. 构建：
 
 ```bash
-cp agent.example.json agent.json
+cd tool
+dotnet build Sim.DeviceAgent.slnx
 ```
 
-2. 启动：
+2. 复制示例配置到应用输出目录并按现场修改：
 
 ```bash
-dotnet run --project src/Sim.DeviceAgent -- --config agent.json
+cp agent.example.json src/Sim.DeviceAgent.App/bin/x64/Debug/net10.0-windows10.0.19041.0/win-x64/agent.json
 ```
 
-配置路径按以下顺序确定：命令行 `--config <path>`（或 `-c`、`--config=<path>`）→ 环境变量 `SIM_DEVICE_AGENT_CONFIG` → **程序所在目录下的 `agent.json`**（即 exe 所在目录；`dotnet run` 调试时为 `bin/Debug/net10.0-windows/`，此时需用 `--config` 指定仓库中的配置）。配置中的相对目录按配置文件所在目录解析。
+3. 启动桌面应用：
 
-启动后 Windows 托盘出现 `Device Agent` 图标；本机可直接访问：
+```bash
+./src/Sim.DeviceAgent.App/bin/x64/Debug/net10.0-windows10.0.19041.0/win-x64/Sim.DeviceAgent.App.exe
+```
+
+配置路径按以下顺序确定：命令行 `--config <path>`（或 `-c`、`--config=<path>`）→ 环境变量 `SIM_DEVICE_AGENT_CONFIG` → **程序所在目录下的 `agent.json`**（即 exe 所在目录；单文件发布时同样取实际 exe 所在目录，而不是 `%TEMP%\.net` 自解压目录）。配置中的相对目录按配置文件所在目录解析。带 `--autostart` 启动时只创建托盘，不显示主窗口。
+
+启动后主窗口显示通道/出口状态，Windows 托盘出现 `Device Agent` 图标；本机可直接访问：
 
 - `GET http://127.0.0.1:18080/health`
 - `GET http://127.0.0.1:18080/api/status`
 - `ws://127.0.0.1:18080/ws`（WebSocket）
 
 本机默认不需要令牌。只有显式设置 `agent.localWs.token` 时才要求 `hello.token`；也可用 `SIM_DEVICE_AGENT_TOKEN` 覆盖配置值。中心出口的 `SIM_DEVICE_AGENT_CENTER_TOKEN` 同样只在配置了 `wsClient` 且需要鉴权时使用。
+
+## 发布
+
+WinUI3 官方推荐目录发布（含 Windows App SDK 运行时，目标机无需预装）：
+
+```bash
+dotnet publish src/Sim.DeviceAgent.App -c Release --self-contained true
+```
+
+发布时会裁剪本地化资源，避免生成几十个语言文件夹：
+
+- .NET 卫星资源由 `SatelliteResourceLanguages` 控制，当前保留 `en`、`zh-Hans`。
+- WinUI 原生 MUI 语言目录由 `KeepWinUIMuiCultures` 控制，当前只保留 `zh-CN`、`en-us`，其余目录在发布后自动删除。
+
+输出目录中的 `Sim.DeviceAgent.App.exe` 可直接运行；现场配置 `agent.json` 放在 exe 旁即可。也可以追加 `-p:PublishSingleFile=true` 发布单文件 exe（启动时自解压到 `%TEMP%\.net`，语言资源随包内嵌、不产生语言文件夹；配置仍按 exe 所在目录解析）。
 
 ## 配置要点
 
@@ -128,16 +152,16 @@ curl -X POST http://127.0.0.1:18080/api/config/reload
 
 配置文件语法错误、校验失败或修改了需重启字段时，当前运行配置保持不变，`/api/status` 的 `config.lastError` 给出原因。重载期间通道会短暂停止再启动；文件源依赖归档移动防止重复处理，进程内 SHA-256 去重集合会重建。
 
-## Windows 托盘
+## Windows 托盘与主窗口
 
-托盘菜单：
+托盘菜单（左键双击托盘图标同样打开主界面）：
 
-- **打开状态**：浏览器打开 `http://127.0.0.1:<port>/api/status`。
+- **打开主界面**：显示并激活 WinUI3 主窗口（概览页）。
 - **打开配置文件**：用系统默认程序打开当前 `agent.json`。
 - **重新加载配置**：与文件监听使用同一重载入口；成功/失败通过托盘气泡提示。
-- **退出**：优雅停止 Agent。
+- **退出**：优雅停止 Agent 后结束进程。
 
-当前托盘仍在控制台进程中运行，控制台窗口不会隐藏；Windows 服务、开机自启和隐藏控制台属于后续阶段。无桌面会话或托盘初始化失败时，Agent 继续提供 WebSocket 与状态接口。
+关闭主窗口默认最小化到托盘，不退出进程；再次启动 exe 时由单实例机制唤醒已运行实例的窗口。进程退出只能通过托盘菜单“退出”。托盘初始化失败时 Agent 继续采集并提供 WebSocket 与状态接口。
 
 ## WebSocket 协议
 
@@ -252,7 +276,7 @@ Agent 在超时内收到匹配帧后返回 `response`（`ok=true`）；超时返
 - spool 包含设备原始帧，应限制 `stateDirectory` 和 `spoolDirectory` 的 ACL，只允许运行 Agent 的账号与本机管理员读取。
 - 中心 ack 是释放 spool 的唯一条件；中心未实现 ack 时不得把 `wsClient` 作为唯一数据留存链路。
 - Agent 进程仍在运行时，断线数据进入 spool；进程停止期间数据不保证补传。
-- Windows 服务、开机自启、静默升级和隐藏控制台尚未实现；当前以带托盘的 Windows 控制台进程运行。
+- Windows 服务、开机自启、静默升级尚未实现；当前以 WinUI3 托盘应用运行，关闭窗口后驻留托盘。
 
 ## 目录
 
@@ -265,14 +289,15 @@ tool/
 ├── Sim.DeviceAgent.slnx
 ├── src/
 │   ├── Sim.DeviceAgent.Contracts/  # 消息信封、SourceRef、JSON 选项
-│   └── Sim.DeviceAgent/
-│       ├── Configuration/          # 配置模型、校验、热加载与文件监听
-│       ├── Sources/                # serial / tcpClient / file
-│       ├── Codecs/                 # delimiter / passthrough / csv
-│       ├── Runtime/                # 多设备通道、出口、跨重启序号
-│       ├── Spool/                  # 按设备 JSONL 分段与确认水位
-│       ├── Tray/                   # Windows 托盘
-│       └── WebSockets/             # 本机 WebSocket 服务
+│   ├── Sim.DeviceAgent.Core/       # 类库：配置、源、编解码、运行时、spool、本机 WebSocket
+│   │   ├── Configuration/          # 配置模型、校验、热加载与文件监听
+│   │   ├── Hosting/                # 可嵌入运行时宿主（Kestrel + 通道装配）
+│   │   ├── Sources/                # serial / tcpClient / file
+│   │   ├── Codecs/                 # delimiter / passthrough / csv
+│   │   ├── Runtime/                # 多设备通道、出口、跨重启序号
+│   │   ├── Spool/                  # 按设备 JSONL 分段与确认水位
+│   │   └── WebSockets/             # 本机 WebSocket 服务
+│   └── Sim.DeviceAgent.App/        # WinUI3 宿主：概览页、Shell_NotifyIcon 托盘、单实例
 └── tests/
-    └── Sim.DeviceAgent.Tests/      # 35 个单元/集成测试
+    └── Sim.DeviceAgent.Tests/      # 38 个单元/集成测试
 ```
