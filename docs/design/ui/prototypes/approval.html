@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>审批中心 · SimApp</title>
+<meta name="description" content="SimApp 审批中心 · 待办、流程轨迹与审批操作">
+<link rel="stylesheet" href="assets/ui.css">
+</head>
+<body data-shell="app" data-page="approval" data-title="审批中心">
+<a class="skip-link" href="#main">跳到主要内容</a>
+<div class="shell" id="shell">
+  <div class="shell__main">
+    <main class="page" id="main">
+
+      <div class="page-head" data-od-id="approval-head">
+        <div class="page-head__main">
+          <span class="kicker">流程 · 审批工作台</span>
+          <h1>审批中心</h1>
+          <p>左侧是待办队列，右侧展示业务单据、审批意见与完整流程轨迹。所有操作都会写入审计日志。</p>
+        </div>
+        <div class="page-head__actions">
+          <button class="btn btn--ghost" type="button" data-toast="已导出当前队列（CSV）">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M4 19h16"/></svg>
+            导出队列
+          </button>
+          <button class="btn btn--primary" type="button" data-new-approval data-od-id="cta-approval-new">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            发起审批
+          </button>
+        </div>
+      </div>
+
+      <section class="grid grid--3" style="margin-bottom:18px" data-od-id="approval-sla">
+        <article class="card" style="padding:15px 17px">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
+            <span class="small muted" style="font-weight:700">今日到期</span>
+            <span class="mono small">3 件</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-top:4px">
+            <b style="font-family:var(--font-display);font-size:26px;line-height:1.2">18:00</b>
+            <span class="tiny muted">最早一单</span>
+          </div>
+          <div class="dot-list" style="margin-top:8px"><span class="on">报销</span><span class="on">合同</span><span>采购</span></div>
+        </article>
+        <article class="card" style="padding:15px 17px">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
+            <span class="small muted" style="font-weight:700">平均处理时长</span>
+            <span class="mono small">4.6 h</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-top:4px">
+            <b style="font-family:var(--font-display);font-size:26px;line-height:1.2">-18%</b>
+            <span class="tiny muted">较上周</span>
+          </div>
+          <div class="progress" style="margin-top:12px"><span style="width:58%"></span></div>
+        </article>
+        <article class="card" style="padding:15px 17px;background:var(--sun-soft)">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
+            <span class="small muted" style="font-weight:700">已超时</span>
+            <span class="mono small">2 件</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-top:4px">
+            <b style="font-family:var(--font-display);font-size:26px;line-height:1.2">合规复核</b>
+          </div>
+          <p class="tiny muted" style="margin-top:6px">供应商准入已超时 1 天，建议今天优先处理。</p>
+        </article>
+      </section>
+
+      <div class="workbench" data-od-id="approval-workbench">
+        <section class="card card--flush" aria-label="审批队列">
+          <div class="card__head" style="align-items:center">
+            <div>
+              <h2>我的队列</h2>
+              <p>共 <span class="mono" id="approval-count">6</span> 件待处理</p>
+            </div>
+            <div class="card__head__side">
+              <button class="icon-btn" type="button" data-toast="队列已按到期时间重新排序" title="刷新队列" aria-label="刷新队列">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-4.5L4 9"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14 4.5L20 15"/><path d="M20 19v-4h-4"/></svg>
+              </button>
+            </div>
+          </div>
+          <div style="padding:6px 16px 0">
+            <div class="segmented" role="group" aria-label="审批筛选" style="width:100%">
+              <button type="button" data-approval-filter="待办" aria-selected="true">待办</button>
+              <button type="button" data-approval-filter="已处理" aria-selected="false">已处理</button>
+              <button type="button" data-approval-filter="全部" aria-selected="false">全部</button>
+            </div>
+          </div>
+          <div class="appr-list" id="approval-list" aria-label="审批单据列表"></div>
+        </section>
+
+        <section class="card" id="approval-detail" aria-live="polite" aria-label="审批详情">
+          <div class="empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.4"/><rect x="15" y="15" width="6" height="6" rx="1.4"/><path d="M9 6h5a4 4 0 0 1 4 4v5"/><path d="M6 9v5a4 4 0 0 0 4 4h5"/></svg>
+            <b>正在载入审批单</b>
+            <span>右侧将显示业务字段与流程轨迹</span>
+          </div>
+        </section>
+      </div>
+
+      <section class="card" style="margin-top:18px" data-od-id="approval-rules">
+        <div class="card__head">
+          <div><h2>审批规则速查</h2><p>金额与类型决定节点，规则由系统配置统一维护</p></div>
+          <a class="link small" href="settings.html">前往配置</a>
+        </div>
+        <div class="grid grid--3">
+          <div class="kv"><dt>报销 · ¥5,000 以下</dt><dd>直属主管 → 财务复核</dd></div>
+          <div class="kv"><dt>采购 · ¥10,000 以上</dt><dd>部门负责人 → 采购复核 → 财务预算校验</dd></div>
+          <div class="kv"><dt>合同 · 任意金额</dt><dd>技术负责人 → 法务审核 → 用印归档</dd></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="modal" id="action-modal" role="dialog" aria-modal="true" aria-labelledby="action-modal-title" hidden>
+  <div class="modal__head">
+    <div>
+      <h2 id="action-modal-title" data-modal-title>确认同意该审批？</h2>
+      <p data-modal-desc>差旅报销 · 上海客户拜访</p>
+    </div>
+    <button class="icon-btn" type="button" data-close aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <div class="modal__body">
+    <div class="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4.5M12 16.2v.3"/></svg>
+      <span>审批结果会立即通知申请人，并写入流程轨迹与审计日志，提交后不可撤回。</span>
+    </div>
+    <div class="field">
+      <label for="action-comment">审批意见</label>
+      <textarea class="textarea" id="action-comment" placeholder="填写同意理由或驳回原因，将同步给申请人…"></textarea>
+    </div>
+  </div>
+  <div class="modal__foot">
+    <button class="btn btn--ghost" type="button" data-close>取消</button>
+    <button class="btn btn--primary" type="button" data-modal-submit>确认同意</button>
+  </div>
+</div>
+
+<div class="modal" id="new-modal" role="dialog" aria-modal="true" aria-labelledby="new-modal-title" hidden>
+  <div class="modal__head">
+    <div>
+      <h2 id="new-modal-title">发起审批</h2>
+      <p>选择流程模板，填写必要信息后提交至第一节点</p>
+    </div>
+    <button class="icon-btn" type="button" data-close aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <div class="modal__body">
+    <div class="field">
+      <label for="new-type">流程模板</label>
+      <select class="select" id="new-type">
+        <option>报销申请 · 差旅</option>
+        <option>采购申请 · IT 外设</option>
+        <option>合同用印 · 服务类</option>
+        <option>权限开通 · 临时账号</option>
+        <option>供应商准入 · 设计资源</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="new-amount">金额 / 规模</label><input class="input" id="new-amount" type="text" placeholder="例如 ¥ 4,860.00"></div>
+      <div class="field"><label for="new-dept">费用归属</label><input class="input" id="new-dept" type="text" value="市场部 / Q4 客户拜访"></div>
+    </div>
+    <div class="field">
+      <label for="new-reason">申请事由</label>
+      <textarea class="textarea" id="new-reason" placeholder="说明背景、金额构成与期望完成时间…"></textarea>
+      <span class="field__hint">第一节点审批人将收到站内信与邮件通知。</span>
+    </div>
+  </div>
+  <div class="modal__foot">
+    <button class="btn btn--ghost" type="button" data-close>取消</button>
+    <button class="btn btn--primary" type="button" data-close data-toast="审批单已创建，已通知第一节点审批人">提交审批</button>
+  </div>
+</div>
+
+<script src="assets/ui.js"></script>
+</body>
+</html>

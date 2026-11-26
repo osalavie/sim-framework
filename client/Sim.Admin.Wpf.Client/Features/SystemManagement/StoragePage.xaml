@@ -1,0 +1,65 @@
+<UserControl x:Class="Sim.Admin.Wpf.Client.Features.SystemManagement.StoragePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:Sim.Admin.Wpf.Client.Controls"
+             xmlns:inputs="clr-namespace:Sim.Admin.Wpf.Client.Controls.Inputs">
+  <ScrollViewer Padding="16" VerticalScrollBarVisibility="Auto">
+    <StackPanel>
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+          <controls:CustomButton Content="刷新" Height="34" Margin="0,0,8,0" Click="RefreshClick"/>
+          <controls:CustomButton Content="保存配置" Variant="Primary" Height="34" Click="SaveClick"/>
+        </StackPanel>
+        <TextBlock Text="文件存储" FontSize="23" FontWeight="Bold"/>
+      </DockPanel>
+
+      <controls:CustomCard Header="存储配置" Margin="0,16,0,0">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Margin="0,0,18,0">
+            <TextBlock Text="默认提供方" FontWeight="Bold" Margin="0,0,0,6"/>
+            <inputs:CustomSelect x:Name="DefaultProvider" Height="38" Margin="0,0,0,14"/>
+            <TextBlock Text="最大上传大小（MB）" FontWeight="Bold" Margin="0,0,0,6"/>
+            <inputs:CustomInput x:Name="MaxUploadMb" Margin="0,0,0,14" AllowClear="True"/>
+            <TextBlock Text="提供方" FontWeight="Bold" Margin="0,0,0,6"/>
+            <ListBox x:Name="ProviderList" Height="250" Background="{DynamicResource PaperBrush}"
+                     Foreground="{DynamicResource InkBrush}" BorderBrush="{DynamicResource EdgeBrush}"
+                     SelectionChanged="ProviderChanged"/>
+          </StackPanel>
+          <StackPanel x:Name="ProviderEditor" Grid.Column="1">
+            <TextBlock x:Name="ProviderTitle" FontSize="18" FontWeight="Bold" Margin="0,0,0,12"/>
+            <inputs:CustomCheckBox x:Name="EnabledCheck" Content="启用此提供方" Margin="0,0,0,14"/>
+            <StackPanel x:Name="LocalFields">
+              <TextBlock Text="根路径 *" FontWeight="Bold" Margin="0,0,0,6"/>
+              <inputs:CustomInput x:Name="RootPath" AllowClear="True"/>
+            </StackPanel>
+            <StackPanel x:Name="ObjectFields">
+              <TextBlock Text="端点" FontWeight="Bold" Margin="0,0,0,6"/>
+              <inputs:CustomInput x:Name="Endpoint" Margin="0,0,0,12" AllowClear="True"/>
+              <TextBlock Text="区域 *" FontWeight="Bold" Margin="0,0,0,6"/>
+              <inputs:CustomInput x:Name="Region" Margin="0,0,0,12" AllowClear="True"/>
+              <TextBlock Text="存储桶 *" FontWeight="Bold" Margin="0,0,0,6"/>
+              <inputs:CustomInput x:Name="Bucket" Margin="0,0,0,12" AllowClear="True"/>
+              <TextBlock Text="Access Key ID *" FontWeight="Bold" Margin="0,0,0,6"/>
+              <inputs:CustomInput x:Name="AccessKeyId" Margin="0,0,0,12" AllowClear="True"/>
+              <TextBlock x:Name="SecretLabel" FontWeight="Bold" Margin="0,0,0,6"/>
+              <inputs:CustomPasswordInput x:Name="AccessKeySecret" Margin="0,0,0,12"/>
+              <TextBlock x:Name="TokenLabel" FontWeight="Bold" Margin="0,0,0,6"/>
+              <inputs:CustomPasswordInput x:Name="SessionToken" Margin="0,0,0,12"/>
+              <inputs:CustomCheckBox x:Name="ForcePathStyle" Content="强制路径样式" Margin="0,0,0,10"/>
+              <inputs:CustomCheckBox x:Name="ClearSecrets" Content="清除已保存的密钥和令牌"/>
+            </StackPanel>
+            <controls:CustomButton Content="测试连接" Height="34" HorizontalAlignment="Left"
+                                Margin="0,16,0,0" Click="TestClick"/>
+          </StackPanel>
+        </Grid>
+      </controls:CustomCard>
+
+      <TextBlock x:Name="Status" Foreground="{DynamicResource MutedBrush}"
+                 TextWrapping="Wrap" Margin="2,14,0,0"/>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

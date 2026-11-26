@@ -1,0 +1,14 @@
+<Project>
+
+  <!--
+    业务系统 NuGet 包版本清单。
+    基座仓保持为空；业务仓只在此追加业务模块新增包的 PackageVersion，不修改 Directory.Packages.props。
+    现有基座包的版本仍由 Directory.Packages.props 维护，业务仓不要在这里覆盖。
+  -->
+  <ItemGroup>
+    <!-- 示例：
+    <PackageVersion Include="Some.Business.Sdk" Version="1.2.3" />
+    -->
+  </ItemGroup>
+
+</Project>

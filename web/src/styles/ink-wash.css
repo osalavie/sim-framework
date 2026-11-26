@@ -1,0 +1,23 @@
+/**
+ * Paper Ocean · 兼容旧类名的动态效果
+ *
+ * 水墨时代的组件级样式已迁移到 styles/paper-ocean.css（Naive UI 换肤 + .po-* 组件），
+ * 这里只保留仍被存量代码引用的动效类（如 utils/inkRipple 注入的 .ink-ripple），
+ * 避免旧调用方失效。
+ */
+
+/* 视图淡入 */
+@keyframes ink-view-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ink-view-enter {
+  animation: ink-view-in 0.26s ease both;
+}

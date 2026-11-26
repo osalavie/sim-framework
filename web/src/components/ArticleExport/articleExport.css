@@ -1,0 +1,148 @@
+/**
+ * 文章导出打印样式：A4 纵向、14mm 页边距，版心固定 182mm。
+ * 纪律：只做分页与颜色修正，不改字号、行高、宽度 —— 换行位置必须与屏幕预览一致。
+ */
+@page {
+  size: A4;
+  margin: 14mm;
+}
+
+/*
+ * 纸面永远是浅色：深色主题下也要黑字白底。
+ * 设计令牌与兼容别名都在 :root 计算，因此这里必须整套重声明（别名引用当前元素的值），
+ * 只覆盖 --po-* 无法影响已解析好的 --theme-* / --admin-* 别名。
+ */
+.article-export-paper {
+  --po-bg: #fff9ee;
+  --po-bg-deep: #f9f2e3;
+  --po-paper: #ffffff;
+  --po-ink: #14284b;
+  --po-ink-soft: #4f6282;
+  --po-ink-faint: #70819f;
+  --po-line: #d9e2f1;
+  --po-accent: #2f6bff;
+  --po-accent-hover: #1b4fd6;
+  --po-accent-soft: #e7f1ff;
+  --po-danger: #c1332f;
+  --po-border: 2px solid var(--po-ink);
+  --po-shadow-card: 1px 1px 0 var(--po-ink);
+  --po-shadow-soft: 1px 1px 0 var(--po-ink);
+  --admin-canvas: var(--po-bg);
+  --theme-primary: var(--po-accent);
+  --theme-primary-hover: var(--po-accent-hover);
+  --theme-error: var(--po-danger);
+  --theme-text-base: var(--po-ink);
+  --theme-text-secondary: var(--po-ink-soft);
+  --theme-bg-base: var(--po-paper);
+  --theme-bg-secondary: var(--po-bg);
+  --theme-bg-tertiary: var(--po-bg-deep);
+  --theme-border: var(--po-line);
+  --theme-divider: var(--po-line);
+  --reader-paper: #fff9ee;
+  --reader-surface: #ffffff;
+  --reader-ink: #14284b;
+  --reader-muted: #4f6282;
+  --reader-line: #d9e2f1;
+  --reader-accent: #2f6bff;
+  --reader-accent-strong: #1b4fd6;
+  --reader-soft-accent: #e7f1ff;
+  --reader-card-shadow: none;
+
+  color-scheme: light;
+}
+
+@media print {
+  body > *:not(.article-export-root) {
+    display: none !important;
+  }
+
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .article-export-root {
+    position: static !important;
+    inset: auto !important;
+  }
+
+  .article-export-overlay {
+    position: static !important;
+    inset: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: none !important;
+  }
+
+  .article-export-dialog {
+    position: static !important;
+    display: block !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  .article-export-toolbar,
+  .article-export-loading {
+    display: none !important;
+  }
+
+  .article-export-scroll {
+    overflow: visible !important;
+    max-height: none !important;
+    padding: 0 !important;
+    background: none !important;
+  }
+
+  .article-export-paper {
+    width: 182mm !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  /* 分页控制：整块不拆的单元 */
+  .article-export-paper img,
+  .article-export-paper .canvas-node-view,
+  .article-export-paper table,
+  .article-export-paper blockquote,
+  .article-export-paper tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* 标题不与后续内容分家 */
+  .article-export-paper h1,
+  .article-export-paper h2,
+  .article-export-paper h3,
+  .article-export-paper h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* 跨页表格重复表头 */
+  .article-export-paper thead {
+    display: table-header-group;
+  }
+
+  /* 代码高亮与底色必须打出来 */
+  .article-export-paper pre,
+  .article-export-paper code,
+  .article-export-paper table,
+  .article-export-paper th {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

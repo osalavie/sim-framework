@@ -1,0 +1,7 @@
+export { createApp } from './bootstrap'
+export type { AppInstance, AppOptions } from './bootstrap'
+export { platformModules } from './platformModules'
+export { registerModuleComponents } from '@/utils/componentRegistry'
+export { registerMessagePacks } from '@/i18n/lazyPacks'
+export type { MessagePack } from '@/i18n/lazyPacks'
+export type { LayoutType, MenuConfig, ModuleConfig } from '@/types/module'

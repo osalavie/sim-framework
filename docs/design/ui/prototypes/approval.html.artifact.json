@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "redesign/approval.html",
+  "entry": "redesign/approval.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-10-22T03:47:58.545Z",
+  "updatedAt": "2026-10-22T03:47:58.545Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

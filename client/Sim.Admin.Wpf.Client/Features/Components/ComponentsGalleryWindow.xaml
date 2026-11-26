@@ -1,0 +1,289 @@
+<Window x:Class="Sim.Admin.Wpf.Client.Features.Components.ComponentsGalleryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Sim.Admin.Wpf.Client.Controls"
+        xmlns:inputs="clr-namespace:Sim.Admin.Wpf.Client.Controls.Inputs"
+        xmlns:display="clr-namespace:Sim.Admin.Wpf.Client.Controls.Display"
+        xmlns:container="clr-namespace:Sim.Admin.Wpf.Client.Controls.Container"
+        Title="Sim 组件库 · Naive UI 复刻预览"
+        Width="1040"
+        Height="820"
+        MinWidth="760"
+        MinHeight="560"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource PageBrush}"
+        Foreground="{DynamicResource InkBrush}"
+        FontFamily="Cascadia Code,Microsoft YaHei UI,Consolas">
+  <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+    <StackPanel>
+      <TextBlock Text="Sim 组件库" FontSize="26" FontWeight="Black"/>
+      <TextBlock Text="按 Naive UI 的常用组件复刻的原生 WPF 控件。全部只用 2px 描边、圆角与语义色表达层级，不带任何投影。"
+                 Foreground="{DynamicResource MutedBrush}"
+                 TextWrapping="Wrap"
+                 Margin="0,6,0,20"/>
+
+      <!-- ============ 按钮 ============ -->
+      <controls:CustomCard Header="按钮 CustomButton" Margin="0,0,0,18">
+        <StackPanel>
+          <TextBlock Text="变体" Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,8"/>
+          <WrapPanel Margin="0,0,0,14">
+            <controls:CustomButton Content="次按钮" Margin="0,0,8,8"/>
+            <controls:CustomButton Content="主按钮" Variant="Primary" Margin="0,0,8,8"/>
+            <controls:CustomButton Content="危险" Variant="Danger" Margin="0,0,8,8"/>
+            <controls:CustomButton Content="三级" Variant="Tertiary" Margin="0,0,8,8"/>
+            <controls:CustomButton Content="幽灵" Variant="Ghost" Margin="0,0,8,8"/>
+            <controls:CustomButton Content="文字" Variant="Text" Margin="0,0,8,8"/>
+            <controls:CustomButton Content="禁用" IsEnabled="False" Margin="0,0,8,8"/>
+            <controls:CustomButton Content="加载中" Variant="Primary" Loading="True" Margin="0,0,8,8"/>
+          </WrapPanel>
+          <TextBlock Text="尺寸" Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,8"/>
+          <WrapPanel>
+            <controls:CustomButton Content="小" Size="Small" Margin="0,0,8,8"/>
+            <controls:CustomButton Content="中" Size="Medium" Margin="0,0,8,8"/>
+            <controls:CustomButton Content="大" Size="Large" Variant="Primary" Margin="0,0,8,8"/>
+          </WrapPanel>
+        </StackPanel>
+      </controls:CustomCard>
+
+      <!-- ============ 文本与标识 ============ -->
+      <controls:CustomCard Header="文本与标识 CustomText / CustomTag / CustomBadge / CustomAvatar" Margin="0,0,0,18">
+        <StackPanel>
+          <WrapPanel Margin="0,0,0,14">
+            <display:CustomTag Content="默认" Margin="0,0,8,8"/>
+            <display:CustomTag Content="主要" Tone="Primary" Margin="0,0,8,8"/>
+            <display:CustomTag Content="信息" Tone="Info" Margin="0,0,8,8"/>
+            <display:CustomTag Content="成功" Tone="Success" Margin="0,0,8,8"/>
+            <display:CustomTag Content="警告" Tone="Warning" Margin="0,0,8,8"/>
+            <display:CustomTag Content="错误" Tone="Error" Margin="0,0,8,8"/>
+            <display:CustomTag Content="圆角" Tone="Primary" Round="True" Margin="0,0,8,8"/>
+          </WrapPanel>
+          <WrapPanel Margin="0,0,0,14">
+            <display:CustomBadge Value="8" Margin="0,10,28,10">
+              <controls:CustomButton Content="通知" Size="Small"/>
+            </display:CustomBadge>
+            <display:CustomBadge Value="120" Max="99" Tone="Error" Margin="0,10,28,10">
+              <controls:CustomButton Content="消息" Size="Small"/>
+            </display:CustomBadge>
+            <display:CustomBadge Dot="True" Tone="Success" Margin="0,10,28,10">
+              <display:CustomAvatar Content="N" Tone="Primary"/>
+            </display:CustomBadge>
+          </WrapPanel>
+          <WrapPanel>
+            <display:CustomAvatar Content="大" Size="Large" Tone="Primary" Margin="0,0,10,8"/>
+            <display:CustomAvatar Content="中" Size="Medium" Tone="Success" Margin="0,0,10,8"/>
+            <display:CustomAvatar Content="小" Size="Small" Tone="Warning" Margin="0,0,10,8"/>
+            <display:CustomAvatar Content="方" Round="False" Tone="Info" Margin="0,0,10,8"/>
+          </WrapPanel>
+          <controls:CustomText Tone="Muted" Margin="0,8,0,0"
+                            Text="CustomText 支持默认 / 次要 / 主要 / 成功 / 警告 / 错误六种语义色，并可切换加粗。"/>
+        </StackPanel>
+      </controls:CustomCard>
+
+      <!-- ============ 表单 ============ -->
+      <controls:CustomCard Header="表单 CustomInput 系列" Margin="0,0,0,18">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="24"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel>
+            <inputs:CustomFormItem Label="用户名" Required="True">
+              <inputs:CustomInput Placeholder="请输入用户名" AllowClear="True"/>
+            </inputs:CustomFormItem>
+            <inputs:CustomFormItem Label="密码">
+              <inputs:CustomPasswordInput Placeholder="请输入密码"/>
+            </inputs:CustomFormItem>
+            <inputs:CustomFormItem Label="备注" Feedback="最多 500 字">
+              <inputs:CustomTextarea Placeholder="补充说明" Height="88"/>
+            </inputs:CustomFormItem>
+            <inputs:CustomFormItem Label="校验失败">
+              <inputs:CustomInput Text="格式不正确" IsInvalid="True"/>
+            </inputs:CustomFormItem>
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <inputs:CustomFormItem Label="数量">
+              <inputs:CustomInputNumber Value="3" Minimum="0" Maximum="10" Step="1"/>
+            </inputs:CustomFormItem>
+            <inputs:CustomFormItem Label="城市">
+              <inputs:CustomSelect Placeholder="请选择城市">
+                <ComboBoxItem Content="上海"/>
+                <ComboBoxItem Content="北京"/>
+                <ComboBoxItem Content="深圳"/>
+              </inputs:CustomSelect>
+            </inputs:CustomFormItem>
+            <inputs:CustomFormItem Label="尺寸">
+              <inputs:CustomSelect Placeholder="请选择尺寸" Size="Small">
+                <ComboBoxItem Content="小"/>
+                <ComboBoxItem Content="中"/>
+                <ComboBoxItem Content="大"/>
+              </inputs:CustomSelect>
+            </inputs:CustomFormItem>
+            <inputs:CustomFormItem Label="开关与选项">
+              <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                  <inputs:CustomSwitch IsChecked="True" Margin="0,0,10,0"/>
+                  <inputs:CustomSwitch/>
+                </StackPanel>
+                <inputs:CustomCheckBox Content="记住我" IsChecked="True" Margin="0,0,0,6"/>
+                <inputs:CustomCheckBox Content="允许通知" Margin="0,0,0,6"/>
+                <inputs:CustomRadio Content="标准" IsChecked="True" Margin="0,0,0,6"/>
+                <inputs:CustomRadio Content="紧凑" Margin="0,0,0,6"/>
+                <StackPanel Orientation="Horizontal">
+                  <inputs:CustomRadioButton Content="月白" IsChecked="True" Margin="0,0,6,0"/>
+                  <inputs:CustomRadioButton Content="玄夜"/>
+                </StackPanel>
+              </StackPanel>
+            </inputs:CustomFormItem>
+          </StackPanel>
+        </Grid>
+      </controls:CustomCard>
+
+      <!-- ============ 展示 ============ -->
+      <controls:CustomCard Header="展示 CustomDivider / CustomProgress / CustomAlert / CustomDescriptions" Margin="0,0,0,18">
+        <StackPanel>
+          <display:CustomProgress Value="42" Margin="0,0,0,10"/>
+          <display:CustomProgress Value="86" Tone="Success" Margin="0,0,0,10"/>
+          <display:CustomProgress Value="61" Tone="Warning" Margin="0,0,0,14"/>
+          <display:CustomAlert Tone="Info" Title="提示" Closable="True" Margin="0,0,0,10">
+            <TextBlock Text="这是信息提示条，右侧 × 可关闭。" TextWrapping="Wrap"/>
+          </display:CustomAlert>
+          <display:CustomAlert Tone="Success" Title="保存成功" Margin="0,0,0,10">
+            <TextBlock Text="配置已写入并生效。" TextWrapping="Wrap"/>
+          </display:CustomAlert>
+          <display:CustomAlert Tone="Warning" Title="注意" Margin="0,0,0,10">
+            <TextBlock Text="该操作会影响全部租户。" TextWrapping="Wrap"/>
+          </display:CustomAlert>
+          <display:CustomAlert Tone="Error" Title="失败" Margin="0,0,0,14">
+            <TextBlock Text="网络不可达，请稍后重试。" TextWrapping="Wrap"/>
+          </display:CustomAlert>
+          <display:CustomDivider Title="描述列表" Margin="0,0,0,12"/>
+          <display:CustomDescriptions>
+            <display:CustomDescriptionItem Label="实例编号">
+              <TextBlock Text="APV-20261110-001"/>
+            </display:CustomDescriptionItem>
+            <display:CustomDescriptionItem Label="标题">
+              <TextBlock Text="桌面端组件库验收" TextWrapping="Wrap"/>
+            </display:CustomDescriptionItem>
+            <display:CustomDescriptionItem Label="状态">
+              <display:CustomTag Content="进行中" Tone="Primary"/>
+            </display:CustomDescriptionItem>
+            <display:CustomDescriptionItem Label="发起时间">
+              <TextBlock Text="2026-11-10 13:40"/>
+            </display:CustomDescriptionItem>
+          </display:CustomDescriptions>
+        </StackPanel>
+      </controls:CustomCard>
+
+      <!-- ============ 状态占位 ============ -->
+      <controls:CustomCard Header="状态 CustomSpin / CustomSkeleton / CustomEmpty / CustomResult" Margin="0,0,0,18">
+        <StackPanel>
+          <display:CustomSpin Spinning="True" Description="加载中…" Margin="0,0,0,14">
+            <Border Height="80" Background="{DynamicResource SoftBrush}" CornerRadius="10">
+              <TextBlock Text="被遮罩的内容区" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+          </display:CustomSpin>
+          <display:CustomSkeleton Lines="3" ShowAvatar="True" Animated="True" Margin="0,0,0,14"/>
+          <display:CustomDivider Title="空状态与结果" Margin="0,0,0,12"/>
+          <display:CustomEmpty Description="还没有任何记录" Margin="0,0,0,14">
+            <controls:CustomButton Content="新建一条" Variant="Primary" Size="Small"/>
+          </display:CustomEmpty>
+          <display:CustomResult Tone="Success" Title="提交成功" Description="审批单已进入流程，可在审批中心查看进度。"/>
+        </StackPanel>
+      </controls:CustomCard>
+
+      <!-- ============ 容器 ============ -->
+      <controls:CustomCard Header="容器 CustomTabs / CustomCollapse / CustomPagination" Margin="0,0,0,18">
+        <StackPanel>
+          <container:CustomTabs Margin="0,0,0,14">
+            <TabItem Header="概览">
+              <TextBlock Text="标签页内容：概览。" TextWrapping="Wrap"/>
+            </TabItem>
+            <TabItem Header="配置">
+              <TextBlock Text="标签页内容：配置。" TextWrapping="Wrap"/>
+            </TabItem>
+            <TabItem Header="日志">
+              <TextBlock Text="标签页内容：日志。" TextWrapping="Wrap"/>
+            </TabItem>
+          </container:CustomTabs>
+          <container:CustomCollapse Margin="0,0,0,14">
+            <container:CustomCollapseItem Header="基础信息" Expanded="True">
+              <TextBlock Text="折叠内容：名称、编码、状态等字段。" TextWrapping="Wrap"/>
+            </container:CustomCollapseItem>
+            <container:CustomCollapseItem Header="高级设置">
+              <TextBlock Text="折叠内容：并发、缓存与超时策略。" TextWrapping="Wrap"/>
+            </container:CustomCollapseItem>
+            <container:CustomCollapseItem Header="审计">
+              <TextBlock Text="折叠内容：最近 30 天的变更记录。" TextWrapping="Wrap"/>
+            </container:CustomCollapseItem>
+          </container:CustomCollapse>
+          <container:CustomPagination PageIndex="3" PageCount="12" HorizontalAlignment="Left"/>
+        </StackPanel>
+      </controls:CustomCard>
+
+      <!-- ============ 步骤与时间线 ============ -->
+      <controls:CustomCard Header="流程 CustomSteps / CustomTimeline" Margin="0,0,0,18">
+        <StackPanel>
+          <container:CustomSteps Margin="0,0,0,18">
+            <container:CustomStep Title="提交申请" Description="11-10 09:20" Status="Finish" Index="1"/>
+            <container:CustomStep Title="部门审批" Description="11-10 11:05" Status="Finish" Index="2"/>
+            <container:CustomStep Title="平台复核" Description="进行中" Status="Process" Index="3"/>
+            <container:CustomStep Title="完成" Description="待处理" Status="Wait" Index="4" IsLast="True"/>
+          </container:CustomSteps>
+          <container:CustomTimeline>
+            <container:CustomTimelineItem Title="创建审批单" Time="2026-11-10 09:20" Tone="Primary">
+              <TextBlock Text="由 张三 发起" Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
+            </container:CustomTimelineItem>
+            <container:CustomTimelineItem Title="部门审批通过" Time="2026-11-10 11:05" Tone="Success">
+              <TextBlock Text="意见：同意，按计划执行。" Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
+            </container:CustomTimelineItem>
+            <container:CustomTimelineItem Title="平台复核中" Time="2026-11-10 13:40" Tone="Warning" IsLast="True"/>
+          </container:CustomTimeline>
+        </StackPanel>
+      </controls:CustomCard>
+
+      <!-- ============ 导航菜单 ============ -->
+      <controls:CustomCard Header="导航菜单 CustomMenu" Margin="0,0,0,18">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="252"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <container:CustomMenu x:Name="MenuDemo"/>
+          <StackPanel Grid.Column="1" Margin="24,8,0,0">
+            <TextBlock Text="点击分组标题展开或收起；同一时间只展开一个分组，子项单选。" TextWrapping="Wrap"
+                       Foreground="{DynamicResource MutedBrush}"/>
+          </StackPanel>
+        </Grid>
+      </controls:CustomCard>
+
+      <!-- ============ 表格 ============ -->
+      <controls:CustomCard Header="数据表格 CustomDataGrid" Margin="0,0,0,18">
+        <controls:CustomDataGrid x:Name="TableDemo" MinHeight="220">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="设备" Binding="{Binding Device}" Width="*"/>
+            <DataGridTextColumn Header="类型" Binding="{Binding Kind}" Width="110"/>
+            <DataGridTextColumn Header="最近活动" Binding="{Binding LastSeen}" Width="152"/>
+            <DataGridCheckBoxColumn Header="当前" Binding="{Binding Current}" Width="64" IsReadOnly="True"
+                                    ElementStyle="{StaticResource NaiveStatusCheckBoxStyle}"/>
+          </DataGrid.Columns>
+        </controls:CustomDataGrid>
+      </controls:CustomCard>
+
+      <!-- ============ 浮层 ============ -->
+      <controls:CustomCard Header="浮层 CustomModal / CustomDrawer / CustomPopconfirm / CustomMessage" Margin="0,0,0,18">
+        <WrapPanel>
+          <controls:CustomButton Content="打开弹窗" Click="ShowModalClick" Margin="0,0,8,8"/>
+          <controls:CustomButton Content="打开抽屉" Click="ShowDrawerClick" Margin="0,0,8,8"/>
+          <controls:CustomButton Content="二次确认" Click="ShowPopconfirmClick" Margin="0,0,8,8"/>
+          <controls:CustomButton Content="消息提示" Click="ShowMessageClick" Margin="0,0,8,8"/>
+        </WrapPanel>
+      </controls:CustomCard>
+
+      <TextBlock Text="组件实现位于 client/Sim.Admin.Wpf.Client/Controls，样式位于 client/Sim.Admin.Wpf.Client/Theme。"
+                 Foreground="{DynamicResource MutedBrush}"
+                 TextWrapping="Wrap"
+                 Margin="0,0,0,12"/>
+    </StackPanel>
+  </ScrollViewer>
+</Window>

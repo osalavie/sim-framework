@@ -1,0 +1,31 @@
+services:
+  api:
+    container_name: sim-api
+    image: ${SIM_API_IMAGE:-sim-api:latest}
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - HTTP_PORTS=${SIM_API_PORT:-7777}
+      - SIM_SECRETS_DIRECTORY=/run/secrets
+      - Swagger__AllowInProduction=true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ./config/appsettings.Production.json:/app/appsettings.Production.json:ro
+      - ./secrets:/run/secrets:ro
+      - ./api-logs:/app/Logs
+      - ./api-data:/app/App_Data
+    restart: unless-stopped
+    ports:
+      # 127.0.0.1仅监听本机SIM_API_PORT/7777，避免外部访问
+      - "127.0.0.1:${SIM_API_PORT:-7777}:${SIM_API_PORT:-7777}"
+    networks:
+      - sim-net
+
+networks:
+  sim-net:
+    driver: bridge

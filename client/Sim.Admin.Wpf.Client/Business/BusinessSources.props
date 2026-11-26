@@ -1,0 +1,19 @@
+<Project>
+
+  <!--
+    业务客户端源码清单。
+    基座仓保持为空；业务仓只在本文件追加 client/<业务>/ 的 Compile 与 Page 条目，
+    不修改客户端 csproj 或 MainWindow。业务源码与基座同程序集编译，避免双向工程引用。
+  -->
+  <ItemGroup>
+    <!-- 示例：
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\blog\**\*.cs"
+             Exclude="$(MSBuildThisFileDirectory)..\..\blog\**\bin\**;$(MSBuildThisFileDirectory)..\..\blog\**\obj\**"
+             Link="Business\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Page Include="$(MSBuildThisFileDirectory)..\..\blog\**\*.xaml"
+          Exclude="$(MSBuildThisFileDirectory)..\..\blog\**\bin\**;$(MSBuildThisFileDirectory)..\..\blog\**\obj\**"
+          Link="Business\%(RecursiveDir)%(Filename)%(Extension)" />
+    -->
+  </ItemGroup>
+
+</Project>

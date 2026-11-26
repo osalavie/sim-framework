@@ -1,0 +1,78 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="14 14 100 100"
+  role="img"
+  aria-labelledby="time-capture-title time-capture-description"
+>
+  <title id="time-capture-title">Time Capture</title>
+  <desc id="time-capture-description">
+    A precise circular time ring, an offset dashed ring, and a tapered rotating corona needle.
+  </desc>
+
+  <defs>
+    <path id="time-capture-letter-arc" d="M 32 88 A 40 40 0 0 0 96 88" />
+  </defs>
+
+  <style>
+    .time-capture-motion {
+      transform-origin: 64px 64px;
+      animation: time-capture-spin 14s linear infinite;
+    }
+
+    .time-capture-wordmark {
+      font-family: Inter, Arial, sans-serif;
+      font-size: 6.2px;
+      font-weight: 500;
+      letter-spacing: 1.25px;
+    }
+
+    @keyframes time-capture-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .time-capture-motion {
+        animation: none;
+      }
+    }
+  </style>
+
+  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Exact geometric outer ring. -->
+    <circle cx="64" cy="64" r="43" stroke-width="1" />
+
+    <!-- The offset ring and needle rotate together around the outer-ring centre. -->
+    <g class="time-capture-motion">
+      <circle
+        cx="64"
+        cy="70"
+        r="16"
+        stroke-width="1"
+        stroke-dasharray="3.2 4.4"
+        stroke-linecap="butt"
+      />
+
+      <!--
+        The needle sits on the x=64 centre axis. Its tips at y=32 and y=96
+        leave the same 11-unit gap to the outer circle at y=21 and y=107.
+      -->
+      <path
+        d="M63.3 32.55
+           Q64 32 64.7 32.55
+           L64.13 95.65
+           Q64 96 63.87 95.65Z"
+        fill="currentColor"
+        stroke="none"
+      />
+    </g>
+  </g>
+
+  <!-- Inside the ring, the shortened needle sweeps above the letters without touching them. -->
+  <text class="time-capture-wordmark" fill="currentColor">
+    <textPath href="#time-capture-letter-arc" startOffset="50%" text-anchor="middle">
+      TIME CAPTURE
+    </textPath>
+  </text>
+</svg>

@@ -1,0 +1,222 @@
+/**
+ * 商务皮肤层
+ *
+ * 只作用于 `data-skin="business"`（玄青 / 竹月 / 朱缃）。
+ * 纸上海洋不匹配任何选择器，视觉保持原样。
+ *
+ * 结构令牌负责 90% 的差异：圆角、投影、描边、字重。
+ * 这里只处理令牌覆盖不到的交互语言：倾斜、位移、分段控件与滚动条。
+ */
+
+:root[data-skin='business'] {
+  /* 形状：控件 8、卡片 14、弹层 12、弹窗 18 */
+  --po-r-sm: 6px;
+  --po-r: 10px;
+  --po-r-control: 8px;
+  --po-r-button: 8px;
+  --po-r-lg: 14px;
+  --po-r-xl: 18px;
+
+  /* 结构边：1px 发丝边 */
+  --po-border: 1px solid var(--po-edge);
+  --po-border-width: 1px;
+  --po-border-hover: 1px solid var(--po-edge-strong);
+  --po-border-focus: 1px solid var(--po-primary);
+  --po-border-disabled: 1px solid var(--po-line);
+  --po-border-thin: 1px solid var(--po-edge);
+  --po-border-hair: 1px solid var(--po-edge-strong);
+  --po-arrow-border-width: 1px;
+
+  /* 字重：展示 600，强 / 粗统一 600 */
+  --po-weight-display: 600;
+  --po-weight-strong: 600;
+  --po-weight-bold: 600;
+
+  /* 柔光分层投影 */
+  --po-shadow-soft: 0 1px 2px rgba(16, 24, 32, 0.05);
+  --po-shadow-card: 0 1px 2px rgba(16, 24, 32, 0.04), 0 10px 28px rgba(16, 24, 32, 0.07);
+  --po-shadow-hard: 0 1px 2px rgba(16, 24, 32, 0.05), 0 8px 24px rgba(16, 24, 32, 0.08);
+  --po-shadow-hover: 0 2px 4px rgba(16, 24, 32, 0.05), 0 14px 32px rgba(16, 24, 32, 0.09);
+  --po-shadow-pop: 0 4px 12px rgba(16, 24, 32, 0.06), 0 18px 48px rgba(16, 24, 32, 0.12);
+  --po-shadow-modal: 0 24px 64px rgba(16, 24, 32, 0.18);
+  --po-shadow-tilt: var(--po-shadow-hover);
+  --po-shadow-tilt-lg: var(--po-shadow-modal);
+  --po-shadow-mark: 0 2px 6px rgba(16, 24, 32, 0.12);
+  --po-focus-ring: 0 0 0 3px color-mix(in oklab, var(--po-primary) 24%, transparent);
+
+  /* 滚动条：细一档，滑块不再描墨边 */
+  --po-scrollbar-size: 8px;
+  --po-scrollbar-thumb: var(--po-line-mid);
+  --po-scrollbar-thumb-hover: var(--po-primary);
+  --po-scrollbar-border: var(--po-paper);
+}
+
+:root[data-skin='business'][data-theme='dark'] {
+  --po-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.32);
+  --po-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 28px rgba(0, 0, 0, 0.32);
+  --po-shadow-hard: 0 1px 2px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.34);
+  --po-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.4), 0 14px 32px rgba(0, 0, 0, 0.4);
+  --po-shadow-pop: 0 4px 12px rgba(0, 0, 0, 0.4), 0 18px 48px rgba(0, 0, 0, 0.48);
+  --po-shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.55);
+  --po-shadow-mark: 0 2px 6px rgba(0, 0, 0, 0.38);
+
+  --po-scrollbar-thumb: var(--po-edge);
+  --po-scrollbar-border: var(--po-paper);
+}
+
+/* ===== 标题与数字 ===== */
+:root[data-skin='business'] .po-page-head h1,
+:root[data-skin='business'] .po-page-head h2 {
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+:root[data-skin='business'] .po-page-head p {
+  line-height: 1.7;
+}
+
+/* ===== 卡片：取消倾斜与硬投影位移 ===== */
+:root[data-skin='business'] .po-card {
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    background-color 0.16s ease;
+}
+
+:root[data-skin='business'] .n-card {
+  border-width: 1px !important;
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    background-color 0.16s ease !important;
+}
+
+:root[data-skin='business'] .n-card::after,
+:root[data-skin='business'] .authz-table-card::after {
+  inset: -1px;
+}
+
+:root[data-skin='business'] .n-card.n-card--hoverable:hover {
+  transform: none;
+  box-shadow: var(--po-shadow-hover) !important;
+}
+
+:root[data-skin='business'] .n-dialog {
+  border-width: 1px !important;
+}
+
+:root[data-skin='business'] .n-popover,
+:root[data-skin='business'] .n-dropdown-menu {
+  border-radius: 12px !important;
+}
+
+:root[data-skin='business'] .po-card--interactive:hover {
+  transform: translateY(-2px);
+  background-color: var(--po-paper);
+  box-shadow: var(--po-shadow-hover);
+}
+
+:root[data-skin='business'] .po-tilt-shell::before {
+  display: none;
+}
+
+:root[data-skin='business'] .po-tilt-shell:hover > .po-tilt-body {
+  transform: none;
+}
+
+/* ===== 按钮：实心主色、无位移 ===== */
+:root[data-skin='business'] .po-btn {
+  border: var(--po-border);
+  border-radius: var(--po-r-button);
+  font-weight: var(--po-weight-strong);
+  box-shadow: var(--po-shadow-soft);
+}
+
+:root[data-skin='business'] .po-btn:hover {
+  background: var(--po-primary-soft);
+  transform: none;
+  box-shadow: var(--po-shadow-soft);
+}
+
+:root[data-skin='business'] .po-btn:active {
+  transform: none;
+  box-shadow: none;
+}
+
+:root[data-skin='business'] .po-btn--primary {
+  border-color: var(--po-primary);
+  background: var(--po-primary);
+  color: var(--po-on-primary);
+}
+
+:root[data-skin='business'] .po-btn--primary:hover {
+  background: var(--po-primary-hover);
+  border-color: var(--po-primary-hover);
+}
+
+:root[data-skin='business'] .po-btn--primary:active {
+  background: var(--po-primary-pressed);
+  border-color: var(--po-primary-pressed);
+}
+
+:root[data-skin='business'] .po-btn--dark {
+  border-color: var(--po-primary);
+  background: var(--po-primary);
+  color: var(--po-on-primary);
+}
+
+:root[data-skin='business'] .po-btn--dark:hover {
+  background: var(--po-primary-hover);
+  border-color: var(--po-primary-hover);
+}
+
+:root[data-skin='business'] .po-btn--ghost {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+:root[data-skin='business'] .po-btn--danger {
+  border-color: var(--po-danger);
+  color: var(--po-danger);
+}
+
+:root[data-skin='business'] .po-btn--sm {
+  border-radius: var(--po-r-sm);
+}
+
+:root[data-skin='business'] .po-btn--sm:hover,
+:root[data-skin='business'] .po-btn--sm:active {
+  transform: none;
+}
+
+:root[data-skin='business'] .po-icon-btn {
+  border: var(--po-border);
+}
+
+/* ===== 分段控件：选中态使用主色 ===== */
+:root[data-skin='business'] .po-segmented {
+  border: var(--po-border);
+  border-radius: var(--po-r-control);
+}
+
+:root[data-skin='business'] .po-segmented button[aria-selected='true'] {
+  background: var(--po-primary);
+  color: var(--po-on-primary);
+}
+
+/* ===== 开关：未选中轨是浅色（墨字），选中轨是实心主色，文字需换成 on-primary ===== */
+:root[data-skin='business'] .n-switch .n-switch__checked {
+  color: var(--po-on-primary);
+}
+
+/* ===== 表格与标签 ===== */
+:root[data-skin='business'] .po-data-table__wrapper {
+  border-radius: var(--po-r-lg);
+}
+
+:root[data-skin='business'] .po-tag,
+:root[data-skin='business'] .po-pill {
+  border-width: 1px;
+}
+
+/* 减少动态效果时不再额外处理，沿用全局 prefers-reduced-motion 规则 */

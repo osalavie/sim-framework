@@ -1,0 +1,61 @@
+flowchart TB
+  subgraph "调用方"
+    Biz["RBAC / Worker / Admin 等业务模块"]
+    AdminWeb["Web 系统管理后台"]
+    UserWeb["Web 用户端"]
+  end
+
+  subgraph "System 通知领域（业务实现）"
+    Contracts["System Notification Contracts"]
+    AdminApi["Provider / 模板 / 规则 / Webhook / 投递管理 API"]
+    EventIngress["事件入口与安全通知命令入口"]
+    Planner["规则解析、模板渲染与投递计划"]
+    Consumer["通知事件消费者"]
+    Delivery["投递状态机与重试调度"]
+    ChannelSpi["System.Domain.Shared: INotificationChannelProvider"]
+    Inbox["站内信、SignalR 与 Web Push"]
+    Providers["System.Application: SMTP / 云厂商 / Webhook / 语音适配器"]
+  end
+
+  subgraph "Framework 基础设施（无业务语义）"
+    BusApi["Domain.Shared: IMessageBus / IMessageHandler"]
+    Outbox["Application: Outbox / Inbox 调度与幂等"]
+    Brokers["Application: RabbitMQ / Kafka / RocketMQ 适配器"]
+    CacheApi["Domain.Shared: ICache / 缓存策略"]
+    Caches["Application: Local / Redis / Hybrid 适配器"]
+  end
+
+  subgraph "持久化"
+    SystemDb[("System 通知配置、模板、投递、站内信")]
+    MessageDb[("SqlSugar.Core: Framework Outbox / Inbox")]
+    Redis[("Redis（可选）")]
+  end
+
+  subgraph "外部通道"
+    Mail["SMTP 邮件服务"]
+    Sms["腾讯云 / 阿里云 / 标准 SMS 网关"]
+    Sites["多个 Site Webhook"]
+    Im["飞书 / 企业微信 / 钉钉群机器人"]
+    Push["浏览器 Push Service"]
+    Voice["腾讯云 / 阿里云 / 标准语音网关"]
+  end
+
+  Biz --> Contracts --> EventIngress
+  AdminWeb --> AdminApi
+  UserWeb --> Inbox
+  AdminApi --> SystemDb
+  EventIngress --> Outbox --> MessageDb
+  Outbox --> BusApi --> Brokers
+  Brokers --> Consumer --> Planner --> Delivery --> ChannelSpi
+  Planner --> SystemDb
+  Delivery --> SystemDb
+  Planner --> CacheApi --> Caches
+  Caches --> Redis
+  ChannelSpi --> Inbox
+  ChannelSpi --> Providers
+  Providers --> Mail
+  Providers --> Sms
+  Providers --> Sites
+  Providers --> Im
+  Providers --> Push
+  Providers --> Voice

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>登录 · SimApp</title>
+<meta name="description" content="SimApp 登录 · 企业中台">
+<link rel="stylesheet" href="assets/ui.css">
+</head>
+<body data-page="login" data-title="登录">
+<a class="skip-link" href="#main">跳到登录表单</a>
+
+<main class="login" id="main">
+  <section class="login__story" aria-label="平台介绍" data-od-id="login-story">
+    <a class="login__brand brand" href="login.html" style="padding:0" aria-label="SimApp 首页">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16c3.5 0 3.5-4 7-4s3.5 4 7 4 4-2 4-2"/><path d="M3 9c3.5 0 3.5-4 7-4s3.5 4 7 4 4-2 4-2"/></svg>
+      </span>
+      <span class="brand__text"><span class="brand__name">SimApp</span><span class="brand__sub">企业中台 · v2.4</span></span>
+    </a>
+
+    <div class="login__hero">
+      <span class="pill pill--sun">一站式内部协作平台</span>
+      <h1>把审批、权限和组织，<br>放进<em>同一片海</em>。</h1>
+      <p>SimApp 把散落在邮件、表格与群聊里的流程收拢到一处。128 位同事在这里提交、审批、协作，每一步都有记录。</p>
+      <div class="login__stamps">
+        <span class="pill pill--outline">审批中心</span>
+        <span class="pill pill--outline">权限矩阵</span>
+        <span class="pill pill--outline">组织架构</span>
+      </div>
+      <div class="login__facts">
+        <div class="login__fact"><b>128</b><span>在位成员</span></div>
+        <div class="login__fact"><b>7</b><span>核心模块</span></div>
+        <div class="login__fact"><b>99.98%</b><span>近 90 天可用性</span></div>
+      </div>
+    </div>
+
+    <div class="login__aside-meta">
+      <span>© 2026 SimApp</span>
+      <span>服务条款</span>
+      <span>隐私说明</span>
+      <span>状态页 · 正常</span>
+    </div>
+
+    <svg class="wave wave--flip login__wave" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 30c50 0 50 22 100 22s50-22 100-22 50 22 100 22 50-22 100-22 50 22 100 22 50-22 100-22 50 22 100 22 50-22 100-22 50 22 100 22 50-22 100-22 50 22 100 22 50-22 100-22v38H0Z" fill="oklch(95.2% 0.045 230)"/>
+      <path d="M0 40c50 0 50 18 100 18s50-18 100-18 50 18 100 18 50-18 100-18 50 18 100 18 50-18 100-18 50 18 100 18 50-18 100-18 50 18 100 18 50-18 100-18 50 18 100 18 50-18 100-18v40H0Z" fill="var(--accent)" opacity="0.18"/>
+    </svg>
+  </section>
+
+  <section class="login__panel" data-od-id="login-panel">
+    <div class="login-card">
+      <h2>欢迎回来</h2>
+      <p>使用你的企业账号登录 SimApp。</p>
+
+      <form class="login-form" onsubmit="window.location.href='dashboard.html';return false">
+        <div class="field">
+          <label for="login-account">账号或邮箱</label>
+          <input class="input" id="login-account" name="account" type="text" autocomplete="username" placeholder="lin.zhiyuan@sim.dev" value="lin.zhiyuan@sim.dev" required>
+        </div>
+        <div class="field">
+          <label for="login-password">密码</label>
+          <input class="input" id="login-password" name="password" type="password" autocomplete="current-password" placeholder="请输入密码" value="simapp" required>
+        </div>
+        <div class="login-form__row">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" class="checkbox" checked> 在此设备保持登录
+          </label>
+          <a class="small" href="#" data-toast="重置链接已发送到你的邮箱" style="font-weight:700;color:var(--accent)">忘记密码？</a>
+        </div>
+        <button class="btn btn--primary btn--block" type="submit" style="min-height:44px">
+          登录
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+        </button>
+      </form>
+
+      <div class="login-divider">或使用企业身份</div>
+      <div class="sso">
+        <button class="btn" type="button" data-toast="正在跳转企业微信扫码登录">企业微信</button>
+        <button class="btn" type="button" data-toast="正在跳转企业 SSO">企业 SSO</button>
+      </div>
+
+      <p class="login-card__foot">
+        首次使用？请联系所在部门负责人开通账号，或
+        <a href="notifications.html" style="color:var(--accent);font-weight:700">提交申请</a>。
+        登录即表示你同意平台的使用规范与数据安全要求。
+      </p>
+
+      <div class="note" style="margin-top:18px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.4 2.9 7.6 7 9.5 4.1-1.9 7-5.1 7-9.5V6Z"/><path d="m9.2 12 2 2 3.6-3.8"/></svg>
+        <span>当前为内部演示环境，账号已为你预填。生产环境请使用 SSO 或双因素认证登录。</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/ui.js"></script>
+</body>
+</html>

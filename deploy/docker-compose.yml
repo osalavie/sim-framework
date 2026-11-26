@@ -1,0 +1,11 @@
+# SimApp Compose 入口
+# 完整栈（后端 API + 前端 nginx）：
+#   docker compose up -d
+# 仅后端（例如复用已有 nginx）：
+#   docker compose -f docker-compose.api.yml up -d api
+# 显式指定前后端文件：
+#   docker compose -f docker-compose.api.yml -f docker-compose.web.yml up -d
+# 注意：include 需要 Docker Compose v2.20+。
+include:
+  - docker-compose.api.yml
+  - docker-compose.web.yml

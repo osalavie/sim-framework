@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sim API</title>
+		<script>
+			if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+				document.documentElement.classList.add("dark-mode");
+			}
+		</script>
+		<link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
+		<link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+		<style>
+			:root {
+				color-scheme: light;
+				--page-bg: #f6f7f9;
+				--surface: #ffffff;
+				--border: #d9dee7;
+				--border-strong: #c4cad4;
+				--text: #20242c;
+				--muted: #626a76;
+				--primary: #2563a6;
+				--primary-hover: #1d4f86;
+				--danger: #b42318;
+				--btn-bg: #ffffff;
+				--btn-hover-bg: #edf4fb;
+				--thead-bg: #f0f2f5;
+				--thead-text: #454c57;
+			}
+
+			/* dark-mode 类由 Swagger UI 内置 DarkModeToggle 在系统深色时加到 <html> 上 */
+			html.dark-mode {
+				color-scheme: dark;
+				--page-bg: #1c2022;
+				--surface: #212528;
+				--border: #3a4148;
+				--border-strong: #4a5259;
+				--text: #e4e6e6;
+				--muted: #b0b8be;
+				--primary: #51a8ff;
+				--primary-hover: #7cbcff;
+				--danger: #ff5f5f;
+				--btn-bg: #2a2e30;
+				--btn-hover-bg: #333b40;
+				--thead-bg: #2a2e30;
+				--thead-text: #cfd6da;
+			}
+
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+			}
+
+			html {
+				overflow-x: hidden;
+			}
+
+			body {
+				margin: 0;
+				background: var(--page-bg);
+				color: var(--text);
+				font-family: Inter, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+			}
+
+			.swagger-ui {
+				color: var(--text);
+				font-family: inherit;
+			}
+
+			.swagger-ui .topbar {
+				position: sticky;
+				top: 0;
+				z-index: 1000;
+				padding: 0;
+				background: #202733;
+				border-bottom: 1px solid #111722;
+			}
+
+			.swagger-ui .topbar .wrapper,
+			.swagger-ui .wrapper {
+				width: calc(100% - 48px);
+				max-width: 1440px;
+				margin: 0 auto;
+				padding: 0;
+			}
+
+			.swagger-ui .topbar .topbar-wrapper {
+				min-height: 56px;
+				gap: 16px;
+			}
+
+			.swagger-ui .topbar .topbar-wrapper > a {
+				display: none;
+			}
+
+			.swagger-ui .topbar .topbar-wrapper::before {
+				content: "Sim API";
+				margin-right: 8px;
+				color: #ffffff;
+				font-size: 16px;
+				font-weight: 600;
+				letter-spacing: 0.02em;
+			}
+
+			.swagger-ui .topbar select {
+				height: 34px;
+				min-width: 220px;
+				padding: 0 30px 0 10px;
+				border: 1px solid #596273;
+				border-radius: 3px;
+				background: #ffffff;
+				color: var(--text);
+				font-size: 13px;
+				font-weight: 500;
+			}
+
+			.swagger-ui .topbar select:focus-visible,
+			.swagger-ui button:focus-visible,
+			.swagger-ui input:focus-visible,
+			.swagger-ui textarea:focus-visible,
+			.swagger-ui a:focus-visible {
+				outline: 2px solid #7eb6ee;
+				outline-offset: 2px;
+			}
+
+			.swagger-ui .information-container {
+				width: calc(100% - 48px);
+				max-width: 1440px;
+				margin: 22px auto 16px;
+				padding: 20px 22px;
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: 4px;
+			}
+
+			.swagger-ui .info {
+				margin: 0;
+			}
+
+			.swagger-ui .info .title {
+				color: var(--text);
+				font-size: 26px;
+				font-weight: 600;
+			}
+
+			.swagger-ui .info p,
+			.swagger-ui .info li,
+			.swagger-ui .info table {
+				color: var(--muted);
+			}
+
+			.swagger-ui .scheme-container {
+				width: calc(100% - 48px);
+				max-width: 1440px;
+				margin: 0 auto 16px;
+				padding: 14px 18px;
+				background: var(--surface);
+				border: 1px solid var(--border);
+				box-shadow: none;
+			}
+
+			.swagger-ui .scheme-container .schemes {
+				padding: 0;
+			}
+
+			/* swagger-ui.css 的暗色规则以更高特异性覆盖卡片底色，这里恢复与其它卡片一致 */
+			html.dark-mode .swagger-ui .scheme-container {
+				background: var(--surface);
+				border-color: var(--border);
+				box-shadow: none;
+			}
+
+			.swagger-ui .opblock-tag-section {
+				margin: 0 0 14px;
+				padding: 0 18px 14px;
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: 4px;
+			}
+
+			.swagger-ui .opblock-tag {
+				margin: 0 0 12px;
+				padding: 13px 0 11px;
+				border-bottom: 1px solid var(--border);
+				color: var(--text);
+				font-size: 18px;
+				font-weight: 600;
+			}
+
+			.swagger-ui .opblock-tag small {
+				color: var(--muted);
+				font-size: 13px;
+				font-weight: 400;
+			}
+
+			.swagger-ui .opblock {
+				margin: 0 0 8px;
+				border-radius: 3px;
+				box-shadow: none;
+				overflow: hidden;
+			}
+
+			.swagger-ui .opblock .opblock-summary {
+				min-height: 46px;
+				padding: 0 14px;
+			}
+
+			.swagger-ui .opblock .opblock-summary-method {
+				min-width: 72px;
+				border-radius: 2px;
+				box-shadow: none;
+				font-size: 12px;
+			}
+
+			.swagger-ui .opblock .opblock-summary-path {
+				font-family: "Cascadia Code", Consolas, monospace;
+				font-size: 14px;
+			}
+
+			.swagger-ui .opblock .opblock-body {
+				border-top: 1px solid rgba(0, 0, 0, 0.08);
+			}
+
+			html.dark-mode .swagger-ui .opblock .opblock-body {
+				border-top-color: rgba(255, 255, 255, 0.12);
+			}
+
+			.swagger-ui .models {
+				margin: 16px 0 24px;
+				padding: 0 18px;
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: 4px;
+			}
+
+			.swagger-ui .models h4 {
+				margin: 0;
+				padding: 13px 0;
+				color: var(--text);
+				font-size: 17px;
+				font-weight: 600;
+			}
+
+			.swagger-ui .btn,
+			.swagger-ui .btn.execute,
+			.swagger-ui .try-out__btn {
+				border: 1px solid var(--primary);
+				border-radius: 3px;
+				background: var(--btn-bg);
+				box-shadow: none;
+				color: var(--primary);
+				font-weight: 600;
+				transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+			}
+
+			.swagger-ui .btn:hover,
+			.swagger-ui .try-out__btn:hover {
+				background: var(--btn-hover-bg);
+				box-shadow: none;
+			}
+
+			.swagger-ui .btn.execute {
+				background: var(--primary);
+				color: #ffffff;
+			}
+
+			.swagger-ui .btn.execute:hover {
+				background: var(--primary-hover);
+			}
+
+			.swagger-ui table thead tr th {
+				background: var(--thead-bg);
+				color: var(--thead-text);
+				font-size: 12px;
+				font-weight: 600;
+			}
+
+			@media (max-width: 720px) {
+				.swagger-ui .topbar .wrapper,
+				.swagger-ui .wrapper,
+				.swagger-ui .information-container,
+				.swagger-ui .scheme-container {
+					width: calc(100% - 24px);
+				}
+
+				.swagger-ui .topbar .topbar-wrapper {
+					flex-wrap: wrap;
+					padding: 10px 0;
+				}
+
+				.swagger-ui .topbar select {
+					min-width: 160px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="swagger-ui"></div>
+
+		<script src="./swagger-ui-bundle.js" charset="UTF-8"></script>
+		<script src="./swagger-ui-standalone-preset.js" charset="UTF-8"></script>
+		<script>
+			window.onload = async function () {
+				let swaggerDocs = [];
+				try {
+					const response = await fetch("/api/swagger-config", {
+						headers: { Accept: "application/json" },
+						cache: "no-store",
+					});
+					if (response.ok) {
+						swaggerDocs = await response.json();
+					}
+				} catch (error) {
+					console.error("Swagger 文档配置加载失败。", error);
+				}
+
+				const ui = SwaggerUIBundle({
+					urls: swaggerDocs,
+					dom_id: "#swagger-ui",
+					deepLinking: true,
+					presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+					plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+					layout: "StandaloneLayout",
+					defaultModelsExpandDepth: 0,
+					docExpansion: "none",
+					persistAuthorization: false,
+				});
+
+				window.ui = ui;
+			};
+		</script>
+	</body>
+</html>

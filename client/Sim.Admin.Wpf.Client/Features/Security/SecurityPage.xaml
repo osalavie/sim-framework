@@ -1,0 +1,106 @@
+<UserControl x:Class="Sim.Admin.Wpf.Client.Features.Security.SecurityPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:Sim.Admin.Wpf.Client.Controls">
+  <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="16">
+    <StackPanel>
+      <TextBlock Text="账号安全" FontSize="23" FontWeight="Bold"/>
+      <TextBlock Text="登录密码、双重验证方式和登录设备。" Foreground="{DynamicResource MutedBrush}" Margin="0,5,0,18"/>
+
+      <controls:CustomCard Header="登录密码" Margin="0,0,0,14">
+        <DockPanel>
+          <controls:CustomButton x:Name="ChangePasswordButton" DockPanel.Dock="Right" Content="修改密码" Variant="Primary"
+                              Width="118" VerticalAlignment="Center" Click="ChangePasswordClick"/>
+          <TextBlock Text="修改后当前会话会退出，需要使用新密码重新登录。" TextWrapping="Wrap"
+                     Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center" Margin="0,0,16,0"/>
+        </DockPanel>
+      </controls:CustomCard>
+
+      <controls:CustomCard Header="双重验证" Margin="0,0,0,14">
+        <StackPanel>
+          <TextBlock x:Name="TwoFactorSummary" TextWrapping="Wrap"
+                     Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,14"/>
+          <Grid Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+              <TextBlock Text="身份验证器" FontWeight="Bold"/>
+              <TextBlock x:Name="AuthenticatorStatus" Foreground="{DynamicResource MutedBrush}"
+                         TextWrapping="Wrap" Margin="0,3,18,0"/>
+            </StackPanel>
+            <controls:CustomButton x:Name="AuthenticatorButton" Grid.Column="1" Width="78" Height="34"
+                                Click="AuthenticatorClick"/>
+          </Grid>
+          <Grid Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+              <TextBlock Text="邮件验证" FontWeight="Bold"/>
+              <TextBlock x:Name="EmailStatus" Foreground="{DynamicResource MutedBrush}"
+                         TextWrapping="Wrap" Margin="0,3,18,0"/>
+            </StackPanel>
+            <controls:CustomButton x:Name="EmailButton" Grid.Column="1" Width="78" Height="34"
+                                Click="EmailClick"/>
+          </Grid>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+              <TextBlock Text="短信验证" FontWeight="Bold"/>
+              <TextBlock x:Name="SmsStatus" Foreground="{DynamicResource MutedBrush}"
+                         TextWrapping="Wrap" Margin="0,3,18,0"/>
+            </StackPanel>
+            <controls:CustomButton x:Name="SmsButton" Grid.Column="1" Width="78" Height="34"
+                                Click="SmsClick"/>
+          </Grid>
+        </StackPanel>
+      </controls:CustomCard>
+
+      <controls:CustomCard Header="登录会话" Margin="0,0,0,14">
+        <DockPanel>
+          <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
+            <controls:CustomButton x:Name="RefreshSessionsButton" Content="刷新" Height="34"
+                                Margin="0,0,8,0" Click="RefreshSessionsClick"/>
+            <controls:CustomButton x:Name="RevokeSessionButton" Content="注销选中会话" Height="34"
+                                Click="RevokeSessionClick"/>
+            <TextBlock x:Name="SessionStatus" VerticalAlignment="Center"
+                       Foreground="{DynamicResource MutedBrush}" Margin="12,0,0,0"/>
+          </StackPanel>
+          <controls:CustomDataGrid x:Name="SessionGrid" MinHeight="120" MaxHeight="260"
+                                SelectionChanged="SessionSelectionChanged">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="设备" Binding="{Binding DeviceName}" Width="*"/>
+              <DataGridTextColumn Header="类型" Binding="{Binding DeviceType}" Width="70"/>
+              <DataGridTextColumn Header="IP" Binding="{Binding IpAddress}" Width="130"/>
+              <DataGridTextColumn Header="登录时间" Binding="{Binding LoginAt, StringFormat=yyyy-MM-dd HH:mm}" Width="160"/>
+              <DataGridTextColumn Header="最近活动" Binding="{Binding LastSeenAt, StringFormat=yyyy-MM-dd HH:mm}" Width="160"/>
+              <DataGridCheckBoxColumn Header="当前" Binding="{Binding IsCurrent}" Width="60" IsReadOnly="True"
+                                      ElementStyle="{StaticResource NaiveStatusCheckBoxStyle}"/>
+              <DataGridCheckBoxColumn Header="在线" Binding="{Binding IsOnline}" Width="60" IsReadOnly="True"
+                                      ElementStyle="{StaticResource NaiveStatusCheckBoxStyle}"/>
+            </DataGrid.Columns>
+          </controls:CustomDataGrid>
+        </DockPanel>
+      </controls:CustomCard>
+
+      <controls:CustomCard Header="注销账号">
+        <DockPanel>
+          <controls:CustomButton x:Name="DeleteAccountButton" DockPanel.Dock="Right" Content="注销账号" Variant="Danger"
+                              Width="110" VerticalAlignment="Center" Click="DeleteAccountClick"/>
+          <TextBlock Text="永久删除当前账号；该操作不可恢复，需依次输入密码和确认短语。"
+                     TextWrapping="Wrap" Foreground="{DynamicResource MutedBrush}"
+                     VerticalAlignment="Center" Margin="0,0,16,0"/>
+        </DockPanel>
+      </controls:CustomCard>
+
+      <TextBlock x:Name="Status" Foreground="{DynamicResource MutedBrush}"
+                 TextWrapping="Wrap" Margin="2,14,0,0"/>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\common.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\framework\Sim.Framework.Domain\Sim.Framework.Domain.csproj" />
+    <ProjectReference Include="..\..\..\framework\Sim.SqlSugar.Core\Sim.SqlSugar.Core.csproj" />
+    <ProjectReference Include="..\Sim.OpenPlatform.Domain.Shared\Sim.OpenPlatform.Domain.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

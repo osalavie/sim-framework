@@ -1,0 +1,3570 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Approval API",
+    "description": "审批模块 API - 审批中心、流程定义与实例监控",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/approval/business-type": {
+      "get": {
+        "tags": [
+          "BusinessType"
+        ],
+        "summary": "全部已注册的审批业务类型。",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalBusinessTypeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalBusinessTypeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalBusinessTypeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/business-type/users": {
+      "get": {
+        "tags": [
+          "BusinessType"
+        ],
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "maxResultCount",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalUserOptionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalUserOptionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalUserOptionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/business-type/organizations": {
+      "get": {
+        "tags": [
+          "BusinessType"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalOrganizationOptionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalOrganizationOptionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalOrganizationOptionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/flow-definition": {
+      "get": {
+        "tags": [
+          "FlowDefinition"
+        ],
+        "summary": "全部流程定义（按编码、版本倒序）。",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalFlowDefinitionListDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalFlowDefinitionListDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalFlowDefinitionListDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "FlowDefinition"
+        ],
+        "summary": "创建流程定义（草稿）；同编码已存在版本时自动派生下一个版本号。",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApprovalFlowDefinitionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApprovalFlowDefinitionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApprovalFlowDefinitionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/flow-definition/{id}": {
+      "get": {
+        "tags": [
+          "FlowDefinition"
+        ],
+        "summary": "流程定义明细（含节点与连线）。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "FlowDefinition"
+        ],
+        "summary": "更新草稿流程定义（节点与连线整体覆盖）。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateApprovalFlowDefinitionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateApprovalFlowDefinitionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateApprovalFlowDefinitionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "FlowDefinition"
+        ],
+        "summary": "删除草稿流程定义（连同节点与连线）。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/flow-definition/{id}/validate": {
+      "post": {
+        "tags": [
+          "FlowDefinition"
+        ],
+        "summary": "发布前校验（不改变状态）：返回逐条问题，供设计器在保存后展示权威判定。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowValidationResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowValidationResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowValidationResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/flow-definition/{id}/publish": {
+      "post": {
+        "tags": [
+          "FlowDefinition"
+        ],
+        "summary": "发布流程定义（发布后不可修改）；发布前按图结构规则校验。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/flow-definition/{id}/disable": {
+      "post": {
+        "tags": [
+          "FlowDefinition"
+        ],
+        "summary": "停用已发布流程定义（存在进行中实例时不允许）。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/flow-definition/{id}/version": {
+      "post": {
+        "tags": [
+          "FlowDefinition"
+        ],
+        "summary": "基于指定版本创建新草稿版本（含节点与连线拷贝）。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalFlowDefinitionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/submit": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "发起审批实例。",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitApprovalDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitApprovalDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitApprovalDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceListDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceListDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceListDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/{id}/resubmit": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "重新提交被退回的实例。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitApprovalDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitApprovalDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitApprovalDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceListDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceListDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceListDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/my-pending": {
+      "get": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "我的待办。",
+        "parameters": [
+          {
+            "name": "DefinitionCode",
+            "in": "query",
+            "description": "流程编码过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "BusinessType",
+            "in": "query",
+            "description": "业务类型过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Keyword",
+            "in": "query",
+            "description": "关键字（编号或标题模糊匹配）。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sorting",
+            "in": "query",
+            "description": "Sorting expression, e.g. \"Name asc, CreationTime desc\".",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MaxResultCount",
+            "in": "query",
+            "description": "Max number of items to return. Default 10.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SkipCount",
+            "in": "query",
+            "description": "Number of items to skip. Default 0.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalTaskDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalTaskDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalTaskDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/my-handled": {
+      "get": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "我的已办。",
+        "parameters": [
+          {
+            "name": "DefinitionCode",
+            "in": "query",
+            "description": "流程编码过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "BusinessType",
+            "in": "query",
+            "description": "业务类型过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Keyword",
+            "in": "query",
+            "description": "关键字（编号或标题模糊匹配）。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sorting",
+            "in": "query",
+            "description": "Sorting expression, e.g. \"Name asc, CreationTime desc\".",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MaxResultCount",
+            "in": "query",
+            "description": "Max number of items to return. Default 10.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SkipCount",
+            "in": "query",
+            "description": "Number of items to skip. Default 0.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalTaskDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalTaskDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalTaskDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/my-submitted": {
+      "get": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "我发起的实例。",
+        "parameters": [
+          {
+            "name": "Status",
+            "in": "query",
+            "description": "状态过滤（Running / Approved / Rejected / Returned / Withdrawn / Terminated）。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "BusinessType",
+            "in": "query",
+            "description": "业务类型过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DefinitionCode",
+            "in": "query",
+            "description": "流程编码过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "InitiatorUserId",
+            "in": "query",
+            "description": "发起人过滤（监控用）。",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Keyword",
+            "in": "query",
+            "description": "关键字（编号或标题模糊匹配）。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sorting",
+            "in": "query",
+            "description": "Sorting expression, e.g. \"Name asc, CreationTime desc\".",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MaxResultCount",
+            "in": "query",
+            "description": "Max number of items to return. Default 10.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SkipCount",
+            "in": "query",
+            "description": "Number of items to skip. Default 0.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalInstanceListDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalInstanceListDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalInstanceListDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/my-cc": {
+      "get": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "抄送我的实例。",
+        "parameters": [
+          {
+            "name": "Status",
+            "in": "query",
+            "description": "状态过滤（Running / Approved / Rejected / Returned / Withdrawn / Terminated）。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "BusinessType",
+            "in": "query",
+            "description": "业务类型过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DefinitionCode",
+            "in": "query",
+            "description": "流程编码过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "InitiatorUserId",
+            "in": "query",
+            "description": "发起人过滤（监控用）。",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Keyword",
+            "in": "query",
+            "description": "关键字（编号或标题模糊匹配）。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sorting",
+            "in": "query",
+            "description": "Sorting expression, e.g. \"Name asc, CreationTime desc\".",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MaxResultCount",
+            "in": "query",
+            "description": "Max number of items to return. Default 10.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SkipCount",
+            "in": "query",
+            "description": "Number of items to skip. Default 0.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalCcDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalCcDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalCcDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/counts": {
+      "get": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "角标数量。",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceCountsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceCountsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceCountsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/{id}": {
+      "get": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "实例明细（发起人、处理人与抄送人可见；监控查看走管理端接口）。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/{id}/upload-attachment": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "上传实例级附件（发起人，实例处理中或已退回）。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "FileName": {
+                    "type": "string"
+                  },
+                  "ContentType": {
+                    "type": "string"
+                  },
+                  "ContentLength": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              },
+              "encoding": {
+                "FileName": {
+                  "style": "form"
+                },
+                "ContentType": {
+                  "style": "form"
+                },
+                "ContentLength": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalAttachmentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalAttachmentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalAttachmentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/upload-task-attachment/{taskId}": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "上传任务附件（该任务的处理人）。",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "FileName": {
+                    "type": "string"
+                  },
+                  "ContentType": {
+                    "type": "string"
+                  },
+                  "ContentLength": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              },
+              "encoding": {
+                "FileName": {
+                  "style": "form"
+                },
+                "ContentType": {
+                  "style": "form"
+                },
+                "ContentLength": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalAttachmentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalAttachmentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalAttachmentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/attachment-download/{attachmentId}": {
+      "get": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "下载实例附件（实例可见范围内）。",
+        "parameters": [
+          {
+            "name": "attachmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/IRemoteStreamContent"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/IRemoteStreamContent"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IRemoteStreamContent"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IRemoteStreamContent"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/instance/approve/{taskId}": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "同意当前任务。",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/instance/reject/{taskId}": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "拒绝当前任务。",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/instance/transfer/{taskId}": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "转交当前任务。",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalTransferDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalTransferDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalTransferDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/instance/sign/{taskId}": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "为当前任务加签。",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalAddSignDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalAddSignDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalAddSignDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/instance/return-to-previous/{taskId}": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "退回上一步。",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/instance/return-to-initiator/{taskId}": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "退回发起人。",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/instance/{id}/withdraw": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "撤回实例。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/instance/{id}/terminate": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "终止实例（仅发起人的上级；管理权限走监控端接口）。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalTerminateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalTerminateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalTerminateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/instance/{id}/urge": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "催办当前处理人。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/instance/mark-cc-read/{ccId}": {
+      "post": {
+        "tags": [
+          "Instance"
+        ],
+        "summary": "标记抄送记录已读。",
+        "parameters": [
+          {
+            "name": "ccId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/approval/monitor": {
+      "get": {
+        "tags": [
+          "Monitor"
+        ],
+        "summary": "全部审批实例分页。",
+        "parameters": [
+          {
+            "name": "Status",
+            "in": "query",
+            "description": "状态过滤（Running / Approved / Rejected / Returned / Withdrawn / Terminated）。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "BusinessType",
+            "in": "query",
+            "description": "业务类型过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DefinitionCode",
+            "in": "query",
+            "description": "流程编码过滤。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "InitiatorUserId",
+            "in": "query",
+            "description": "发起人过滤（监控用）。",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Keyword",
+            "in": "query",
+            "description": "关键字（编号或标题模糊匹配）。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sorting",
+            "in": "query",
+            "description": "Sorting expression, e.g. \"Name asc, CreationTime desc\".",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MaxResultCount",
+            "in": "query",
+            "description": "Max number of items to return. Default 10.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SkipCount",
+            "in": "query",
+            "description": "Number of items to skip. Default 0.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalInstanceListDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalInstanceListDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResultDtoOfApprovalInstanceListDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/monitor/{id}": {
+      "get": {
+        "tags": [
+          "Monitor"
+        ],
+        "summary": "任意实例明细（含任务与记录）。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalInstanceDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/approval/monitor/{id}/terminate": {
+      "post": {
+        "tags": [
+          "Monitor"
+        ],
+        "summary": "强制终止进行中的实例。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalTerminateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalTerminateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalTerminateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApprovalActionDto": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "maxLength": 1000,
+            "type": "string",
+            "description": "处理意见。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "审批意见（同意 / 拒绝 / 退回 / 撤回 / 终止共用）。"
+      },
+      "ApprovalAddSignDto": {
+        "required": [
+          "position",
+          "targetUserId"
+        ],
+        "type": "object",
+        "properties": {
+          "targetUserId": {
+            "type": "string",
+            "description": "加签目标用户。",
+            "format": "uuid"
+          },
+          "position": {
+            "minLength": 1,
+            "type": "string",
+            "description": "加签位置：Before（前加签）/ After（后加签）。"
+          },
+          "comment": {
+            "maxLength": 1000,
+            "type": "string",
+            "description": "处理意见。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "加签请求。"
+      },
+      "ApprovalAttachmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "附件记录 ID（下载端点使用）。",
+            "format": "uuid"
+          },
+          "instanceId": {
+            "type": "string",
+            "description": "所属实例 ID。",
+            "format": "uuid"
+          },
+          "taskId": {
+            "type": "string",
+            "description": "所属任务 ID（审批人上传时记录，实例级附件为空）。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "description": "原始文件名。",
+            "nullable": true
+          },
+          "size": {
+            "type": "integer",
+            "description": "文件字节数。",
+            "format": "int64"
+          },
+          "uploaderUserId": {
+            "type": "string",
+            "description": "上传人。",
+            "format": "uuid"
+          },
+          "creationTime": {
+            "type": "string",
+            "description": "上传时间。",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "审批附件：挂在实例或具体任务上，文件本体走框架既有存储链路。\r\n存储键与提供方不对外暴露，下载统一走审批模块的鉴权下载端点。"
+      },
+      "ApprovalBusinessTypeDto": {
+        "type": "object",
+        "properties": {
+          "businessType": {
+            "type": "string",
+            "description": "业务类型标识。",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "description": "业务类型显示名。",
+            "nullable": true
+          },
+          "definitionCode": {
+            "type": "string",
+            "description": "默认流程编码。",
+            "nullable": true
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalFieldDto"
+            },
+            "description": "业务字段清单（详情页只读渲染与分支条件字段来源）；\r\n条件编辑器应过滤掉 Sim.Approval.Domain.Shared.ApprovalFieldType.Attachment 类型的字段。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "业务类型（由业务模块的审批描述符注册）。"
+      },
+      "ApprovalCcDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "抄送记录 ID。",
+            "format": "uuid"
+          },
+          "instanceId": {
+            "type": "string",
+            "description": "实例 ID。",
+            "format": "uuid"
+          },
+          "nodeKey": {
+            "type": "string",
+            "description": "节点标识。",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "description": "接收人。",
+            "format": "uuid"
+          },
+          "readAt": {
+            "type": "string",
+            "description": "已读时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "creationTime": {
+            "type": "string",
+            "description": "创建时间。",
+            "format": "date-time"
+          },
+          "instanceNumber": {
+            "type": "string",
+            "description": "实例编号（抄送列表展示）。",
+            "nullable": true
+          },
+          "instanceTitle": {
+            "type": "string",
+            "description": "实例标题（抄送列表展示）。",
+            "nullable": true
+          },
+          "instanceStatus": {
+            "type": "string",
+            "description": "实例状态（抄送列表展示）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "抄送记录。"
+      },
+      "ApprovalContextFieldDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "字段标识。",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "description": "字段显示名（发起时按业务类型声明固化，旧数据回退为字段标识）。",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "description": "字段类型（取自 Sim.Approval.Domain.Shared.ApprovalFieldType 的取值名）。",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "description": "字段取值。",
+            "nullable": true
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalFieldOptionDto"
+            },
+            "description": "枚举可选值（按当前业务类型声明读取时补齐，不落库）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "实例字段值快照项 —— 带标签的字段值，使详情页不依赖业务模块即可渲染。"
+      },
+      "ApprovalContextSnapshotDto": {
+        "type": "object",
+        "properties": {
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalContextFieldDto"
+            },
+            "description": "字段值列表（按业务类型声明的顺序排列）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "实例业务上下文快照（`ApprovalInstance.ContextJson` 的持久化形态）。"
+      },
+      "ApprovalFieldDto": {
+        "required": [
+          "displayName",
+          "key",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "key": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string",
+            "description": "字段标识（条件 JSON 中 `field` 的取值，同一业务类型内唯一）。"
+          },
+          "displayName": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "字段显示名（详情页与条件编辑器展示）。"
+          },
+          "type": {
+            "minLength": 1,
+            "type": "string",
+            "description": "字段类型（取自 Sim.Approval.Domain.Shared.ApprovalFieldType 的取值名）。"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalFieldOptionDto"
+            },
+            "description": "枚举可选值（Type = Select 时提供）。",
+            "nullable": true
+          },
+          "required": {
+            "type": "boolean",
+            "description": "发起时是否必填（缺失或为空的必填字段会被拒绝提交）。"
+          },
+          "placeholder": {
+            "maxLength": 256,
+            "type": "string",
+            "description": "输入提示（表单引擎与编辑器展示）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "审批字段声明 —— 业务模块（或后续的表单引擎）按业务类型声明字段清单，\r\n既作为分支条件的可比较字段来源，也作为详情页只读渲染依据。"
+      },
+      "ApprovalFieldOptionDto": {
+        "required": [
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "value": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string",
+            "description": "选项值（实例快照中保存的值）。"
+          },
+          "label": {
+            "maxLength": 128,
+            "type": "string",
+            "description": "选项显示名。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "枚举字段的可选值。"
+      },
+      "ApprovalFieldValueDto": {
+        "required": [
+          "key"
+        ],
+        "type": "object",
+        "properties": {
+          "key": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string",
+            "description": "字段标识。"
+          },
+          "value": {
+            "maxLength": 2000,
+            "type": "string",
+            "description": "字段取值（统一按字符串传输，按字段类型解释）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "提交时的字段值（展示元数据以业务类型声明为准，客户端只提供取值）。"
+      },
+      "ApprovalFlowDefinitionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "流程定义 ID。",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string",
+            "description": "流程编码（同一编码的多个版本共享）。",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "流程名称。",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "流程说明。",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "description": "版本号。",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "description": "发布状态：Draft / Published / Disabled。",
+            "nullable": true
+          },
+          "businessType": {
+            "type": "string",
+            "description": "绑定业务类型。",
+            "nullable": true
+          },
+          "nodeCount": {
+            "type": "integer",
+            "description": "节点数量。",
+            "format": "int32"
+          },
+          "publishedTime": {
+            "type": "string",
+            "description": "发布时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "creationTime": {
+            "type": "string",
+            "description": "创建时间。",
+            "format": "date-time"
+          },
+          "creatorId": {
+            "type": "string",
+            "description": "创建人标识。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lastModificationTime": {
+            "type": "string",
+            "description": "最后修改时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "description": "最后修改人标识。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "allowWithdraw": {
+            "type": "boolean",
+            "description": "是否允许撤回。"
+          },
+          "withdrawWindowHours": {
+            "type": "integer",
+            "description": "撤回时间窗（小时，自发起起算；空表示不限）。",
+            "format": "int32",
+            "nullable": true
+          },
+          "autoPassWhenInitiator": {
+            "type": "boolean",
+            "description": "审批人与发起人相同时是否自动通过。"
+          },
+          "fallbackApproverUserIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "兜底审批人。",
+            "nullable": true
+          },
+          "basedOnDefinitionId": {
+            "type": "string",
+            "description": "来源版本 ID。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalFlowNodeDto"
+            },
+            "description": "节点列表（按顺序）。",
+            "nullable": true
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalFlowEdgeDto"
+            },
+            "description": "连线列表（有向图的边）。",
+            "nullable": true
+          },
+          "layoutJson": {
+            "type": "string",
+            "description": "画布布局 JSON（仅设计器还原用，引擎不读取）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "流程定义明细（含节点）。"
+      },
+      "ApprovalFlowDefinitionListDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "流程定义 ID。",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string",
+            "description": "流程编码（同一编码的多个版本共享）。",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "流程名称。",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "流程说明。",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "description": "版本号。",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "description": "发布状态：Draft / Published / Disabled。",
+            "nullable": true
+          },
+          "businessType": {
+            "type": "string",
+            "description": "绑定业务类型。",
+            "nullable": true
+          },
+          "nodeCount": {
+            "type": "integer",
+            "description": "节点数量。",
+            "format": "int32"
+          },
+          "publishedTime": {
+            "type": "string",
+            "description": "发布时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "creationTime": {
+            "type": "string",
+            "description": "创建时间。",
+            "format": "date-time"
+          },
+          "creatorId": {
+            "type": "string",
+            "description": "创建人标识。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lastModificationTime": {
+            "type": "string",
+            "description": "最后修改时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "description": "最后修改人标识。",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "流程定义列表项（不含节点明细）。"
+      },
+      "ApprovalFlowEdgeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "连线 ID。",
+            "format": "uuid"
+          },
+          "fromNodeKey": {
+            "type": "string",
+            "description": "起点节点标识。",
+            "nullable": true
+          },
+          "toNodeKey": {
+            "type": "string",
+            "description": "终点节点标识。",
+            "nullable": true
+          },
+          "conditionJson": {
+            "type": "string",
+            "description": "出边条件 JSON（为空表示默认出边）。",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "description": "连线标签（仅画布展示）。",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "integer",
+            "description": "同一起点多条出边时的求值顺序。",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "流程连线（有向图的边）。"
+      },
+      "ApprovalFlowNodeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "节点 ID。",
+            "format": "uuid"
+          },
+          "nodeKey": {
+            "type": "string",
+            "description": "节点标识（流程内唯一）。",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "节点名称。",
+            "nullable": true
+          },
+          "nodeType": {
+            "type": "string",
+            "description": "节点类型：Approval / Cc / Start / ExclusiveGateway / ParallelGateway / End。",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "integer",
+            "description": "节点顺序。",
+            "format": "int32"
+          },
+          "approverType": {
+            "type": "string",
+            "description": "审批人来源：SpecifiedUsers / Role / OrganizationManager / OrganizationMembers / Initiator。",
+            "nullable": true
+          },
+          "approverUserIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "指定审批人。",
+            "nullable": true
+          },
+          "approverRoleName": {
+            "type": "string",
+            "description": "审批角色名。",
+            "nullable": true
+          },
+          "approverOrganizationId": {
+            "type": "string",
+            "description": "审批组织（ApproverType = OrganizationManager / OrganizationMembers 时生效）。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "multiApproveMode": {
+            "type": "string",
+            "description": "多人审批模式：All（会签）/ Any（或签）/ Sequential（顺序）。",
+            "nullable": true
+          },
+          "conditionJson": {
+            "type": "string",
+            "description": "节点激活条件 JSON。",
+            "nullable": true
+          },
+          "allowTransfer": {
+            "type": "boolean",
+            "description": "是否允许转交。"
+          },
+          "allowAddSign": {
+            "type": "boolean",
+            "description": "是否允许加签。"
+          },
+          "allowReturnToInitiator": {
+            "type": "boolean",
+            "description": "是否允许退回发起人。"
+          },
+          "timeoutHours": {
+            "type": "integer",
+            "description": "超时小时数。",
+            "format": "int32",
+            "nullable": true
+          },
+          "ccConfigJson": {
+            "type": "string",
+            "description": "抄送配置 JSON。",
+            "nullable": true
+          },
+          "joinPolicy": {
+            "type": "string",
+            "description": "汇聚策略：AnyArrival（任一路到达）/ AllArrival（全部入边到达）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "流程节点。"
+      },
+      "ApprovalFlowValidationResultDto": {
+        "type": "object",
+        "properties": {
+          "valid": {
+            "type": "boolean",
+            "description": "是否通过（问题清单为空）。"
+          },
+          "problems": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "逐条问题（可读文案，与前端即时提示共用同一套规则）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "发布前校验结果（设计器展示逐条问题，发布判定以此为准）。"
+      },
+      "ApprovalInstanceCountsDto": {
+        "type": "object",
+        "properties": {
+          "pendingCount": {
+            "type": "integer",
+            "description": "待办数量。",
+            "format": "int32"
+          },
+          "unreadCcCount": {
+            "type": "integer",
+            "description": "未读抄送数量。",
+            "format": "int32"
+          },
+          "submittedRunningCount": {
+            "type": "integer",
+            "description": "我发起的进行中数量。",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "实例计数（角标）。"
+      },
+      "ApprovalInstanceDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "实例 ID。",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "string",
+            "description": "实例编号。",
+            "nullable": true
+          },
+          "definitionCode": {
+            "type": "string",
+            "description": "流程编码。",
+            "nullable": true
+          },
+          "definitionName": {
+            "type": "string",
+            "description": "流程名称。",
+            "nullable": true
+          },
+          "definitionVersion": {
+            "type": "integer",
+            "description": "流程版本。",
+            "format": "int32"
+          },
+          "businessType": {
+            "type": "string",
+            "description": "业务类型。",
+            "nullable": true
+          },
+          "businessId": {
+            "type": "string",
+            "description": "业务对象标识。",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "description": "实例标题。",
+            "nullable": true
+          },
+          "initiatorUserId": {
+            "type": "string",
+            "description": "发起人用户 ID。",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "description": "实例状态：Running / Approved / Rejected / Returned / Withdrawn / Terminated。",
+            "nullable": true
+          },
+          "currentNodeKey": {
+            "type": "string",
+            "description": "当前节点标识。",
+            "nullable": true
+          },
+          "currentNodeName": {
+            "type": "string",
+            "description": "当前节点名称。",
+            "nullable": true
+          },
+          "creationTime": {
+            "type": "string",
+            "description": "创建时间。",
+            "format": "date-time"
+          },
+          "creatorId": {
+            "type": "string",
+            "description": "创建人标识。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lastModificationTime": {
+            "type": "string",
+            "description": "最后修改时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "description": "最后修改人标识。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "completedTime": {
+            "type": "string",
+            "description": "结束时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "initiatorOrganizationUnitId": {
+            "type": "string",
+            "description": "发起人组织 ID。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "context": {
+            "$ref": "#/components/schemas/ApprovalContextSnapshotDto"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalAttachmentDto"
+            },
+            "description": "实例附件（实例级与审批节点上传的合并列表）。",
+            "nullable": true
+          },
+          "canWithdraw": {
+            "type": "boolean",
+            "description": "允许撤回（流程开关 + 状态 + 操作人）。"
+          },
+          "canResubmit": {
+            "type": "boolean",
+            "description": "允许重新提交（状态为已退回且操作人为发起人）。"
+          },
+          "canUploadAttachment": {
+            "type": "boolean",
+            "description": "允许上传实例级附件（发起人且实例在处理中）。"
+          },
+          "canTerminateAsSuperior": {
+            "type": "boolean",
+            "description": "当前查看者是发起人上级且实例可终止（进行中或已退回）。管理端终止权限由权限码单独判断。"
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalNodeProgressDto"
+            },
+            "description": "节点进度。",
+            "nullable": true
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalTaskDto"
+            },
+            "description": "任务列表。",
+            "nullable": true
+          },
+          "records": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalRecordDto"
+            },
+            "description": "处理记录（按时间正序）。",
+            "nullable": true
+          },
+          "ccRecipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalCcDto"
+            },
+            "description": "抄送记录。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "审批实例明细（含节点进度、任务、记录与抄送）。"
+      },
+      "ApprovalInstanceListDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "实例 ID。",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "string",
+            "description": "实例编号。",
+            "nullable": true
+          },
+          "definitionCode": {
+            "type": "string",
+            "description": "流程编码。",
+            "nullable": true
+          },
+          "definitionName": {
+            "type": "string",
+            "description": "流程名称。",
+            "nullable": true
+          },
+          "definitionVersion": {
+            "type": "integer",
+            "description": "流程版本。",
+            "format": "int32"
+          },
+          "businessType": {
+            "type": "string",
+            "description": "业务类型。",
+            "nullable": true
+          },
+          "businessId": {
+            "type": "string",
+            "description": "业务对象标识。",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "description": "实例标题。",
+            "nullable": true
+          },
+          "initiatorUserId": {
+            "type": "string",
+            "description": "发起人用户 ID。",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "description": "实例状态：Running / Approved / Rejected / Returned / Withdrawn / Terminated。",
+            "nullable": true
+          },
+          "currentNodeKey": {
+            "type": "string",
+            "description": "当前节点标识。",
+            "nullable": true
+          },
+          "currentNodeName": {
+            "type": "string",
+            "description": "当前节点名称。",
+            "nullable": true
+          },
+          "creationTime": {
+            "type": "string",
+            "description": "创建时间。",
+            "format": "date-time"
+          },
+          "creatorId": {
+            "type": "string",
+            "description": "创建人标识。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lastModificationTime": {
+            "type": "string",
+            "description": "最后修改时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "description": "最后修改人标识。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "completedTime": {
+            "type": "string",
+            "description": "结束时间。",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "审批实例摘要（列表项）。"
+      },
+      "ApprovalNodeProgressDto": {
+        "type": "object",
+        "properties": {
+          "nodeKey": {
+            "type": "string",
+            "description": "节点标识。",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "节点名称。",
+            "nullable": true
+          },
+          "nodeType": {
+            "type": "string",
+            "description": "节点类型。",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "integer",
+            "description": "节点顺序。",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "description": "节点进度状态：NotStarted / Active / Approved / Rejected / Skipped / Canceled。",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "description": "节点状态：Pending / Active / Completed / Skipped（并行汇合与死分支判定结果）。",
+            "nullable": true
+          },
+          "round": {
+            "type": "integer",
+            "description": "激活轮次（退回重提后递增）。",
+            "format": "int32"
+          },
+          "activated": {
+            "type": "boolean",
+            "description": "该节点是否满足激活条件（未激活节点展示为 NotStarted）。"
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalTaskDto"
+            },
+            "description": "节点任务。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "节点进度。"
+      },
+      "ApprovalOrganizationOptionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "parentId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "审批组织选项，供组织负责人/组织人员来源选择组织；扁平列表按 parentId 组装树。"
+      },
+      "ApprovalRecordDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "记录 ID。",
+            "format": "uuid"
+          },
+          "instanceId": {
+            "type": "string",
+            "description": "实例 ID。",
+            "format": "uuid"
+          },
+          "nodeKey": {
+            "type": "string",
+            "description": "节点标识。",
+            "nullable": true
+          },
+          "nodeName": {
+            "type": "string",
+            "description": "节点名称。",
+            "nullable": true
+          },
+          "fromNodeKey": {
+            "type": "string",
+            "description": "动作发生前的节点标识（时间线 from→to 起点）。",
+            "nullable": true
+          },
+          "toNodeKey": {
+            "type": "string",
+            "description": "动作完成后的当前节点标识（并行为多个时以逗号分隔；实例结束时为空）。",
+            "nullable": true
+          },
+          "action": {
+            "type": "string",
+            "description": "动作。",
+            "nullable": true
+          },
+          "operatorUserId": {
+            "type": "string",
+            "description": "操作人（系统动作如超时提醒为空）。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "targetUserId": {
+            "type": "string",
+            "description": "目标用户。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "comment": {
+            "type": "string",
+            "description": "处理意见。",
+            "nullable": true
+          },
+          "creationTime": {
+            "type": "string",
+            "description": "发生时间。",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "处理记录。"
+      },
+      "ApprovalTaskDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "任务 ID。",
+            "format": "uuid"
+          },
+          "instanceId": {
+            "type": "string",
+            "description": "实例 ID。",
+            "format": "uuid"
+          },
+          "nodeKey": {
+            "type": "string",
+            "description": "节点标识。",
+            "nullable": true
+          },
+          "nodeName": {
+            "type": "string",
+            "description": "节点名称。",
+            "nullable": true
+          },
+          "nodeSort": {
+            "type": "integer",
+            "description": "节点顺序。",
+            "format": "int32"
+          },
+          "taskType": {
+            "type": "string",
+            "description": "任务类型：Approval / AddSignBefore / AddSignAfter / Transfer。",
+            "nullable": true
+          },
+          "assigneeUserId": {
+            "type": "string",
+            "description": "处理人。",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "description": "状态：Pending / Approved / Rejected / Skipped / Canceled。",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "integer",
+            "description": "节点内次序。",
+            "format": "int32"
+          },
+          "comment": {
+            "type": "string",
+            "description": "处理意见。",
+            "nullable": true
+          },
+          "dueAt": {
+            "type": "string",
+            "description": "超时时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "handledTime": {
+            "type": "string",
+            "description": "处理时间。",
+            "format": "date-time",
+            "nullable": true
+          },
+          "creationTime": {
+            "type": "string",
+            "description": "创建时间。",
+            "format": "date-time"
+          },
+          "instanceNumber": {
+            "type": "string",
+            "description": "实例编号（待办/已办列表展示）。",
+            "nullable": true
+          },
+          "instanceTitle": {
+            "type": "string",
+            "description": "实例标题（待办/已办列表展示）。",
+            "nullable": true
+          },
+          "instanceStatus": {
+            "type": "string",
+            "description": "实例状态（待办/已办列表展示）。",
+            "nullable": true
+          },
+          "businessType": {
+            "type": "string",
+            "description": "业务类型（待办/已办列表展示）。",
+            "nullable": true
+          },
+          "businessId": {
+            "type": "string",
+            "description": "业务对象标识（业务详情跳转）。",
+            "nullable": true
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/ApprovalTaskPermissionsDto"
+          }
+        },
+        "additionalProperties": false,
+        "description": "审批任务。"
+      },
+      "ApprovalTaskPermissionsDto": {
+        "type": "object",
+        "properties": {
+          "canApprove": {
+            "type": "boolean",
+            "description": "可同意/拒绝。"
+          },
+          "canTransfer": {
+            "type": "boolean",
+            "description": "可转交。"
+          },
+          "canAddSign": {
+            "type": "boolean",
+            "description": "可加签。"
+          },
+          "canReturnToPrevious": {
+            "type": "boolean",
+            "description": "可退回上一步。"
+          },
+          "canReturnToInitiator": {
+            "type": "boolean",
+            "description": "可退回发起人。"
+          }
+        },
+        "additionalProperties": false,
+        "description": "任务可用操作（由节点配置与流程开关决定）。"
+      },
+      "ApprovalTerminateDto": {
+        "required": [
+          "comment"
+        ],
+        "type": "object",
+        "properties": {
+          "comment": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string",
+            "description": "终止原因。"
+          }
+        },
+        "additionalProperties": false,
+        "description": "终止请求。"
+      },
+      "ApprovalTransferDto": {
+        "required": [
+          "targetUserId"
+        ],
+        "type": "object",
+        "properties": {
+          "targetUserId": {
+            "type": "string",
+            "description": "转交目标用户。",
+            "format": "uuid"
+          },
+          "comment": {
+            "maxLength": 1000,
+            "type": "string",
+            "description": "处理意见。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "转交请求。"
+      },
+      "ApprovalUserOptionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "审批选人目录项，仅包含选择与展示所需字段。"
+      },
+      "CreateApprovalFlowDefinitionDto": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "流程编码（租户内唯一，字母数字与中划线）。"
+          },
+          "name": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string",
+            "description": "流程名称。"
+          },
+          "description": {
+            "maxLength": 1024,
+            "type": "string",
+            "description": "流程说明。",
+            "nullable": true
+          },
+          "businessType": {
+            "maxLength": 128,
+            "type": "string",
+            "description": "绑定业务类型。",
+            "nullable": true
+          },
+          "allowWithdraw": {
+            "type": "boolean",
+            "description": "是否允许撤回。"
+          },
+          "withdrawWindowHours": {
+            "maximum": 8760,
+            "minimum": 1,
+            "type": "integer",
+            "description": "撤回时间窗（小时，自发起起算；空表示不限）。",
+            "format": "int32",
+            "nullable": true
+          },
+          "autoPassWhenInitiator": {
+            "type": "boolean",
+            "description": "审批人与发起人相同时是否自动通过。"
+          },
+          "fallbackApproverUserIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "兜底审批人。",
+            "nullable": true
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaveApprovalFlowNodeDto"
+            },
+            "description": "节点列表。",
+            "nullable": true
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaveApprovalFlowEdgeDto"
+            },
+            "description": "连线列表（为空时按节点顺序视为线性流程）。",
+            "nullable": true
+          },
+          "layoutJson": {
+            "maxLength": 8000,
+            "type": "string",
+            "description": "画布布局 JSON（仅设计器还原用）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "创建流程定义（生成草稿版本）。"
+      },
+      "IRemoteStreamContent": {
+        "type": "object",
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "contentType": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "contentLength": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Remote stream content abstraction. Replaces Volo.Abp.Content.IRemoteStreamContent.\r\nUsed for file upload/download across application service boundaries."
+      },
+      "PagedResultDtoOfApprovalCcDto": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "integer",
+            "description": "总记录数。",
+            "format": "int64"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalCcDto"
+            },
+            "description": "当前页数据列表。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Paged result wrapper. Replaces Volo.Abp.Application.Dtos.PagedResultDto<T>."
+      },
+      "PagedResultDtoOfApprovalInstanceListDto": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "integer",
+            "description": "总记录数。",
+            "format": "int64"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalInstanceListDto"
+            },
+            "description": "当前页数据列表。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Paged result wrapper. Replaces Volo.Abp.Application.Dtos.PagedResultDto<T>."
+      },
+      "PagedResultDtoOfApprovalTaskDto": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "integer",
+            "description": "总记录数。",
+            "format": "int64"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalTaskDto"
+            },
+            "description": "当前页数据列表。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Paged result wrapper. Replaces Volo.Abp.Application.Dtos.PagedResultDto<T>."
+      },
+      "SaveApprovalFlowEdgeDto": {
+        "required": [
+          "fromNodeKey",
+          "toNodeKey"
+        ],
+        "type": "object",
+        "properties": {
+          "fromNodeKey": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string",
+            "description": "起点节点标识。"
+          },
+          "toNodeKey": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string",
+            "description": "终点节点标识。"
+          },
+          "conditionJson": {
+            "maxLength": 4000,
+            "type": "string",
+            "description": "出边条件 JSON（为空表示默认出边）。",
+            "nullable": true
+          },
+          "label": {
+            "maxLength": 64,
+            "type": "string",
+            "description": "连线标签（仅画布展示）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "保存流程连线（创建与更新草稿共用，整体覆盖）。"
+      },
+      "SaveApprovalFlowNodeDto": {
+        "required": [
+          "approverType",
+          "joinPolicy",
+          "multiApproveMode",
+          "name",
+          "nodeKey",
+          "nodeType"
+        ],
+        "type": "object",
+        "properties": {
+          "nodeKey": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string",
+            "description": "节点标识（流程内唯一，字母数字与中划线，条件表达式引用该值）。"
+          },
+          "name": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "节点名称。"
+          },
+          "nodeType": {
+            "minLength": 1,
+            "type": "string",
+            "description": "节点类型（Approval / Cc / Start / ExclusiveGateway / ParallelGateway / End）。"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "description": "节点顺序（从 1 开始，审批节点按该值执行）。",
+            "format": "int32"
+          },
+          "approverType": {
+            "minLength": 1,
+            "type": "string",
+            "description": "审批人来源（SpecifiedUsers / Role / OrganizationManager / OrganizationMembers / Initiator）。"
+          },
+          "approverUserIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "指定审批人（ApproverType = SpecifiedUsers 时必填）。",
+            "nullable": true
+          },
+          "approverRoleName": {
+            "maxLength": 128,
+            "type": "string",
+            "description": "审批角色名（ApproverType = Role 时必填）。",
+            "nullable": true
+          },
+          "approverOrganizationId": {
+            "type": "string",
+            "description": "审批组织（ApproverType = OrganizationManager / OrganizationMembers 时必填）。",
+            "format": "uuid",
+            "nullable": true
+          },
+          "multiApproveMode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "多人审批模式（All / Any / Sequential）。"
+          },
+          "conditionJson": {
+            "maxLength": 4000,
+            "type": "string",
+            "description": "节点激活条件 JSON（可空）。",
+            "nullable": true
+          },
+          "allowTransfer": {
+            "type": "boolean",
+            "description": "是否允许转交。"
+          },
+          "allowAddSign": {
+            "type": "boolean",
+            "description": "是否允许加签。"
+          },
+          "allowReturnToInitiator": {
+            "type": "boolean",
+            "description": "是否允许退回发起人。"
+          },
+          "timeoutHours": {
+            "maximum": 8760,
+            "minimum": 1,
+            "type": "integer",
+            "description": "超时小时数（1-8760，空表示不限制）。",
+            "format": "int32",
+            "nullable": true
+          },
+          "ccConfigJson": {
+            "maxLength": 2000,
+            "type": "string",
+            "description": "抄送配置 JSON（NodeType = Cc 时使用）。",
+            "nullable": true
+          },
+          "joinPolicy": {
+            "minLength": 1,
+            "type": "string",
+            "description": "汇聚策略（AnyArrival / AllArrival；并行 join 用 AllArrival）。"
+          }
+        },
+        "additionalProperties": false,
+        "description": "保存流程节点（创建与更新草稿共用）。"
+      },
+      "SubmitApprovalDto": {
+        "required": [
+          "businessId",
+          "businessType",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "definitionCode": {
+            "maxLength": 128,
+            "type": "string",
+            "description": "流程编码；为空时按业务类型解析默认流程。",
+            "nullable": true
+          },
+          "businessType": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "业务类型。"
+          },
+          "businessId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "业务对象标识。"
+          },
+          "title": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string",
+            "description": "实例标题。"
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "业务上下文（条件求值与详情展示使用）。",
+            "nullable": true
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalFieldValueDto"
+            },
+            "description": "字段值列表（表单引擎提交用，与 Sim.Approval.Application.Contracts.Dtos.SubmitApprovalDto.Context 两种形态均可；\r\n同键以本属性为准，展示元数据取自业务类型声明）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "发起审批请求（业务模块服务端调用或用户端自助发起）。"
+      },
+      "UpdateApprovalFlowDefinitionDto": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string",
+            "description": "流程名称。"
+          },
+          "description": {
+            "maxLength": 1024,
+            "type": "string",
+            "description": "流程说明。",
+            "nullable": true
+          },
+          "businessType": {
+            "maxLength": 128,
+            "type": "string",
+            "description": "绑定业务类型。",
+            "nullable": true
+          },
+          "allowWithdraw": {
+            "type": "boolean",
+            "description": "是否允许撤回。"
+          },
+          "withdrawWindowHours": {
+            "maximum": 8760,
+            "minimum": 1,
+            "type": "integer",
+            "description": "撤回时间窗（小时，自发起起算；空表示不限）。",
+            "format": "int32",
+            "nullable": true
+          },
+          "autoPassWhenInitiator": {
+            "type": "boolean",
+            "description": "审批人与发起人相同时是否自动通过。"
+          },
+          "fallbackApproverUserIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "兜底审批人。",
+            "nullable": true
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaveApprovalFlowNodeDto"
+            },
+            "description": "节点列表。",
+            "nullable": true
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaveApprovalFlowEdgeDto"
+            },
+            "description": "连线列表（为空时按节点顺序视为线性流程）。",
+            "nullable": true
+          },
+          "layoutJson": {
+            "maxLength": 8000,
+            "type": "string",
+            "description": "画布布局 JSON（仅设计器还原用）。",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "更新流程定义（仅草稿状态可更新，节点整体覆盖）。"
+      }
+    },
+    "securitySchemes": {
+      "JWT Auth": {
+        "type": "http",
+        "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {}
+  ],
+  "tags": [
+    {
+      "name": "BusinessType",
+      "description": "业务类型目录 —— 展示已注册审批的业务类型及其可条件字段。\r\n数据来源于各业务模块注册的 Sim.Approval.Application.Contracts.Ports.IApprovalBusinessDescriptor。"
+    },
+    {
+      "name": "FlowDefinition",
+      "description": "审批流程定义管理 —— 草稿创建与编辑、发布、停用、版本派生与草稿删除。\r\n已发布版本不可修改，需基于来源版本创建新草稿。"
+    },
+    {
+      "name": "Instance",
+      "description": "审批中心（用户端）—— 发起、待办、已办、我发起的、抄送我的与审批操作。\r\n所有写操作在同一个工作单元事务内完成，失败整体回滚。"
+    },
+    {
+      "name": "Monitor",
+      "description": "审批实例监控（管理端）—— 跨用户查询全部实例并强制终止。\r\n查看与终止分别由独立权限控制。"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+erDiagram
+  APPROVAL_FLOW_DEFINITION ||--|{ APPROVAL_FLOW_NODE : "包含节点"
+  APPROVAL_FLOW_DEFINITION ||--o{ APPROVAL_INSTANCE : "按版本发起"
+  APPROVAL_INSTANCE ||--|{ APPROVAL_TASK : "生成任务"
+  APPROVAL_INSTANCE ||--|{ APPROVAL_RECORD : "流转时间线"
+  APPROVAL_INSTANCE ||--o{ APPROVAL_CC : "抄送"
+  APPROVAL_TASK ||--o{ APPROVAL_TASK : "转交/加签派生(SourceTaskId)"
+
+  APPROVAL_FLOW_DEFINITION {
+    guid Id PK
+    guid TenantId
+    string Code
+    int Version
+    string Status
+    bool AllowWithdraw
+    string FallbackApproverIds
+  }
+  APPROVAL_FLOW_NODE {
+    guid Id PK
+    guid DefinitionId FK
+    string NodeKey
+    string NodeType
+    int SortOrder
+    string ApproverType
+    string MultiApproveMode
+    string ConditionJson
+  }
+  APPROVAL_INSTANCE {
+    guid Id PK
+    guid TenantId
+    string Number
+    string BusinessType
+    string BusinessId
+    string Status
+    string RunningKey
+    int Version
+  }
+  APPROVAL_TASK {
+    guid Id PK
+    guid InstanceId FK
+    string NodeKey
+    string TaskType
+    guid AssigneeUserId
+    string Status
+    datetime DueAt
+  }
+  APPROVAL_RECORD {
+    guid Id PK
+    guid InstanceId FK
+    string Action
+    guid OperatorUserId
+    string Comment
+  }
+  APPROVAL_CC {
+    guid Id PK
+    guid InstanceId FK
+    guid UserId
+    datetime ReadAt
+  }

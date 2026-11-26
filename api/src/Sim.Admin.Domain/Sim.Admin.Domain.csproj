@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\modules\openplatform\Sim.OpenPlatform.Application.Contracts\Sim.OpenPlatform.Application.Contracts.csproj" />
+    <PackageReference Include="Volo.Abp.Core" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\framework\Sim.Framework.Application.Contracts\Sim.Framework.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\framework\Sim.SqlSugar.Core\Sim.SqlSugar.Core.csproj" />
+    <ProjectReference Include="..\..\modules\system\Sim.System.Application.Contracts\Sim.System.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\system\Sim.System.Domain\Sim.System.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\system\Sim.System.Domain.Shared\Sim.System.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\modules\system\Sim.System.SqlSugar\Sim.System.SqlSugar.csproj" />
+    <ProjectReference Include="..\Sim.Admin.Domain.Shared\Sim.Admin.Domain.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

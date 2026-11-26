@@ -1,0 +1,22 @@
+<Project>
+    <PropertyGroup>
+        <!-- ...existing code... -->
+
+        <!-- 全局版本配置 - 使用日期分布到不同段位 -->
+        <MajorVersion>1</MajorVersion>
+        <!-- MinorVersion 使用年份：2025 -> 25 -->
+        <MinorVersion>$([System.DateTime]::Now.ToString("yy"))</MinorVersion>
+        <!-- PatchVersion 使用月日：0819 -> 819 -->
+        <PatchVersion>$([MSBuild]::Subtract($([System.DateTime]::Now.ToString("MMdd")), 0))</PatchVersion>
+        <!-- BuildNumber 使用时分：1857 -> 1857 -->
+        <BuildNumber>$([System.DateTime]::Now.ToString("HHmm"))</BuildNumber>
+
+        <VersionPrefix>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionPrefix>
+        <Version>$(VersionPrefix)</Version>
+        <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+        <FileVersion>$(VersionPrefix).$(BuildNumber)</FileVersion>
+        <InformationalVersion>$(VersionPrefix)+build.$(BuildNumber)</InformationalVersion>
+    </PropertyGroup>
+
+    <!-- ...existing code... -->
+</Project>

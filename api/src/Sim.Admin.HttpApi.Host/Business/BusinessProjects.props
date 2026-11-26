@@ -1,0 +1,18 @@
+<Project>
+
+  <!--
+    业务系统模块工程引用清单。
+    基座仓保持为空；业务仓只在 <ItemGroup> 内追加自己的模块工程，不修改 Host csproj。
+    新增业务模块时同步：
+      1. 在本文件追加 Application 与 SqlSugar 工程的 ProjectReference；
+      2. 在 Business/BusinessModuleRegistration.cs 追加 [DependsOn]；
+      3. 在 appsettings.json 的 Swagger:Documents 追加业务文档分组。
+  -->
+  <ItemGroup>
+    <!-- 示例：
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\..\modules\qms\Sim.Qms.Application\Sim.Qms.Application.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\..\modules\qms\Sim.Qms.SqlSugar\Sim.Qms.SqlSugar.csproj" />
+    -->
+  </ItemGroup>
+
+</Project>

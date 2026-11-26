@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>角色权限 · SimApp</title>
+<meta name="description" content="SimApp 角色权限 · 角色列表与权限矩阵">
+<link rel="stylesheet" href="assets/ui.css">
+</head>
+<body data-shell="app" data-page="roles" data-title="角色权限">
+<a class="skip-link" href="#main">跳到主要内容</a>
+<div class="shell" id="shell">
+  <div class="shell__main">
+    <main class="page" id="main">
+
+      <div class="page-head" data-od-id="roles-head">
+        <div class="page-head__main">
+          <span class="kicker">权限与组织 · RBAC</span>
+          <h1>角色权限</h1>
+          <p>角色决定成员能看到哪些模块、能做哪些操作。修改后 5 分钟内对所有在线会话生效，变更会写入审计日志。</p>
+        </div>
+        <div class="page-head__actions">
+          <button class="btn btn--ghost" type="button" data-toast="已生成权限对比报告（PDF）">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+            权限报告
+          </button>
+          <button class="btn btn--primary" type="button" data-toast="已创建角色草稿，可继续配置权限">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            新建角色
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid--sidebar" data-od-id="roles-main">
+        <section class="card card--flush">
+          <div class="card__head" style="align-items:center">
+            <div>
+              <h2><span id="perm-role-name">平台管理员</span> · 权限矩阵</h2>
+              <p>按模块分组，勾选即授予对应操作权限</p>
+            </div>
+            <div class="card__head__side">
+              <span class="pill pill--sun" id="perm-dirty" hidden>有未保存更改</span>
+              <button class="btn btn--sm btn--primary" type="button" id="perm-save" disabled>保存权限</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="matrix" id="perm-matrix">
+              <thead>
+                <tr>
+                  <th scope="col" style="min-width:200px">权限项</th>
+                  <th scope="col"><label style="display:inline-flex;align-items:center;gap:6px;justify-content:center"><input class="checkbox" type="checkbox" data-col-all="view" aria-label="全选查看">查看</label></th>
+                  <th scope="col"><label style="display:inline-flex;align-items:center;gap:6px;justify-content:center"><input class="checkbox" type="checkbox" data-col-all="edit" aria-label="全选编辑">编辑</label></th>
+                  <th scope="col"><label style="display:inline-flex;align-items:center;gap:6px;justify-content:center"><input class="checkbox" type="checkbox" data-col-all="approve" aria-label="全选审批">审批</label></th>
+                  <th scope="col"><label style="display:inline-flex;align-items:center;gap:6px;justify-content:center"><input class="checkbox" type="checkbox" data-col-all="admin" aria-label="全选管理">管理</label></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="group-row"><td colspan="5">审批中心</td></tr>
+                <tr>
+                  <td>查看审批队列与单据 <span class="perm">approval.read</span></td>
+                  <td><input class="checkbox" type="checkbox" data-col="view" checked aria-label="审批中心查看"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="edit" aria-label="审批中心编辑"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="approve" checked aria-label="审批中心审批"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="admin" aria-label="审批中心管理"></td>
+                </tr>
+                <tr>
+                  <td>转交与加签 <span class="perm">approval.forward</span></td>
+                  <td><input class="checkbox" type="checkbox" data-col="view" checked aria-label="转交查看"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="edit" aria-label="转交编辑"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="approve" checked aria-label="转交审批"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="admin" aria-label="转交管理"></td>
+                </tr>
+                <tr>
+                  <td>导出流程记录与审计 <span class="perm">approval.export</span></td>
+                  <td><input class="checkbox" type="checkbox" data-col="view" checked aria-label="导出查看"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="edit" aria-label="导出编辑"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="approve" aria-label="导出审批"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="admin" checked aria-label="导出管理"></td>
+                </tr>
+
+                <tr class="group-row"><td colspan="5">用户与组织</td></tr>
+                <tr>
+                  <td>查看成员目录 <span class="perm">users.read</span></td>
+                  <td><input class="checkbox" type="checkbox" data-col="view" checked aria-label="成员查看"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="edit" aria-label="成员编辑"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="approve" aria-label="成员审批"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="admin" aria-label="成员管理"></td>
+                </tr>
+                <tr>
+                  <td>邀请、停用与重置密码 <span class="perm">users.manage</span></td>
+                  <td><input class="checkbox" type="checkbox" data-col="view" checked aria-label="账号查看"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="edit" checked aria-label="账号编辑"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="approve" aria-label="账号审批"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="admin" checked aria-label="账号管理"></td>
+                </tr>
+                <tr>
+                  <td>调整组织架构与负责人 <span class="perm">org.manage</span></td>
+                  <td><input class="checkbox" type="checkbox" data-col="view" checked aria-label="组织查看"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="edit" checked aria-label="组织编辑"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="approve" aria-label="组织审批"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="admin" checked aria-label="组织管理"></td>
+                </tr>
+
+
+                <tr class="group-row"><td colspan="5">系统与平台</td></tr>
+                <tr>
+                  <td>查看系统配置 <span class="perm">settings.read</span></td>
+                  <td><input class="checkbox" type="checkbox" data-col="view" checked aria-label="配置查看"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="edit" aria-label="配置编辑"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="approve" aria-label="配置审批"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="admin" aria-label="配置管理"></td>
+                </tr>
+                <tr>
+                  <td>修改安全与通知策略 <span class="perm">settings.manage</span></td>
+                  <td><input class="checkbox" type="checkbox" data-col="view" checked aria-label="策略查看"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="edit" checked aria-label="策略编辑"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="approve" aria-label="策略审批"></td>
+                  <td><input class="checkbox" type="checkbox" data-col="admin" checked aria-label="策略管理"></td>
+                </tr>
+            <span class="pill pill--outline">共 12 项权限</span>
+            <span class="small muted">灰色勾选表示由上级角色继承，无法单独取消。</span>
+          </div>
+        </section>
+
+        <aside class="stack" aria-label="角色列表" data-od-id="roles-list">
+          <section class="card">
+            <div class="card__head">
+              <div><h2>角色</h2><p>共 5 个内置角色</p></div>
+              <button class="icon-btn" type="button" data-toast="已打开角色排序面板" aria-label="排序角色">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+              </button>
+            </div>
+            <div class="role-list">
+              <button class="role-item" type="button" data-role="平台管理员" aria-selected="true">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><b>平台管理员</b><span class="pill pill--sun">12 人</span></div>
+                <span>全部模块的读写与管理权限，可调整安全策略</span>
+              </button>
+              <button class="role-item" type="button" data-role="部门负责人" aria-selected="false">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><b>部门负责人</b><span class="pill pill--sky">9 人</span></div>
+                <span>本部门审批、成员查看与内容发布</span>
+              </button>
+              <button class="role-item" type="button" data-role="审批人" aria-selected="false">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><b>审批人</b><span class="pill pill--lilac">23 人</span></div>
+                <span>仅处理被指派的审批节点，可查看关联单据</span>
+              </button>
+              <button class="role-item" type="button" data-role="编辑" aria-selected="false">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><b>编辑</b><span class="pill pill--mint">41 人</span></div>
+                <span>内容撰写与草稿管理，需终审后发布</span>
+              </button>
+              <button class="role-item" type="button" data-role="访客" aria-selected="false">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><b>访客</b><span class="pill">6 人</span></div>
+                <span>只读访问共享文档与公开信息</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="card card--cream">
+            <div class="card__head"><div><h3>角色继承</h3></div></div>
+            <div class="dot-list" style="flex-direction:column;align-items:flex-start;gap:8px">
+              <span class="on">平台管理员 → 全部权限</span>
+              <span class="on">部门负责人 → 审批人 + 成员查看</span>
+              <span>审批人 → 仅审批相关</span>
+              <span>编辑 → 内容读写</span>
+            </div>
+            <p class="tiny muted" style="margin-top:12px">继承来的权限不能在下级角色中取消，需要调整上级角色或直接分配独立权限集。</p>
+          </section>
+        </aside>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="assets/ui.js"></script>
+</body>
+</html>

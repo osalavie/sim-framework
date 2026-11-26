@@ -1,0 +1,190 @@
+<mxfile pages="4">
+  <diagram id="system-context" name="01 系统上下文">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="0" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ctx-admin" parent="1" style="shape=mxgraph.c4.person2;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#083F75;strokeColor=#06315C;" value="开发者 / 管理员&#xa;[Person]&#xa;维护权限、组织、审批、存储配置与四类定时任务" vertex="1">
+          <mxGeometry height="180" width="200" x="60" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="ctx-reader" parent="1" style="shape=mxgraph.c4.person2;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#083F75;strokeColor=#06315C;" value="审批用户&#xa;[Person]&#xa;发起与处理审批事项" vertex="1">
+          <mxGeometry height="180" width="200" x="60" y="500" as="geometry" />
+        </mxCell>
+        <UserObject label="SimApp&#xa;[Software System]&#xa;模块化企业级系统平台" link="data:page/id,container-view" id="ctx-sim">
+          <mxCell parent="1" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=13;fontColor=#ffffff;align=center;fillColor=#1061B0;strokeColor=#0D5091;" vertex="1">
+            <mxGeometry height="140" width="260" x="500" y="320" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="ctx-storage" parent="1" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" value="云对象存储&#xa;[External Software System]&#xa;S3 / 腾讯 COS / 阿里 OSS" vertex="1">
+          <mxGeometry height="130" width="260" x="1030" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="ctx-tools" parent="1" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" value="文件处理工具&#xa;[External Software System]&#xa;LibreOffice / ImageMagick" vertex="1">
+          <mxGeometry height="130" width="260" x="1030" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="ctx-e1" edge="1" parent="1" source="ctx-admin" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.3;" target="ctx-sim" value="HTTPS 管理">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctx-e2" edge="1" parent="1" source="ctx-reader" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.7;" target="ctx-sim" value="HTTPS 访问">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctx-e3" edge="1" parent="1" source="ctx-sim" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.3;entryX=0;entryY=0.5;" target="ctx-storage" value="S3 兼容 API">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctx-e4" edge="1" parent="1" source="ctx-sim" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.7;entryX=0;entryY=0.5;" target="ctx-tools" value="受控子进程">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="container-view" name="02 容器视图">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="900">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="con-web" value="Note Web&#xa;[Container: Vue 3 / TypeScript]&#xa;管理后台、审批与系统配置" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="270" height="130" as="geometry" />
+        </mxCell>
+        <UserObject label="API Host&#xa;[Container: .NET 10 / ABP]&#xa;组合 Framework、Approval、System、Tenant、Worker" link="data:page/id,backend-components" id="con-api">
+          <mxCell style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=13;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+            <mxGeometry x="530" y="300" width="300" height="150" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="con-db" value="业务数据库&#xa;[Container: SqlSugar / SQLite 或关系库]&#xa;业务数据、文件 BLOB、存储配置与调度配置" style="shape=cylinder3;size=15;boundedLbl=1;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="70" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="con-object" value="文件存储&#xa;[Container: Local / S3 Compatible]&#xa;本地、S3、COS、OSS" style="shape=cylinder3;size=15;boundedLbl=1;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="310" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="con-tools" value="Office / 图片工具&#xa;[External Software System]&#xa;LibreOffice 与 ImageMagick" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="550" width="300" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="con-e1" value="JSON / Multipart / HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.3;" edge="1" parent="1" source="con-web" target="con-api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="con-e3" value="SQL" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.25;entryX=0;entryY=0.5;" edge="1" parent="1" source="con-api" target="con-db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="con-e4" value="文件流 / S3 API" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="con-api" target="con-object">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="con-e5" value="CLI / 临时工作区" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.75;entryX=0;entryY=0.5;" edge="1" parent="1" source="con-api" target="con-tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="backend-components" name="03 后端组件">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1800" pageHeight="1000">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="be-host" value="Host 组合根&#xa;[Component: ABP Module]&#xa;加载模块、配置与 Conventional Controllers" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="60" y="380" width="290" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="be-file" value="File Management&#xa;[Component: Framework]&#xa;运行时存储抽象、模板、导出、转换、头像与图片处理" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="500" y="110" width="310" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="be-rate" value="Attribute Rate Limiting&#xa;[Component: ASP.NET Core]&#xa;配置默认值，特性可覆盖配额与窗口" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="500" y="370" width="310" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="be-modules" value="业务模块&#xa;[Component: Approval / System / Tenant / Worker]&#xa;Quartz + HTTP / Command / Service Method / Worker 执行器" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="500" y="630" width="310" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="be-local" value="Local Provider&#xa;[Component: File System]&#xa;原子写入与元数据" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="980" y="40" width="270" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="be-object" value="Object Providers&#xa;[Component: AWS SDK for S3]&#xa;S3 / COS / OSS" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="980" y="230" width="270" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="be-database-provider" value="Database Provider&#xa;[Component: SqlSugar]&#xa;BLOB 文件内容与元数据" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="980" y="420" width="270" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="be-render" value="Render / Convert&#xa;[Component: Scriban / CLI]&#xa;文本模板、PDF 与图片处理" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="980" y="610" width="270" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="be-db" value="关系数据库&#xa;[Container: SQL]&#xa;业务表与 framework_stored_file" style="shape=cylinder3;size=15;boundedLbl=1;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="420" width="280" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="be-e1" value="注册并暴露" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.25;entryX=0;entryY=0.5;" edge="1" parent="1" source="be-host" target="be-file">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="be-e2" value="中间件" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="be-host" target="be-rate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="be-e3" value="组合" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.75;entryX=0;entryY=0.5;" edge="1" parent="1" source="be-host" target="be-modules">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="be-e4" value="IFileStorageProvider" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.15;entryX=0;entryY=0.5;" edge="1" parent="1" source="be-file" target="be-local">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="be-e5" value="IFileStorageProvider" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.4;entryX=0;entryY=0.5;" edge="1" parent="1" source="be-file" target="be-object">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="be-e6" value="IFileStorageProvider" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.65;entryX=0;entryY=0.5;" edge="1" parent="1" source="be-file" target="be-database-provider">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="be-e7" value="处理端口" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.85;entryX=0;entryY=0.5;" edge="1" parent="1" source="be-file" target="be-render">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="690" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="be-e8" value="SQL" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="be-database-provider" target="be-db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="be-e9" value="仓储 / 工作单元" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0;entryY=0.8;" edge="1" parent="1" source="be-modules" target="be-db">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="655" y="830" />
+              <mxPoint x="1360" y="830" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="frontend-components" name="04 前端组件">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1500" pageHeight="900">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fe-admin" value="Admin Modules&#xa;[Component: Dynamic Routes]&#xa;审批、授权与系统管理" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="60" y="520" width="290" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-request" value="Unified Request&#xa;[Component: Axios]&#xa;内存 Token、刷新、语言与错误处理" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="500" y="80" width="290" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-workbench" value="FileWorkbench&#xa;[Component: Responsive Vue]&#xa;上传、存储选择与 Office 转 PDF" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="500" y="320" width="290" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-image" value="ImageEditor&#xa;[Component: Canvas API]&#xa;本地裁剪、轻度压缩并上传系统头像" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="500" y="560" width="290" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-api" value="Framework / Business API&#xa;[Container: HTTPS]&#xa;JSON、Blob 与 Multipart 契约" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="180" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-browser" value="Browser Runtime&#xa;[Container: Canvas / File API]&#xa;移动端和桌面端本地图片处理" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="560" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-e2" value="管理 API" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.75;" edge="1" parent="1" source="fe-admin" target="fe-request">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="590" />
+              <mxPoint x="420" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fe-e3" value="Multipart / Blob" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.6;" edge="1" parent="1" source="fe-workbench" target="fe-api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-e4" value="统一鉴权请求" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.25;" edge="1" parent="1" source="fe-request" target="fe-api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-e5" value="Canvas 处理" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;fontSize=11;strokeColor=#828282;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="fe-image" target="fe-browser">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

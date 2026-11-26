@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "redesign/roles.html",
+  "entry": "redesign/roles.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-10-22T03:48:27.886Z",
+  "updatedAt": "2026-10-22T03:48:27.886Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

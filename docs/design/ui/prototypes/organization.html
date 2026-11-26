@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>组织架构 · SimApp</title>
+<meta name="description" content="SimApp 组织架构 · 部门树与成员分布">
+<link rel="stylesheet" href="assets/ui.css">
+<style>
+  .org-grid { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 18px; align-items: start; }
+  @media (max-width: 1080px) { .org-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body data-shell="app" data-page="organization" data-title="组织架构">
+<a class="skip-link" href="#main">跳到主要内容</a>
+<div class="shell" id="shell">
+  <div class="shell__main">
+    <main class="page" id="main">
+
+      <div class="page-head" data-od-id="org-head">
+        <div class="page-head__main">
+          <span class="kicker">权限与组织 · 组织结构</span>
+          <h1>组织架构</h1>
+          <p>部门树驱动审批路由、数据可见范围与费用归属。调整负责人后，历史审批不会回改，新流程立即生效。</p>
+        </div>
+        <div class="page-head__actions">
+          <button class="btn btn--ghost" type="button" data-toast="已同步企业目录，无新增部门">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-4.5L4 9"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14 4.5L20 15"/><path d="M20 19v-4h-4"/></svg>
+            同步目录
+          </button>
+          <button class="btn btn--primary" type="button" data-toast="已创建新部门草稿">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            新建部门
+          </button>
+        </div>
+      </div>
+
+      <div class="org-grid" data-od-id="org-main">
+        <aside class="card" aria-label="部门树">
+          <div class="card__head">
+            <div><h2>部门树</h2><p>点击切换部门，展开查看下级</p></div>
+            <span class="pill pill--outline">6 个部门</span>
+          </div>
+          <div class="tree" id="org-tree">
+            <div style="display:flex;align-items:center;gap:2px">
+              <button class="icon-btn" type="button" data-expand="org-children" aria-label="收起下级部门" aria-expanded="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 9 7 7 7-7"/></svg>
+              </button>
+              <button class="tree__item is-active" type="button" data-org="root" style="flex:1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="10" height="17" rx="1.6"/><path d="M14 9h6v12h-6"/><path d="M7.5 8h3M7.5 12h3M7.5 16h3M17 13h.5M17 17h.5"/></svg>
+                <span>SimApp 集团</span><span class="count">128</span>
+              </button>
+            </div>
+            <div class="tree__children" id="org-children">
+              <button class="tree__item" type="button" data-org="pd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3Z"/><path d="M14.5 5.5 18.5 9.5"/></svg><span>产品设计中心</span><span class="count">24</span></button>
+              <button class="tree__item" type="button" data-org="rd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg><span>研发中心</span><span class="count">46</span></button>
+              <button class="tree__item" type="button" data-org="mkt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 3 10.5l7 2.5 2.5 7L21 3Z"/><path d="m10 13 4-4"/></svg><span>市场部</span><span class="count">18</span></button>
+              <button class="tree__item" type="button" data-org="fin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><span>财务共享</span><span class="count">12</span></button>
+              <button class="tree__item" type="button" data-org="it"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.4 2.9 7.6 7 9.5 4.1-1.9 7-5.1 7-9.5V6Z"/><path d="m9.2 12 2 2 3.6-3.8"/></svg><span>信息技术部</span><span class="count">15</span></button>
+              <button class="tree__item" type="button" data-org="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 20a6.2 6.2 0 0 1 12.4 0"/><path d="M16.5 5.6a3 3 0 0 1 0 5.8"/></svg><span>外部协作</span><span class="count">6</span></button>
+            </div>
+          </div>
+          <div class="note" style="margin-top:16px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4.5M12 16.2v.3"/></svg>
+            <span>部门树与 HR 系统每日 02:00 同步，冲突时以本系统的人工调整优先。</span>
+          </div>
+        </aside>
+
+        <div class="stack">
+          <section class="card">
+            <div class="org-head">
+              <span class="org-head__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="10" height="17" rx="1.6"/><path d="M14 9h6v12h-6"/><path d="M7.5 8h3M7.5 12h3M7.5 16h3M17 13h.5M17 17h.5"/></svg></span>
+              <div style="min-width:0;flex:1">
+                <h2 id="org-name" style="font-size:22px">SimApp 集团</h2>
+                <p class="small muted" id="org-sub" style="margin-top:2px">总部 · 上海</p>
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <div class="kv" style="padding:8px 12px"><dt>负责人</dt><dd id="org-leader" style="font-size:13px">林知远</dd></div>
+                <div class="kv" style="padding:8px 12px"><dt>成员数</dt><dd class="mono" id="org-count" style="font-size:13px">128</dd></div>
+              </div>
+            </div>
+            <div class="dot-list" style="margin-top:14px">
+              <span class="on">审批路由已配置</span><span class="on">费用归属已绑定</span><span class="on">数据权限已继承</span>
+            </div>
+          </section>
+
+          <section class="card card--flush">
+            <div class="card__head">
+              <div><h2>成员名单</h2><p>按部门筛选，切换左侧部门树即可更新</p></div>
+              <div class="card__head__side">
+                <button class="btn btn--sm" type="button" data-toast="已邀请成员加入该部门">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                  添加成员
+                </button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr><th scope="col">成员</th><th scope="col">岗位 / 角色</th><th scope="col">所属部门</th><th scope="col">最近登录</th><th scope="col" style="text-align:right">操作</th></tr>
+                </thead>
+                <tbody id="org-members">
+                  <tr>
+                    <td><div class="table__person"><span class="avatar avatar--sun">林</span><div><b>林知远</b><span>lin.zhiyuan@sim.dev</span></div></div></td>
+                    <td>平台管理员</td><td>集团总部</td><td class="mono small">10-22 09:41</td>
+                    <td><div class="cell-actions"><a class="icon-btn" href="users.html" aria-label="查看林知远详情"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></a></div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="table__person"><span class="avatar avatar--peach">周</span><div><b>周雨桐</b><span>zhou.yutong@sim.dev</span></div></div></td>
+                    <td>市场部负责人</td><td>市场部</td><td class="mono small">10-22 08:55</td>
+                    <td><div class="cell-actions"><a class="icon-btn" href="users.html" aria-label="查看周雨桐详情"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></a></div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="table__person"><span class="avatar avatar--mint">王</span><div><b>王牧</b><span>wang.mu@sim.dev</span></div></div></td>
+                    <td>信息技术部负责人</td><td>信息技术部</td><td class="mono small">10-22 07:10</td>
+                    <td><div class="cell-actions"><a class="icon-btn" href="users.html" aria-label="查看王牧详情"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></a></div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="table__person"><span class="avatar avatar--lilac">苏</span><div><b>苏晚</b><span>su.wan@sim.dev</span></div></div></td>
+                    <td>产品设计中心负责人</td><td>产品设计中心</td><td class="mono small">10-21 16:02</td>
+                    <td><div class="cell-actions"><a class="icon-btn" href="users.html" aria-label="查看苏晚详情"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></a></div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="table__person"><span class="avatar avatar--sky">何</span><div><b>何舟</b><span>he.zhou@sim.dev</span></div></div></td>
+                    <td>财务共享负责人</td><td>财务共享</td><td class="mono small">10-21 15:24</td>
+                    <td><div class="cell-actions"><a class="icon-btn" href="users.html" aria-label="查看何舟详情"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></a></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card__head">
+              <div><h2>部门设置</h2><p>影响审批路由与费用归属，修改后立即生效</p></div>
+              <span class="pill pill--sun">编辑中</span>
+            </div>
+            <div class="field-row">
+              <div class="field"><label for="org-cost">成本中心</label><input class="input" id="org-cost" type="text" value="HQ-0001"></div>
+              <div class="field"><label for="org-route">审批路由模板</label>
+                <select class="select" id="org-route"><option>标准三级审批</option><option>财务强校验</option><option>仅负责人审批</option></select>
+              </div>
+            </div>
+            <div class="field" style="margin-top:14px"><label for="org-note">备注</label><textarea class="textarea" id="org-note" style="min-height:76px" placeholder="说明该部门的特殊审批规则…"></textarea></div>
+            <div style="display:flex;gap:9px;justify-content:flex-end;margin-top:14px">
+              <button class="btn btn--ghost" type="button" data-toast="已放弃本次修改">取消</button>
+              <button class="btn btn--primary" type="button" data-toast="部门设置已保存">保存设置</button>
+            </div>
+          </section>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="assets/ui.js"></script>
+<script>
+(function () {
+  var DATA = {
+    root: [["林知远", "平台管理员", "集团总部", "10-22 09:41", "sun"], ["周雨桐", "市场部负责人", "市场部", "10-22 08:55", "peach"], ["王牧", "信息技术部负责人", "信息技术部", "10-22 07:10", "mint"], ["苏晚", "产品设计中心负责人", "产品设计中心", "10-21 16:02", "lilac"], ["何舟", "财务共享负责人", "财务共享", "10-21 15:24", "sky"]],
+    pd: [["苏晚", "设计总监", "产品设计中心", "10-21 16:02", "lilac"], ["沈亦然", "品牌设计师", "产品设计中心", "10-21 14:30", "peach"], ["顾言", "视觉设计师", "产品设计中心", "10-12 11:30", "sky"], ["唐溪", "体验研究员", "产品设计中心", "10-21 10:08", "mint"], ["白露", "设计运营", "产品设计中心", "10-20 19:12", "sun"]],
+    rd: [["赵一鸣", "数据平台负责人", "研发中心", "10-21 23:48", "lilac"], ["陆沉", "前端工程师", "研发中心", "10-22 09:02", "sky"], ["江野", "后端工程师", "研发中心", "10-22 08:31", "mint"], ["温言", "数据工程师", "研发中心", "10-21 22:15", "sun"], ["程一", "测试工程师", "研发中心", "10-21 18:44", "peach"]],
+    mkt: [["周雨桐", "市场部负责人", "市场部", "10-22 08:55", "peach"], ["陈嘉禾", "品牌增长编辑", "市场部", "10-21 19:22", "sky"], ["许澈", "内容运营", "市场部", "10-21 17:08", "mint"], ["林小满", "活动策划", "市场部", "10-20 16:40", "sun"], ["邵宁", "品牌增长", "市场部", "10-19 11:22", "lilac"]],
+    fin: [["何舟", "财务共享负责人", "财务共享", "10-21 15:24", "sky"], ["秦岚", "核算会计", "财务共享", "10-22 09:08", "mint"], ["方卓", "结算专员", "财务共享", "10-21 18:03", "peach"], ["沈青", "预算分析师", "财务共享", "10-21 13:36", "sun"], ["罗一", "出纳", "财务共享", "10-20 17:50", "lilac"]],
+    it: [["王牧", "信息技术部负责人", "信息技术部", "10-22 07:10", "mint"], ["韩越", "基础设施工程师", "信息技术部", "10-22 08:20", "sky"], ["叶川", "安全合规", "信息技术部", "10-21 21:44", "lilac"], ["高岑", "桌面支持", "信息技术部", "10-21 10:12", "sun"], ["卫然", "系统运维", "信息技术部", "10-20 23:05", "peach"]],
+    ext: [["顾言", "外部设计顾问", "外部协作", "10-12 11:30", "sky"], ["闻笛", "外部内容作者", "外部协作", "10-18 14:20", "peach"], ["季白", "外部审计", "外部协作", "10-15 09:45", "mint"], ["常安", "供应商对接", "外部协作", "10-11 16:10", "sun"], ["宋屿", "外部开发", "外部协作", "10-09 10:02", "lilac"]]
+  };
+  function render(key) {
+    var rows = DATA[key];
+    if (!rows) return;
+    if (key === "ext") {
+      document.getElementById("org-name").textContent = "外部协作";
+      document.getElementById("org-sub").textContent = "外部顾问 / 供应商 / 审计";
+      document.getElementById("org-leader").textContent = "顾言";
+      document.getElementById("org-count").textContent = "6";
+    }
+    var body = document.getElementById("org-members");
+    body.innerHTML = rows.map(function (u) {
+      return '<tr>' +
+        '<td><div class="table__person"><span class="avatar avatar--' + u[4] + '">' + u[0].slice(0, 1) + '</span><div><b>' + u[0] + '</b><span>' + u[2] + '</span></div></div></td>' +
+        '<td>' + u[1] + '</td><td>' + u[2] + '</td><td class="mono small">' + u[3] + '</td>' +
+        '<td><div class="cell-actions"><a class="icon-btn" href="users.html" aria-label="查看' + u[0] + '详情"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></a></div></td>' +
+        '</tr>';
+    }).join("");
+  }
+  document.querySelectorAll("#org-tree [data-org]").forEach(function (b) {
+    b.addEventListener("click", function () { render(b.getAttribute("data-org")); });
+  });
+})();
+</script>
+</body>
+</html>

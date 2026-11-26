@@ -1,0 +1,16 @@
+// 授权模块 API 统一导出
+export * from './user'
+export * from './role'
+export * from './permission'
+export * from './module'
+export * from './route'
+export * from './tenant'
+export * from './organization'
+
+export { userApi } from './user'
+export { roleApi } from './role'
+export { permissionApi } from './permission'
+export { moduleApi } from './module'
+export { routeApi } from './route'
+export { tenantApi } from './tenant'
+export { organizationApi } from './organization'

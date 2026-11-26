@@ -1,0 +1,18 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+
+[*.csproj]
+indent_size = 2
+
+[*.sh]
+end_of_line = lf
+
+[Dockerfile]
+end_of_line = lf
+
+[Jenkinsfile]
+end_of_line = lf

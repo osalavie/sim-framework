@@ -1,0 +1,142 @@
+// 移动端样式混合器
+
+// 触摸友好的按钮尺寸
+@mixin touch-target($size: 44px) {
+  min-width: $size;
+  min-height: $size;
+  padding: 8px 16px;
+}
+
+// 移动端间距
+@mixin mobile-spacing {
+  padding: 16px;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
+}
+
+// 移动端卡片
+@mixin mobile-card {
+  border-radius: 8px;
+
+  @media (max-width: 768px) {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+}
+
+// 移动端字体大小
+@mixin mobile-font-size($desktop-size, $mobile-size: null) {
+  font-size: $desktop-size;
+
+  @media (max-width: 768px) {
+    @if $mobile-size {
+      font-size: $mobile-size;
+    } @else {
+      font-size: calc(#{$desktop-size} * 0.9);
+    }
+  }
+}
+
+// 移动端网格布局
+@mixin mobile-grid($desktop-columns, $tablet-columns: 2, $mobile-columns: 1) {
+  display: grid;
+  grid-template-columns: repeat($desktop-columns, 1fr);
+  gap: 20px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat($tablet-columns, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat($mobile-columns, 1fr);
+    gap: 12px;
+  }
+}
+
+// 移动端隐藏
+@mixin mobile-hide {
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
+
+// 仅移动端显示
+@mixin mobile-only {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+// 触摸反馈
+@mixin touch-feedback {
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+// 移动端模态框
+@mixin mobile-modal {
+  @media (max-width: 768px) {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 0 auto;
+  }
+}
+
+// 移动端表单
+@mixin mobile-form {
+  .n-form-item {
+    @media (max-width: 768px) {
+      margin-bottom: 16px;
+
+      .n-form-item-label {
+        padding-bottom: 8px;
+      }
+    }
+  }
+}
+
+// 移动端滚动优化
+@mixin mobile-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+
+    @media (max-width: 768px) {
+      width: 2px;
+    }
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+}
+
+// 移动端安全区域
+@mixin safe-area-padding($property: padding) {
+  #{$property}-top: env(safe-area-inset-top);
+  #{$property}-right: env(safe-area-inset-right);
+  #{$property}-bottom: env(safe-area-inset-bottom);
+  #{$property}-left: env(safe-area-inset-left);
+}

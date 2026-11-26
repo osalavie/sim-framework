@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>改版总览 · SimApp</title>
+<meta name="description" content="SimApp 全站改版总览 · Paper Ocean 设计系统">
+<link rel="stylesheet" href="assets/ui.css">
+</head>
+<body data-shell="app" data-page="index" data-title="改版总览">
+<a class="skip-link" href="#main">跳到主要内容</a>
+<div class="shell" id="shell">
+  <div class="shell__main">
+    <main class="page" id="main">
+
+      <section class="overview-hero" data-od-id="ov-hero">
+        <div class="overview-hero__main">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="pill pill--sun">改版总览</span>
+            <span class="pill pill--outline">2026 · Q4</span>
+            <span class="pill pill--mint pill--dot">全站 11 页</span>
+          </div>
+          <h1>从水墨黑白，<br>到<em style="font-style:normal;color:var(--accent)">纸上海洋</em>。</h1>
+          <p>SimApp 原有界面是一套克制的水墨黑白主题，信息密度高，但层级偏平、状态不够醒目。这次改版保留它的秩序感，换上更温暖、更有触感的视觉语言：奶油纸底、海军蓝描边、硬投影与一点珊瑚色的行动号召。</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px">
+            <a class="btn btn--primary" href="dashboard.html">
+              从工作台开始
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+            </a>
+            <a class="btn" href="design-system.html">查看设计规范</a>
+            <a class="btn btn--ghost" href="login.html">登录页</a>
+          </div>
+          <div class="login__facts" style="margin-top:24px">
+            <div class="login__fact"><b>11</b><span>交付页面</span></div>
+            <div class="login__fact"><b>1</b><span>共享设计系统</span></div>
+            <div class="login__fact"><b>0</b><span>外部依赖</span></div>
+          </div>
+        </div>
+        <aside class="overview-hero__side">
+          <b>视觉迁移</b>
+          <div class="swap">
+            <div class="swap__col"><span>改版前</span><b>水墨黑白</b></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+            <div class="swap__col"><span>改版后</span><b>纸上海洋</b></div>
+          </div>
+          <div class="swap">
+            <div class="swap__col"><span>字体</span><b>系统默认 → Nunito</b></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+            <div class="swap__col"><span>强调</span><b>灰阶 → 电光蓝</b></div>
+          </div>
+          <p class="tiny" style="margin-top:4px;line-height:1.7">硬投影与 2px 描边替代模糊阴影，状态色扩展到审批、权限与组织模块。</p>
+          <a class="btn btn--dark btn--sm" href="approval.html" style="align-self:flex-start">看审批中心</a>
+        </aside>
+      </section>
+
+      <div class="page-head" style="margin-top:26px" data-od-id="ov-pages-head">
+        <div class="page-head__main">
+          <span class="kicker">页面地图</span>
+          <h2 style="font-size:22px">七个页面，一套语言</h2>
+          <p>覆盖 SimApp 真实的信息架构：工作台、审批、权限、组织、配置与通知。</p>
+        </div>
+      </div>
+
+      <div class="tile-grid" data-od-id="ov-pages">
+        <a class="tile" href="dashboard.html">
+          <div class="tile__top"><span class="tile__no">01 / HOME</span><span class="pill pill--sky">个人</span></div>
+          <b>工作台</b>
+          <p>待我审批、审批吞吐、团队动态与系统状态，一屏看清今天要做什么。</p>
+          <span class="tile__go">进入页面 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
+        </a>
+        <a class="tile" href="approval.html">
+          <div class="tile__top"><span class="tile__no">02 / APPROVAL</span><span class="pill pill--peach">流程</span></div>
+          <b>审批中心</b>
+          <p>左侧队列、右侧详情、底部时间线，超时与驳回都有明确出口。</p>
+          <span class="tile__go">进入页面 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
+        </a>
+        <a class="tile" href="users.html">
+          <div class="tile__top"><span class="tile__no">03 / USERS</span><span class="pill pill--lilac">权限</span></div>
+          <b>用户管理</b>
+          <p>搜索、批量操作、账号抽屉与启用状态，128 位成员可被快速定位。</p>
+          <span class="tile__go">进入页面 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
+        </a>
+        <a class="tile" href="roles.html">
+          <div class="tile__top"><span class="tile__no">04 / ROLES</span><span class="pill pill--lilac">权限</span></div>
+          <b>角色权限</b>
+          <p>把 42 个权限点收敛为视图、编辑、审批、管理四组，支持角色继承。</p>
+          <span class="tile__go">进入页面 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
+        </a>
+        <a class="tile" href="organization.html">
+          <div class="tile__top"><span class="tile__no">05 / ORG</span><span class="pill pill--mint">组织</span></div>
+          <b>组织架构</b>
+          <p>6 个部门、128 人的树形结构，成员、负责人与人数的联动视图。</p>
+          <span class="tile__go">进入页面 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
+        </a>
+        <a class="tile" href="settings.html">
+          <div class="tile__top"><span class="tile__no">06 / SETTINGS</span><span class="pill pill--sun">系统</span></div>
+          <b>系统配置</b>
+          <p>常规、安全、审批流与存储四组配置，未保存改动以固定操作栏提示。</p>
+          <span class="tile__go">进入页面 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
+        </a>
+        <a class="tile" href="notifications.html">
+          <div class="tile__top"><span class="tile__no">07 / NOTIFY</span><span class="pill pill--sky">消息</span></div>
+          <b>通知中心</b>
+          <p>按类别聚合消息，并为邮件、企业微信、短信与 Webhook 单独配置。</p>
+          <span class="tile__go">进入页面 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
+        </a>
+      </div>
+
+      <div class="grid grid--2" style="margin-top:26px" data-od-id="ov-notes">
+        <section class="card">
+          <div class="card__head"><div><h2>改版做了什么</h2><p class="small">视觉与交互层面的重构，不改业务逻辑</p></div></div>
+          <div class="spec-row"><span class="tag">色彩</span><span class="small">奶油纸底替代纯白，墨蓝替代纯黑，电光蓝只用于可交互元素。</span></div>
+          <div class="spec-row"><span class="tag">层级</span><span class="small">页头、统计、内容、侧栏四段式；每屏只保留一个主行动。</span></div>
+          <div class="spec-row"><span class="tag">状态</span><span class="small">审批、权限、同步等关键状态都有色彩与文案双重表达。</span></div>
+          <div class="spec-row"><span class="tag">触感</span><span class="small">2px 描边与无模糊硬投影，让卡片像贴纸一样落在纸面上。</span></div>
+          <div class="spec-row"><span class="tag">可达性</span><span class="small">键盘可遍历、焦点环可见、表格有表头、弹层可 Esc 关闭。</span></div>
+        </section>
+        <section class="card">
+          <div class="card__head"><div><h2>交付清单</h2><p class="small">所有页面共享 assets 下的样式与脚本</p></div><span class="pill pill--outline">静态原型</span></div>
+          <div class="list">
+            <div class="list__row" style="padding:8px 0"><div><div class="list__title mono" style="font-size:12px">assets/ui.css</div><div class="list__sub">设计 token、组件与响应式规则</div></div><span class="pill pill--sky">CSS</span></div>
+            <div class="list__row" style="padding:8px 0"><div><div class="list__title mono" style="font-size:12px">assets/ui.js</div><div class="list__sub">外壳、命令面板、筛选与弹层交互</div></div><span class="pill pill--sun">JS</span></div>
+            <div class="list__row" style="padding:8px 0"><div><div class="list__title mono" style="font-size:12px">dashboard / approval / users …</div><div class="list__sub">7 个业务页面 + 登录 + 规范 + 总览</div></div><span class="pill pill--mint">HTML</span></div>
+          </div>
+          <div class="note" style="margin-top:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.4 2.9 7.6 7 9.5 4.1-1.9 7-5.1 7-9.5V6Z"/><path d="m9.2 12 2 2 3.6-3.8"/></svg>
+            <span>原型仅用于设计评审：数据为示例，不连接后端，不包含真实密钥。</span>
+          </div>
+        </section>
+      </div>
+
+      <footer style="margin-top:30px;padding-top:16px;border-top:2px solid var(--ink);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap" class="tiny muted">
+        <span>SimApp · Paper Ocean 改版 · 2026</span>
+        <span style="display:flex;gap:14px;flex-wrap:wrap"><a href="design-system.html">设计规范</a><a href="login.html">登录页</a></span>
+      </footer>
+
+    </main>
+  </div>
+</div>
+<script src="assets/ui.js"></script>
+</body>
+</html>

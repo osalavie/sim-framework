@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "redesign/dashboard.html",
+  "entry": "redesign/dashboard.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-10-22T03:47:41.494Z",
+  "updatedAt": "2026-10-22T03:47:41.494Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}
